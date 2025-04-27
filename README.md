@@ -1,6 +1,6 @@
 # Leetcodes
 
-Welcome to **leetcodes**, a collection of programming solutions for the popular [LeetCode 150](https://leetcode.com/studyplan/top-interview-150/). This repository is designed to help developers solve and understand fundamental programming problems typically encountered in technical interviews.
+This repository was created by some friends to store and track our progress as we solve and understand fundamental programming problems.
 
 ### File Naming Format
 ```
@@ -15,17 +15,8 @@ For LeetCode problem 88, "Merge Sorted Array":
 88-merge-sorted-array.py
 ```
 
-## Usage
-To use or contribute to this repository, follow the guidelines below:
-
-1. **All code must be written in Python.**
-2. Use the prescribed naming format for all solution files.
-3. Ensure that commit messages reference the corresponding problem, for example:
-   - "Add solution for 88-merge-sorted-array"
-   - "Optimize code for 121-best-time-to-buy-and-sell-stock"
-
 ## Contributing
-Contributions are welcome! If you would like to add solutions, optimize existing code, or fix any issues, please follow these steps:
+Contributions are welcome. If you would like to add solutions, optimise existing code, or fix any issues, please follow these steps:
 
 1. Fork this repository.
 2. Clone your fork to your local machine.
