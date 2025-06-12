@@ -9,6 +9,7 @@ import { Card, CardFooter } from "@/components/ui/card";
 import type { LeetCodeProblem } from "@/lib/types";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Filter } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 type Topic = string;
@@ -87,17 +88,21 @@ export default function Home() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        {/* Flashcard area: always top-aligned, always drawer for filters */}
         <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4 mt-4">
-          {/* Always show: Sheet for Sidebar and nav row */}
           <div className="flex w-full items-center mb-4 gap-2">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline">
+                <Button
+                  variant="outline"
+                  className="hover:scale-105 active:scale-95 transition-transform duration-200"
+                >
                   <Filter className="mr-2 h-4 w-4" /> Filters
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="p-0 max-w-xs">
+              <SheetContent
+                side="left"
+                className="p-0 max-w-xs transition-all duration-300 ease-in-out"
+              >
                 <Sidebar
                   difficulties={difficulties}
                   topics={topics}
@@ -109,37 +114,58 @@ export default function Home() {
                 />
               </SheetContent>
             </Sheet>
-            <div className="flex-1 flex items-center justify-end gap-4">
-              <div className="text-sm text-muted-foreground">
-                Card {index + 1} of {shuffledProblems.length}
-              </div>
-              <Button
-                variant="secondary"
-                onClick={prev}
-                className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-                disabled={shuffledProblems.length === 0}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={next}
-                className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-                disabled={shuffledProblems.length === 0}
-              >
-                Next
-              </Button>
-            </div>
           </div>
-          {filteredProblems.length > 0 && shuffledProblems.length > 0 ? (
-            <div className="w-full max-w-3xl mx-auto flex flex-col items-stretch">
-              <Flashcard problem={shuffledProblems[index]} />
-            </div>
-          ) : (
-            <div className="text-muted-foreground">
-              No problems match the current filters
-            </div>
-          )}
+          <AnimatePresence mode="wait">
+            {filteredProblems.length > 0 && shuffledProblems.length > 0 ? (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="w-full max-w-3xl mx-auto flex flex-col items-stretch"
+              >
+                {/* Nav row inside card area */}
+                <div className="flex items-center justify-between w-full mb-2 px-2 mt-8">
+                  <Button
+                    variant="secondary"
+                    onClick={prev}
+                    className="hover:bg-accent hover:text-accent-foreground hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+                    disabled={shuffledProblems.length === 0}
+                  >
+                    Previous
+                  </Button>
+                  <motion.div
+                    key={`${index}-${shuffledProblems.length}`}
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-sm text-muted-foreground text-center flex-1"
+                  >
+                    Card {index + 1} of {shuffledProblems.length}
+                  </motion.div>
+                  <Button
+                    variant="secondary"
+                    onClick={next}
+                    className="hover:bg-accent hover:text-accent-foreground hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+                    disabled={shuffledProblems.length === 0}
+                  >
+                    Next
+                  </Button>
+                </div>
+                <Flashcard problem={shuffledProblems[index]} />
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-muted-foreground"
+              >
+                No problems match the current filters
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
       <footer className="w-full flex justify-center items-center py-6 px-4 text-muted-foreground text-sm bg-white border-t">

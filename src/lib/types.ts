@@ -13,10 +13,7 @@ export type LeetCodeProblem = {
   id: number;
   title: string;
   description: string;
-  solutions: {
-    typescript: Solution;
-    python: Solution;
-  };
+  solution: Solution;
   category: string;
   difficulty: "Easy" | "Medium" | "Hard";
   testCases: TestCase[];
