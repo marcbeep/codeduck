@@ -365,12 +365,9 @@ export default function Home() {
                     } ${problem.topics.join(" ")} ${problem.difficulty}`}
                     onSelect={() => handleSearchSelect(problem.title)}
                     className="flex items-center justify-between cursor-pointer hover:bg-accent"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleSearchSelect(problem.title);
-                    }}
+                    onClick={() => handleSearchSelect(problem.title)}
                   >
-                    <div className="flex flex-col pointer-events-none">
+                    <div className="flex flex-col">
                       <span className="font-medium">{problem.title}</span>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span
