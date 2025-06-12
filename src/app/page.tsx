@@ -3,7 +3,7 @@
 import Flashcard from "@/components/Flashcard";
 import { Sidebar } from "@/components/Sidebar";
 import { getProblems } from "@/lib/actions";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
@@ -39,6 +39,7 @@ type List = string;
 export default function Home() {
   const [problems, setProblems] = useState<LeetCodeProblem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     async function loadProblems() {
@@ -79,13 +80,33 @@ export default function Home() {
     return Array.from(uniqueCategories).sort();
   }, [problems]);
 
-  // Initialize categories state
-  const [categories, setCategories] = useState<Record<string, boolean>>(() => {
-    const initialCategories = Object.fromEntries(
-      availableCategories.map((category) => [category, true])
+  // Initialize categories state with useEffect to ensure it's set after availableCategories is populated
+  const [categories, setCategories] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (availableCategories.length > 0) {
+      setCategories(
+        Object.fromEntries(
+          availableCategories.map((category) => [category, true])
+        )
+      );
+    }
+  }, [availableCategories]);
+
+  // Reset all filters to default state
+  const resetFilters = () => {
+    setDifficulties({
+      Easy: true,
+      Medium: true,
+      Hard: true,
+    });
+    setCategories(
+      Object.fromEntries(
+        availableCategories.map((category) => [category, true])
+      )
     );
-    return initialCategories;
-  });
+    setSelectedList("all");
+  };
 
   // Get available lists
   const availableLists = useMemo(() => {
@@ -110,14 +131,56 @@ export default function Home() {
         selectedList === "all" || problem.list === selectedList;
       return matchesDifficulty && matchesCategory && matchesList;
     });
-  }, [difficulties, categories, selectedList]);
+  }, [difficulties, categories, selectedList, problems]);
 
-  // Initialize and update shuffled problems when filters change
+  // Shuffle function that can be reused
+  const shuffleProblems = useCallback(
+    async (problemsToShuffle: LeetCodeProblem[]) => {
+      if (problemsToShuffle.length === 0) return;
+
+      setIsShuffling(true);
+      // Brief delay to show animation
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      const shuffled = [...problemsToShuffle];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setShuffledProblems(shuffled);
+      setIndex(0);
+      setIsShuffling(false);
+    },
+    []
+  );
+
+  // Handle initial load and filter changes
   useEffect(() => {
-    if (filteredProblems.length > 0) {
-      setShuffledProblems(filteredProblems);
+    if (filteredProblems.length > 0 && !isLoading) {
+      if (isInitialLoad) {
+        // On initial load, shuffle the problems
+        shuffleProblems(filteredProblems);
+        setIsInitialLoad(false);
+      } else if (shuffledProblems.length === 0) {
+        // If we somehow have no shuffled problems (shouldn't happen), shuffle them
+        shuffleProblems(filteredProblems);
+      } else {
+        // On filter changes, just update the problems without shuffling
+        setShuffledProblems(filteredProblems);
+        setIndex(0);
+      }
     }
-  }, [filteredProblems]);
+  }, [
+    filteredProblems,
+    isLoading,
+    isInitialLoad,
+    shuffleProblems,
+    shuffledProblems.length,
+  ]);
+
+  const handleShuffle = () => {
+    shuffleProblems(filteredProblems);
+  };
 
   // Calculate progress percentage
   const progressValue =
@@ -135,24 +198,6 @@ export default function Home() {
     setIndex(
       (i) => (i - 1 + shuffledProblems.length) % shuffledProblems.length
     );
-  };
-
-  const handleShuffle = async () => {
-    if (filteredProblems.length === 0) return;
-
-    setIsShuffling(true);
-
-    // Brief delay to show animation
-    await new Promise((resolve) => setTimeout(resolve, 400));
-
-    const shuffled = [...filteredProblems];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    setShuffledProblems(shuffled);
-    setIndex(0);
-    setIsShuffling(false);
   };
 
   // Get difficulty badge color
@@ -202,17 +247,28 @@ export default function Home() {
                     side="left"
                     className="p-0 max-w-xs transition-all duration-300 ease-in-out"
                   >
-                    <Sidebar
-                      difficulties={difficulties}
-                      categories={categories}
-                      list={selectedList}
-                      availableCategories={availableCategories}
-                      availableLists={availableLists}
-                      onDifficultyChange={setDifficulties}
-                      onCategoryChange={setCategories}
-                      onListChange={setSelectedList}
-                      noCard
-                    />
+                    <div className="flex flex-col h-full">
+                      <Sidebar
+                        difficulties={difficulties}
+                        categories={categories}
+                        list={selectedList}
+                        availableCategories={availableCategories}
+                        availableLists={availableLists}
+                        onDifficultyChange={setDifficulties}
+                        onCategoryChange={setCategories}
+                        onListChange={setSelectedList}
+                        noCard
+                      />
+                      <div className="p-4 mt-auto border-t">
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          onClick={resetFilters}
+                        >
+                          Reset Filters
+                        </Button>
+                      </div>
+                    </div>
                   </SheetContent>
                 </Sheet>
 
