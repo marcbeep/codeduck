@@ -120,34 +120,32 @@ export default function Home() {
           />
         </div>
         {/* Flashcard area: centered, responsive */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-8 p-4">
+        <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4">
           {filteredProblems.length > 0 && shuffledProblems.length > 0 ? (
-            <Card className="w-full max-w-xl flex flex-col items-center p-4 sm:p-6">
-              <div className="flex w-full flex-col sm:flex-row items-center sm:justify-between mb-4 gap-2 sm:gap-0">
-                <div className="text-sm text-muted-foreground mb-2 sm:mb-0">
+            <div className="w-full flex flex-col items-stretch p-4 sm:p-6">
+              <div className="flex w-full justify-end items-center mb-4 gap-4">
+                <div className="text-sm text-muted-foreground">
                   Card {index + 1} of {shuffledProblems.length}
                 </div>
-                <div className="flex gap-4">
-                  <Button
-                    variant="secondary"
-                    onClick={prev}
-                    className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-                    disabled={shuffledProblems.length === 0}
-                  >
-                    Previous
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    onClick={next}
-                    className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-                    disabled={shuffledProblems.length === 0}
-                  >
-                    Next
-                  </Button>
-                </div>
+                <Button
+                  variant="secondary"
+                  onClick={prev}
+                  className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+                  disabled={shuffledProblems.length === 0}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={next}
+                  className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+                  disabled={shuffledProblems.length === 0}
+                >
+                  Next
+                </Button>
               </div>
               <Flashcard problem={shuffledProblems[index]} />
-            </Card>
+            </div>
           ) : (
             <div className="text-muted-foreground">
               No problems match the current filters
@@ -156,7 +154,8 @@ export default function Home() {
         </div>
       </div>
       <footer className="w-full flex justify-center items-center py-6 text-muted-foreground text-sm bg-white border-t">
-        Made with love
+        Code for the solutions were contributed by Marc Beepath, Daniel Diaz and
+        Alex Rong
       </footer>
     </>
   );

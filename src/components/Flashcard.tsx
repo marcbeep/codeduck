@@ -24,7 +24,7 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
   const explanation = problem.solutions[language]?.explanation || "";
 
   return (
-    <Card className="w-full max-w-xl transition-all duration-200 hover:shadow-lg">
+    <Card className="w-full transition-all duration-200 hover:shadow-lg">
       <CardHeader className="space-y-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-bold">{problem.title}</CardTitle>
