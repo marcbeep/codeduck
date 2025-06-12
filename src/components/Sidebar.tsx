@@ -16,29 +16,29 @@ import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
-type Topic = string;
+type Category = string;
 
 interface SidebarProps {
   difficulties: Record<Difficulty, boolean>;
-  topics: Record<Topic, boolean>;
-  availableTopics: Topic[];
+  categories: Record<Category, boolean>;
+  availableCategories: Category[];
   onDifficultyChange: Dispatch<SetStateAction<Record<Difficulty, boolean>>>;
-  onTopicChange: Dispatch<SetStateAction<Record<Topic, boolean>>>;
+  onCategoryChange: Dispatch<SetStateAction<Record<Category, boolean>>>;
   onShuffle: () => void;
   noCard?: boolean;
 }
 
 export function Sidebar({
   difficulties,
-  topics,
-  availableTopics,
+  categories,
+  availableCategories,
   onDifficultyChange,
-  onTopicChange,
+  onCategoryChange,
   onShuffle,
   noCard = false,
 }: SidebarProps) {
   const [isDifficultyOpen, setIsDifficultyOpen] = useState(true);
-  const [isTopicsOpen, setIsTopicsOpen] = useState(true);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(true);
 
   const handleDifficultyChange = (
     difficulty: Difficulty,
@@ -50,13 +50,13 @@ export function Sidebar({
     }));
   };
 
-  const handleTopicChange = (
-    topic: Topic,
+  const handleCategoryChange = (
+    category: Category,
     checked: boolean | "indeterminate"
   ) => {
-    onTopicChange((prev) => ({
+    onCategoryChange((prev) => ({
       ...prev,
-      [topic]: checked === true,
+      [category]: checked === true,
     }));
   };
 
@@ -105,39 +105,39 @@ export function Sidebar({
         <Separator />
 
         <Collapsible
-          open={isTopicsOpen}
-          onOpenChange={setIsTopicsOpen}
+          open={isCategoriesOpen}
+          onOpenChange={setIsCategoriesOpen}
           className="space-y-2"
         >
           <CollapsibleTrigger className="flex items-center justify-between w-full hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors cursor-pointer">
-            <h3 className="text-sm font-medium">Topics</h3>
+            <h3 className="text-sm font-medium">Categories</h3>
             <ChevronDown
               className={`h-4 w-4 transition-transform ${
-                isTopicsOpen ? "transform rotate-180" : ""
+                isCategoriesOpen ? "transform rotate-180" : ""
               }`}
             />
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-2 pl-2">
             <ScrollArea className="h-[200px] pr-4">
               <div className="space-y-2">
-                {availableTopics.map((topic) => (
+                {availableCategories.map((category) => (
                   <div
-                    key={topic}
+                    key={category}
                     className="flex items-center space-x-2 group"
                   >
                     <Checkbox
-                      id={`topic-${topic}`}
-                      checked={topics[topic]}
+                      id={`category-${category}`}
+                      checked={categories[category]}
                       onCheckedChange={(checked) =>
-                        handleTopicChange(topic, checked)
+                        handleCategoryChange(category, checked)
                       }
                       className="cursor-pointer"
                     />
                     <Label
-                      htmlFor={`topic-${topic}`}
+                      htmlFor={`category-${category}`}
                       className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors"
                     >
-                      {topic}
+                      {category}
                     </Label>
                   </div>
                 ))}

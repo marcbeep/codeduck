@@ -52,31 +52,31 @@ export default function Home() {
     }
   );
 
-  // Get available topics
-  const availableTopics = useMemo(() => {
-    const uniqueTopics = new Set<Topic>();
+  // Get available categories
+  const availableCategories = useMemo(() => {
+    const uniqueCategories = new Set<string>();
     problems.forEach((problem) => {
-      problem.topics.forEach((topic) => uniqueTopics.add(topic));
+      uniqueCategories.add(problem.category);
     });
-    return Array.from(uniqueTopics).sort();
+    return Array.from(uniqueCategories).sort();
   }, []);
 
-  // Initialize topics state
-  const [topics, setTopics] = useState<Record<Topic, boolean>>(() => {
-    const initialTopics = Object.fromEntries(
-      availableTopics.map((topic) => [topic, true])
+  // Initialize categories state
+  const [categories, setCategories] = useState<Record<string, boolean>>(() => {
+    const initialCategories = Object.fromEntries(
+      availableCategories.map((category) => [category, true])
     );
-    return initialTopics;
+    return initialCategories;
   });
 
   // Filter problems based on current filters
   const filteredProblems = useMemo(() => {
     return problems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
-      const matchesTopics = problem.topics.some((topic) => topics[topic]);
-      return matchesDifficulty && matchesTopics;
+      const matchesCategory = categories[problem.category];
+      return matchesDifficulty && matchesCategory;
     });
-  }, [difficulties, topics]);
+  }, [difficulties, categories]);
 
   // Initialize and update shuffled problems when filters change
   useEffect(() => {
@@ -121,17 +121,6 @@ export default function Home() {
     setIsShuffling(false);
   };
 
-  // Search functionality
-  const handleSearchSelect = (problemTitle: string) => {
-    const problemIndex = shuffledProblems.findIndex(
-      (problem) => problem.title === problemTitle
-    );
-    if (problemIndex !== -1) {
-      setIndex(problemIndex);
-    }
-    setSearchOpen(false);
-  };
-
   // Get difficulty badge color
   const getDifficultyColor = (difficulty: Difficulty) => {
     switch (difficulty) {
@@ -170,10 +159,10 @@ export default function Home() {
                   >
                     <Sidebar
                       difficulties={difficulties}
-                      topics={topics}
-                      availableTopics={availableTopics}
+                      categories={categories}
+                      availableCategories={availableCategories}
                       onDifficultyChange={setDifficulties}
-                      onTopicChange={setTopics}
+                      onCategoryChange={setCategories}
                       onShuffle={handleShuffle}
                       noCard
                     />
@@ -320,8 +309,7 @@ export default function Home() {
                       No problems match your current filter settings.
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Try adjusting your difficulty or topic filters to see more
-                      problems.
+                      Try adjusting your difficulty filter to see more problems.
                     </div>
                     <Sheet>
                       <SheetTrigger asChild>
@@ -336,10 +324,10 @@ export default function Home() {
                       >
                         <Sidebar
                           difficulties={difficulties}
-                          topics={topics}
-                          availableTopics={availableTopics}
+                          categories={categories}
+                          availableCategories={availableCategories}
                           onDifficultyChange={setDifficulties}
-                          onTopicChange={setTopics}
+                          onCategoryChange={setCategories}
                           onShuffle={handleShuffle}
                           noCard
                         />
@@ -360,12 +348,17 @@ export default function Home() {
                 {shuffledProblems.map((problem) => (
                   <CommandItem
                     key={problem.id}
-                    value={`${problem.title} ${
-                      problem.category
-                    } ${problem.topics.join(" ")} ${problem.difficulty}`}
-                    onSelect={() => handleSearchSelect(problem.title)}
-                    className="flex items-center justify-between cursor-pointer hover:bg-accent"
-                    onClick={() => handleSearchSelect(problem.title)}
+                    value={problem.title}
+                    onSelect={() => {
+                      const problemIndex = shuffledProblems.findIndex(
+                        (p) => p.title === problem.title
+                      );
+                      if (problemIndex !== -1) {
+                        setIndex(problemIndex);
+                        setSearchOpen(false);
+                      }
+                    }}
+                    className="flex items-center justify-between"
                   >
                     <div className="flex flex-col">
                       <span className="font-medium">{problem.title}</span>
@@ -379,15 +372,6 @@ export default function Home() {
                         </span>
                         <span>•</span>
                         <span>{problem.category}</span>
-                        {problem.topics.length > 0 && (
-                          <>
-                            <span>•</span>
-                            <span>
-                              {problem.topics.slice(0, 2).join(", ")}
-                              {problem.topics.length > 2 ? "..." : ""}
-                            </span>
-                          </>
-                        )}
                       </div>
                     </div>
                   </CommandItem>

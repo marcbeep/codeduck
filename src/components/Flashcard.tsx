@@ -10,10 +10,23 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { Separator } from "./ui/separator";
-import { Code2, Eye, EyeOff, ExternalLink, TestTube2 } from "lucide-react";
+import { Code2, Eye, EyeOff, ExternalLink, TestTube2, Tag } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
+
+const getDifficultyColor = (difficulty: string) => {
+  switch (difficulty) {
+    case "Easy":
+      return "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-950/50";
+    case "Medium":
+      return "text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-950/50";
+    case "Hard":
+      return "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-950/50";
+    default:
+      return "text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-950/50";
+  }
+};
 
 export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
   const [showSolution, setShowSolution] = useState(false);
@@ -25,33 +38,68 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
   return (
     <Card className="w-full transition-all duration-300 hover:shadow-lg hover:scale-[1.01]">
       <CardHeader className="space-y-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold">{problem.title}</CardTitle>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open(
-                      `https://leetcode.com/problems/${problem.title
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}`,
-                      "_blank"
-                    );
-                  }}
-                  className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Open on LeetCode</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <CardTitle className="text-xl font-bold">
+                {problem.title}
+              </CardTitle>
+              <span
+                className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(
+                  problem.difficulty
+                )}`}
+              >
+                {problem.difficulty}
+              </span>
+            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(
+                        `https://leetcode.com/problems/${problem.title
+                          .toLowerCase()
+                          .replace(/\s+/g, "-")}`,
+                        "_blank"
+                      );
+                    }}
+                    className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Open on LeetCode</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <Tag className="h-3.5 w-3.5" />
+              <span>{problem.category}</span>
+            </div>
+            {problem.topics.length > 0 && (
+              <>
+                <span className="text-muted-foreground/50">•</span>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {problem.topics.map((topic, index) => (
+                    <span
+                      key={topic}
+                      className="px-2 py-0.5 rounded-full text-xs bg-accent/50 text-accent-foreground"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
         <Separator />
       </CardHeader>
