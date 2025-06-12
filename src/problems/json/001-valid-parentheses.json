@@ -1,7 +1,7 @@
 {
   "id": 1,
   "title": "Valid Parentheses",
-  "list": "blind75",
+  "list": ["blind75", "neetcode150"],
   "category": "Stack",
   "topics": ["Stack", "String"],
   "difficulty": "Easy",

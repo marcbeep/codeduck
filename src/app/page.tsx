@@ -91,6 +91,28 @@ export default function Home() {
     }
   }, [availableCategories]);
 
+  // Get available lists - now works with arrays
+  const availableLists = useMemo(() => {
+    const uniqueLists = new Set<string>();
+    problems.forEach((problem) => {
+      if (problem.list && Array.isArray(problem.list)) {
+        problem.list.forEach((list) => {
+          uniqueLists.add(list);
+        });
+      }
+    });
+    return Array.from(uniqueLists).sort();
+  }, [problems]);
+
+  // Initialize lists state with useEffect to ensure it's set after availableLists is populated
+  const [lists, setLists] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (availableLists.length > 0) {
+      setLists(Object.fromEntries(availableLists.map((list) => [list, true])));
+    }
+  }, [availableLists]);
+
   // Reset all filters to default state
   const resetFilters = () => {
     setDifficulties({
@@ -103,33 +125,24 @@ export default function Home() {
         availableCategories.map((category) => [category, true])
       )
     );
-    setSelectedList("all");
+    setLists(Object.fromEntries(availableLists.map((list) => [list, true])));
   };
-
-  // Get available lists
-  const availableLists = useMemo(() => {
-    const uniqueLists = new Set<string>();
-    problems.forEach((problem) => {
-      if (problem.list) {
-        uniqueLists.add(problem.list);
-      }
-    });
-    return Array.from(uniqueLists).sort();
-  }, [problems]);
-
-  // Remove lists state and use a single string for selected list
-  const [selectedList, setSelectedList] = useState<string>("all");
 
   // Filter problems based on current filters
   const filteredProblems = useMemo(() => {
     return problems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
       const matchesCategory = categories[problem.category];
+
+      // Check if problem matches any selected list
       const matchesList =
-        selectedList === "all" || problem.list === selectedList;
+        problem.list && Array.isArray(problem.list)
+          ? problem.list.some((list) => lists[list])
+          : false;
+
       return matchesDifficulty && matchesCategory && matchesList;
     });
-  }, [difficulties, categories, selectedList, problems]);
+  }, [difficulties, categories, lists, problems]);
 
   // Shuffle function that can be reused
   const shuffleProblems = useCallback(
@@ -249,12 +262,12 @@ export default function Home() {
                       <Sidebar
                         difficulties={difficulties}
                         categories={categories}
-                        list={selectedList}
+                        lists={lists}
                         availableCategories={availableCategories}
                         availableLists={availableLists}
                         onDifficultyChange={setDifficulties}
                         onCategoryChange={setCategories}
-                        onListChange={setSelectedList}
+                        onListChange={setLists}
                         noCard
                       />
                       <div className="p-4 mt-auto border-t">
@@ -415,12 +428,12 @@ export default function Home() {
                         <Sidebar
                           difficulties={difficulties}
                           categories={categories}
-                          list={selectedList}
+                          lists={lists}
                           availableCategories={availableCategories}
                           availableLists={availableLists}
                           onDifficultyChange={setDifficulties}
                           onCategoryChange={setCategories}
-                          onListChange={setSelectedList}
+                          onListChange={setLists}
                           noCard
                         />
                       </SheetContent>

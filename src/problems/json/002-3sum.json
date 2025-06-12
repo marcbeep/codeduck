@@ -1,7 +1,7 @@
 {
   "id": 2,
   "title": "3Sum",
-  "list": "blind75",
+  "list": ["blind75", "neetcode150", "leetcode150"],
   "category": "Array",
   "topics": ["Array", "Two Pointers", "Sorting"],
   "difficulty": "Medium",

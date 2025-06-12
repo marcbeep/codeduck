@@ -84,6 +84,27 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
               <Tag className="h-3.5 w-3.5" />
               <span>{problem.category}</span>
             </div>
+            {problem.list && problem.list.length > 0 && (
+              <>
+                <span className="text-muted-foreground/50">•</span>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {problem.list.map((list) => (
+                    <span
+                      key={list}
+                      className="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400 font-medium"
+                    >
+                      {list === "blind75"
+                        ? "Blind 75"
+                        : list === "neetcode150"
+                        ? "NeetCode 150"
+                        : list === "leetcode150"
+                        ? "LeetCode 150"
+                        : list}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
             {problem.topics.length > 0 && (
               <>
                 <span className="text-muted-foreground/50">•</span>

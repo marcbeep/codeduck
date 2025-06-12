@@ -11,13 +11,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
@@ -28,19 +21,19 @@ type List = string;
 interface SidebarProps {
   difficulties: Record<Difficulty, boolean>;
   categories: Record<Category, boolean>;
-  list: string;
+  lists: Record<List, boolean>;
   availableCategories: Category[];
   availableLists: List[];
   onDifficultyChange: Dispatch<SetStateAction<Record<Difficulty, boolean>>>;
   onCategoryChange: Dispatch<SetStateAction<Record<Category, boolean>>>;
-  onListChange: (list: string) => void;
+  onListChange: Dispatch<SetStateAction<Record<List, boolean>>>;
   noCard?: boolean;
 }
 
 export function Sidebar({
   difficulties,
   categories,
-  list,
+  lists,
   availableCategories,
   availableLists,
   onDifficultyChange,
@@ -50,6 +43,7 @@ export function Sidebar({
 }: SidebarProps) {
   const [isDifficultyOpen, setIsDifficultyOpen] = useState(true);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(true);
+  const [isListsOpen, setIsListsOpen] = useState(true);
 
   const handleDifficultyChange = (
     difficulty: Difficulty,
@@ -71,30 +65,59 @@ export function Sidebar({
     }));
   };
 
-  const handleListChange = (value: string) => {
-    onListChange(value);
+  const handleListChange = (list: List, checked: boolean | "indeterminate") => {
+    onListChange((prev) => ({
+      ...prev,
+      [list]: checked === true,
+    }));
   };
 
   const content = (
     <div className="p-4">
       <h2 className="text-lg font-semibold mb-4">Filters</h2>
       <div className="space-y-4">
-        <div className="mb-2">
-          <h3 className="text-sm font-medium mb-1">List</h3>
-          <Select value={list} onValueChange={handleListChange}>
-            <SelectTrigger className="w-full cursor-pointer">
-              <SelectValue placeholder="Select list" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Lists</SelectItem>
-              {availableLists.map((l) => (
-                <SelectItem key={l} value={l}>
-                  {l === "blind75" ? "Blind 75" : l}
-                </SelectItem>
+        <Collapsible
+          open={isListsOpen}
+          onOpenChange={setIsListsOpen}
+          className="space-y-2"
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors cursor-pointer">
+            <h3 className="text-sm font-medium">Lists</h3>
+            <ChevronDown
+              className={`h-4 w-4 transition-transform ${
+                isListsOpen ? "transform rotate-180" : ""
+              }`}
+            />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-2 pl-2">
+            <div className="space-y-2">
+              {availableLists.map((list) => (
+                <div key={list} className="flex items-center space-x-2 group">
+                  <Checkbox
+                    id={`list-${list}`}
+                    checked={lists[list]}
+                    onCheckedChange={(checked) =>
+                      handleListChange(list, checked)
+                    }
+                    className="cursor-pointer"
+                  />
+                  <Label
+                    htmlFor={`list-${list}`}
+                    className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors"
+                  >
+                    {list === "blind75"
+                      ? "Blind 75"
+                      : list === "neetcode150"
+                      ? "NeetCode 150"
+                      : list === "leetcode150"
+                      ? "LeetCode 150"
+                      : list}
+                  </Label>
+                </div>
               ))}
-            </SelectContent>
-          </Select>
-        </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
         <Separator />
         <Collapsible
           open={isDifficultyOpen}
