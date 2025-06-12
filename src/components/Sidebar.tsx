@@ -165,7 +165,7 @@ export function Sidebar({
     return content;
   }
   return (
-    <Card className="w-80 h-[calc(100vh-2rem)] m-4 flex flex-col">
+    <Card className="w-80 h-[calc(100vh-2rem)] mt-4 flex flex-col">
       {content}
     </Card>
   );

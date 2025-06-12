@@ -86,64 +86,53 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row min-h-screen">
-        {/* Mobile/Tablet: Sheet for Sidebar */}
-        <div className="block lg:hidden w-full">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" className="m-4">
-                <Filter className="mr-2 h-4 w-4" /> Filters
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0 max-w-xs">
-              <Sidebar
-                difficulties={difficulties}
-                topics={topics}
-                availableTopics={availableTopics}
-                onDifficultyChange={setDifficulties}
-                onTopicChange={setTopics}
-                onShuffle={handleShuffle}
-                noCard
-              />
-            </SheetContent>
-          </Sheet>
-        </div>
-        {/* Desktop: persistent Sidebar */}
-        <div className="hidden lg:block w-80 flex-shrink-0">
-          <Sidebar
-            difficulties={difficulties}
-            topics={topics}
-            availableTopics={availableTopics}
-            onDifficultyChange={setDifficulties}
-            onTopicChange={setTopics}
-            onShuffle={handleShuffle}
-          />
-        </div>
-        {/* Flashcard area: centered, responsive */}
-        <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4">
-          {filteredProblems.length > 0 && shuffledProblems.length > 0 ? (
-            <div className="w-full flex flex-col items-stretch p-4 sm:p-6">
-              <div className="flex w-full justify-end items-center mb-4 gap-4">
-                <div className="text-sm text-muted-foreground">
-                  Card {index + 1} of {shuffledProblems.length}
-                </div>
-                <Button
-                  variant="secondary"
-                  onClick={prev}
-                  className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-                  disabled={shuffledProblems.length === 0}
-                >
-                  Previous
+      <div className="flex flex-col min-h-screen">
+        {/* Flashcard area: always top-aligned, always drawer for filters */}
+        <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4 mt-4">
+          {/* Always show: Sheet for Sidebar and nav row */}
+          <div className="flex w-full items-center mb-4 gap-2">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline">
+                  <Filter className="mr-2 h-4 w-4" /> Filters
                 </Button>
-                <Button
-                  variant="secondary"
-                  onClick={next}
-                  className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-                  disabled={shuffledProblems.length === 0}
-                >
-                  Next
-                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="p-0 max-w-xs">
+                <Sidebar
+                  difficulties={difficulties}
+                  topics={topics}
+                  availableTopics={availableTopics}
+                  onDifficultyChange={setDifficulties}
+                  onTopicChange={setTopics}
+                  onShuffle={handleShuffle}
+                  noCard
+                />
+              </SheetContent>
+            </Sheet>
+            <div className="flex-1 flex items-center justify-end gap-4">
+              <div className="text-sm text-muted-foreground">
+                Card {index + 1} of {shuffledProblems.length}
               </div>
+              <Button
+                variant="secondary"
+                onClick={prev}
+                className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+                disabled={shuffledProblems.length === 0}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={next}
+                className="hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+                disabled={shuffledProblems.length === 0}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+          {filteredProblems.length > 0 && shuffledProblems.length > 0 ? (
+            <div className="w-full max-w-3xl mx-auto flex flex-col items-stretch">
               <Flashcard problem={shuffledProblems[index]} />
             </div>
           ) : (
@@ -153,7 +142,7 @@ export default function Home() {
           )}
         </div>
       </div>
-      <footer className="w-full flex justify-center items-center py-6 text-muted-foreground text-sm bg-white border-t">
+      <footer className="w-full flex justify-center items-center py-6 px-4 text-muted-foreground text-sm bg-white border-t">
         Code for the solutions were contributed by Marc Beepath, Daniel Diaz and
         Alex Rong
       </footer>
