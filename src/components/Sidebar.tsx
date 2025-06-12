@@ -82,7 +82,7 @@ export function Sidebar({
         <div className="mb-2">
           <h3 className="text-sm font-medium mb-1">List</h3>
           <Select value={list} onValueChange={handleListChange}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full cursor-pointer">
               <SelectValue placeholder="Select list" />
             </SelectTrigger>
             <SelectContent>

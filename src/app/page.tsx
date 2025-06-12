@@ -260,7 +260,7 @@ export default function Home() {
                       <div className="p-4 mt-auto border-t">
                         <Button
                           variant="outline"
-                          className="w-full"
+                          className="w-full cursor-pointer"
                           onClick={resetFilters}
                         >
                           Reset Filters
@@ -317,7 +317,7 @@ export default function Home() {
               {/* Center - Card counter or status */}
               <div className="text-sm text-muted-foreground text-center font-medium">
                 {filteredProblems.length > 0 && shuffledProblems.length > 0
-                  ? `Card ${index + 1} of ${shuffledProblems.length}`
+                  ? `${index + 1} / ${shuffledProblems.length}`
                   : `${problems.length} problems available`}
               </div>
 
@@ -400,7 +400,10 @@ export default function Home() {
                     </div>
                     <Sheet>
                       <SheetTrigger asChild>
-                        <Button variant="outline" className="mt-4">
+                        <Button
+                          variant="outline"
+                          className="mt-4 cursor-pointer"
+                        >
                           <Filter className="mr-2 h-4 w-4" />
                           Open Filters
                         </Button>

@@ -1,6 +1,9 @@
 # DSA Flashcards
 
-These flashcards were based on solutions created by myself, Daniel and Alex.
+> You can use the deployed site [here](https://code.marc.tt)
+
+These flashcards were based on solutions created by [myself](https://marc.tt), [Daniel](https://github.com/Daniel-04) and [Haowen](https://github.com/HaowenRong).
+
 The original solutions are preserved on the `solutions` branch.
 They are now being integrated into this Nextjs Site slowly.
 
@@ -9,7 +12,7 @@ They are now being integrated into this Nextjs Site slowly.
 ![1.png](images/1.png)
 ![2.png](images/2.png)
 
-## Getting Started
+## Getting Started Locally
 
 First, run the development server:
 
