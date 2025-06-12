@@ -472,9 +472,36 @@ export default function Home() {
           </CommandDialog>
         </div>
       </div>
-      <footer className="w-full flex justify-center items-center py-6 px-4 text-muted-foreground text-sm bg-white border-t">
-        Code for the solutions were contributed by Marc Beepath, Daniel Diaz and
-        Alex Rong
+      <footer className="w-full flex flex-col sm:flex-row justify-center items-center gap-2 py-6 px-4 text-muted-foreground text-sm bg-white border-t text-center">
+        <span>Code for the solutions were contributed by</span>
+        <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-1">
+          <a
+            href="https://marc.tt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            Marc Beepath
+          </a>
+          <span className="hidden sm:inline">,</span>
+          <a
+            href="https://github.com/Daniel-04"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            Daniel Diaz
+          </a>
+          <span>and</span>
+          <a
+            href="https://github.com/HaowenRong"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            Haowen Rong
+          </a>
+        </div>
       </footer>
     </>
   );
