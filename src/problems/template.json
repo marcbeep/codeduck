@@ -12,22 +12,30 @@
   ],
   "testCases": [
     {
-      "input": { "s": "()" },
+      "input": {
+        "s": "()"
+      },
       "output": true,
       "explanation": "Simple valid case with matching parentheses."
     },
     {
-      "input": { "s": "()[]{}" },
+      "input": {
+        "s": "()[]{}"
+      },
       "output": true,
       "explanation": "Valid case with multiple types of brackets."
     },
     {
-      "input": { "s": "(]" },
+      "input": {
+        "s": "(]"
+      },
       "output": false,
       "explanation": "Invalid case with mismatched brackets."
     },
     {
-      "input": { "s": "([)]" },
+      "input": {
+        "s": "([)]"
+      },
       "output": false,
       "explanation": "Invalid case with incorrectly nested brackets."
     }
