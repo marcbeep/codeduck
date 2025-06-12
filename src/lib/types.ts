@@ -4,8 +4,8 @@ export type Solution = {
 };
 
 export type TestCase = {
-  input: Record<string, any>;
-  output: any;
+  input: Record<string, unknown>;
+  output: unknown;
   explanation: string;
 };
 

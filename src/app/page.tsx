@@ -5,11 +5,18 @@ import { Sidebar } from "@/components/Sidebar";
 import { problems } from "@/lib/load-problems";
 import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardFooter } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+
 import type { LeetCodeProblem } from "@/lib/types";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { Filter } from "lucide-react";
+import { Filter, Shuffle, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 type Topic = string;
@@ -19,6 +26,7 @@ export default function Home() {
   const [shuffledProblems, setShuffledProblems] = useState<LeetCodeProblem[]>(
     []
   );
+  const [isShuffling, setIsShuffling] = useState(false);
 
   // Move filter state to parent
   const [difficulties, setDifficulties] = useState<Record<Difficulty, boolean>>(
@@ -62,6 +70,12 @@ export default function Home() {
     }
   }, [filteredProblems]);
 
+  // Calculate progress percentage
+  const progressValue =
+    shuffledProblems.length > 0
+      ? ((index + 1) / shuffledProblems.length) * 100
+      : 0;
+
   const next = () => {
     if (shuffledProblems.length === 0) return;
     setIndex((i) => (i + 1) % shuffledProblems.length);
@@ -74,8 +88,14 @@ export default function Home() {
     );
   };
 
-  const handleShuffle = () => {
+  const handleShuffle = async () => {
     if (filteredProblems.length === 0) return;
+
+    setIsShuffling(true);
+
+    // Brief delay to show animation
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
     const shuffled = [...filteredProblems];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -83,38 +103,139 @@ export default function Home() {
     }
     setShuffledProblems(shuffled);
     setIndex(0);
+    setIsShuffling(false);
   };
 
   return (
     <>
       <div className="flex flex-col min-h-screen">
         <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4 mt-4">
-          <div className="flex w-full items-center mb-4 gap-2">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="hover:scale-105 active:scale-95 transition-transform duration-200"
-                >
-                  <Filter className="mr-2 h-4 w-4" /> Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="left"
-                className="p-0 max-w-xs transition-all duration-300 ease-in-out"
+          {/* Navigation bar - always visible */}
+          <div className="w-full max-w-3xl mx-auto">
+            <div className="flex items-center justify-between w-full mb-4 px-2 mt-8">
+              {/* Left side - Filter and Shuffle buttons */}
+              <div className="flex gap-3">
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                    >
+                      <Filter className="mr-2 h-4 w-4" /> Filters
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side="left"
+                    className="p-0 max-w-xs transition-all duration-300 ease-in-out"
+                  >
+                    <Sidebar
+                      difficulties={difficulties}
+                      topics={topics}
+                      availableTopics={availableTopics}
+                      onDifficultyChange={setDifficulties}
+                      onTopicChange={setTopics}
+                      onShuffle={handleShuffle}
+                      noCard
+                    />
+                  </SheetContent>
+                </Sheet>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        onClick={handleShuffle}
+                        className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                        disabled={filteredProblems.length === 0 || isShuffling}
+                      >
+                        <motion.div
+                          animate={
+                            isShuffling ? { rotate: 360 } : { rotate: 0 }
+                          }
+                          transition={{ duration: 0.4, ease: "easeInOut" }}
+                        >
+                          <Shuffle className="h-4 w-4" />
+                        </motion.div>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Shuffle Deck</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
+              {/* Center - Card counter or status */}
+              <motion.div
+                key={`${index}-${shuffledProblems.length}-${isShuffling}-${filteredProblems.length}`}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+                className="text-sm text-muted-foreground text-center font-medium"
               >
-                <Sidebar
-                  difficulties={difficulties}
-                  topics={topics}
-                  availableTopics={availableTopics}
-                  onDifficultyChange={setDifficulties}
-                  onTopicChange={setTopics}
-                  onShuffle={handleShuffle}
-                  noCard
-                />
-              </SheetContent>
-            </Sheet>
+                {filteredProblems.length > 0 && shuffledProblems.length > 0
+                  ? `Card ${index + 1} of ${shuffledProblems.length}`
+                  : `${problems.length} problems available`}
+              </motion.div>
+
+              {/* Right side - Navigation buttons */}
+              <div className="flex gap-2">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={prev}
+                        className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-150 cursor-pointer"
+                        disabled={shuffledProblems.length === 0}
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Previous</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={next}
+                        className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-150 cursor-pointer"
+                        disabled={shuffledProblems.length === 0}
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Next</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </div>
+
+            {/* Progress bar - only show when there are problems */}
+            {filteredProblems.length > 0 && shuffledProblems.length > 0 && (
+              <motion.div
+                className="w-full mb-6 px-2"
+                key={`progress-${index}-${shuffledProblems.length}`}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              >
+                <Progress value={progressValue} className="h-1.5" />
+              </motion.div>
+            )}
           </div>
+
+          {/* Content area */}
           <AnimatePresence mode="wait">
             {filteredProblems.length > 0 && shuffledProblems.length > 0 ? (
               <motion.div
@@ -122,47 +243,52 @@ export default function Home() {
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="w-full max-w-3xl mx-auto flex flex-col items-stretch"
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="w-full max-w-3xl mx-auto"
               >
-                {/* Nav row inside card area */}
-                <div className="flex items-center justify-between w-full mb-2 px-2 mt-8">
-                  <Button
-                    variant="secondary"
-                    onClick={prev}
-                    className="hover:bg-accent hover:text-accent-foreground hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
-                    disabled={shuffledProblems.length === 0}
-                  >
-                    Previous
-                  </Button>
-                  <motion.div
-                    key={`${index}-${shuffledProblems.length}`}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-sm text-muted-foreground text-center flex-1"
-                  >
-                    Card {index + 1} of {shuffledProblems.length}
-                  </motion.div>
-                  <Button
-                    variant="secondary"
-                    onClick={next}
-                    className="hover:bg-accent hover:text-accent-foreground hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
-                    disabled={shuffledProblems.length === 0}
-                  >
-                    Next
-                  </Button>
-                </div>
                 <Flashcard problem={shuffledProblems[index]} />
               </motion.div>
             ) : (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-muted-foreground"
+                transition={{ duration: 0.2 }}
+                className="w-full max-w-3xl mx-auto"
               >
-                No problems match the current filters
+                <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-8 text-center">
+                  <div className="space-y-4">
+                    <div className="text-2xl font-bold">No Problems Found</div>
+                    <div className="text-muted-foreground">
+                      No problems match your current filter settings.
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Try adjusting your difficulty or topic filters to see more
+                      problems.
+                    </div>
+                    <Sheet>
+                      <SheetTrigger asChild>
+                        <Button variant="outline" className="mt-4">
+                          <Filter className="mr-2 h-4 w-4" />
+                          Open Filters
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent
+                        side="left"
+                        className="p-0 max-w-xs transition-all duration-300 ease-in-out"
+                      >
+                        <Sidebar
+                          difficulties={difficulties}
+                          topics={topics}
+                          availableTopics={availableTopics}
+                          onDifficultyChange={setDifficulties}
+                          onTopicChange={setTopics}
+                          onShuffle={handleShuffle}
+                          noCard
+                        />
+                      </SheetContent>
+                    </Sheet>
+                  </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
