@@ -1,0 +1,47 @@
+{
+  "id": 1,
+  "title": "Valid Parentheses",
+  "list": "blind75",
+  "category": "Stack",
+  "topics": ["Stack", "String"],
+  "difficulty": "Easy",
+  "description": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.",
+  "constraints": [
+    "1 <= s.length <= 104",
+    "s consists of parentheses only '()[]{}'"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "()"
+      },
+      "output": true,
+      "explanation": "Simple valid case with matching parentheses."
+    },
+    {
+      "input": {
+        "s": "()[]{}"
+      },
+      "output": true,
+      "explanation": "Valid case with multiple types of brackets."
+    },
+    {
+      "input": {
+        "s": "(]"
+      },
+      "output": false,
+      "explanation": "Invalid case with mismatched brackets."
+    },
+    {
+      "input": {
+        "s": "([)]"
+      },
+      "output": false,
+      "explanation": "Invalid case with incorrectly nested brackets."
+    }
+  ],
+  "solution": {
+    "code": "def is_valid(s: str) -> bool:\n    # Create a stack to keep track of opening brackets\n    stack = []\n    \n    # Create a mapping of closing brackets to their corresponding opening brackets\n    bracket_map = {')': '(', '}': '{', ']': '['}\n    \n    # Iterate through each character in the string\n    for char in s:\n        # If it's an opening bracket, push it onto the stack\n        if char in '({[':\n            stack.append(char)\n        # If it's a closing bracket\n        else:\n            # If stack is empty or the top of stack doesn't match the closing bracket\n            if not stack or stack.pop() != bracket_map[char]:\n                return False\n    \n    # If stack is empty, all brackets were properly matched\n    return len(stack) == 0",
+    "explanation": "This solution uses a stack to keep track of opening brackets. For each character in the string:\n1. If it's an opening bracket, we push it onto the stack\n2. If it's a closing bracket, we check if it matches the most recent opening bracket (top of stack)\n3. If they don't match or the stack is empty, the string is invalid\n4. At the end, if the stack is empty, all brackets were properly matched\n\nThe time complexity is O(n) as we process each character once. The space complexity is O(n) as we might need to store all characters in the stack in the worst case."
+  }
+}
