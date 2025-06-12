@@ -1,7 +1,13 @@
 # DSA Flashcards
 
 These flashcards were based on solutions created by myself, Daniel and Alex.
-You can view them in this Nextjs Site.
+The original solutions are preserved on the `solutions` branch.
+They are now being integrated into this Nextjs Site slowly.
+
+## Screenshots
+
+![1.png](images/1.png)
+![2.png](images/2.png)
 
 ## Getting Started
 
