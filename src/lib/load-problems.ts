@@ -1,12 +1,19 @@
 import type { LeetCodeProblem } from "@/lib/types";
-import twoSum from "@/problems/json/001-two-sum.json";
-import reverseLinkedList from "@/problems/json/002-reverse-linked-list.json";
+import fs from "fs";
+import path from "path";
 
-// Type assertion to ensure JSON files match our LeetCodeProblem type
-const problemFiles = [
-  twoSum as LeetCodeProblem,
-  reverseLinkedList as LeetCodeProblem,
-];
+// Get the absolute path to the problems directory
+const problemsDir = path.join(process.cwd(), "src/problems/json");
+
+// Read all JSON files in the directory
+const problemFiles = fs
+  .readdirSync(problemsDir)
+  .filter((file) => file.endsWith(".json"))
+  .map((file) => {
+    const filePath = path.join(problemsDir, file);
+    const data = fs.readFileSync(filePath, "utf-8");
+    return JSON.parse(data) as LeetCodeProblem;
+  });
 
 // Sort problems by ID
 export const problems: LeetCodeProblem[] = problemFiles.sort(

@@ -2,7 +2,7 @@
 
 import Flashcard from "@/components/Flashcard";
 import { Sidebar } from "@/components/Sidebar";
-import { problems } from "@/lib/load-problems";
+import { getProblems } from "@/lib/actions";
 import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -37,6 +37,23 @@ type Topic = string;
 type List = string;
 
 export default function Home() {
+  const [problems, setProblems] = useState<LeetCodeProblem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProblems() {
+      try {
+        const loadedProblems = await getProblems();
+        setProblems(loadedProblems);
+      } catch (error) {
+        console.error("Failed to load problems:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadProblems();
+  }, []);
+
   const [index, setIndex] = useState(0);
   const [shuffledProblems, setShuffledProblems] = useState<LeetCodeProblem[]>(
     []
@@ -60,7 +77,7 @@ export default function Home() {
       uniqueCategories.add(problem.category);
     });
     return Array.from(uniqueCategories).sort();
-  }, []);
+  }, [problems]);
 
   // Initialize categories state
   const [categories, setCategories] = useState<Record<string, boolean>>(() => {
@@ -151,6 +168,17 @@ export default function Home() {
         return "text-gray-600 bg-gray-100";
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-2 text-muted-foreground">Loading problems...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

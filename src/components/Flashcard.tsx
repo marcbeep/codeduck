@@ -147,66 +147,46 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                     <span>Test Cases</span>
                   </div>
                   <div className="space-y-4">
-                    {problem.testCases.map((testCase, index) => (
-                      <motion.div
-                        key={
-                          index +
-                          "-" +
-                          JSON.stringify(testCase.input) +
-                          "-" +
-                          JSON.stringify(testCase.output)
-                        }
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1, duration: 0.3 }}
-                        className="text-sm space-y-2"
-                      >
-                        <div className="font-medium">
-                          Test Case {index + 1}:
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div>
-                            <span className="text-muted-foreground">
-                              Input:
-                            </span>
-                            <SyntaxHighlighter
-                              language="json"
-                              style={oneLight}
-                              customStyle={{
-                                borderRadius: "0.5rem",
-                                fontSize: "0.9em",
-                                padding: "0.5em",
-                                marginTop: "0.25em",
-                              }}
-                            >
-                              {JSON.stringify(testCase.input, null, 2)}
-                            </SyntaxHighlighter>
+                    {problem.testCases.map((testCase, index) => {
+                      const inputStr = Object.entries(testCase.input)
+                        .map(([k, v]) => `${k} = ${JSON.stringify(v)}`)
+                        .join(", ");
+                      const outputStr =
+                        Array.isArray(testCase.output) ||
+                        typeof testCase.output === "object"
+                          ? JSON.stringify(testCase.output)
+                          : String(testCase.output);
+                      return (
+                        <motion.div
+                          key={
+                            index +
+                            "-" +
+                            JSON.stringify(testCase.input) +
+                            "-" +
+                            JSON.stringify(testCase.output)
+                          }
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1, duration: 0.3 }}
+                          className="text-sm space-y-1"
+                        >
+                          <div className="font-medium">
+                            Test Case {index + 1}:
                           </div>
                           <div>
-                            <span className="text-muted-foreground">
-                              Output:
-                            </span>
-                            <SyntaxHighlighter
-                              language="json"
-                              style={oneLight}
-                              customStyle={{
-                                borderRadius: "0.5rem",
-                                fontSize: "0.9em",
-                                padding: "0.5em",
-                                marginTop: "0.25em",
-                              }}
-                            >
-                              {JSON.stringify(testCase.output, null, 2)}
-                            </SyntaxHighlighter>
+                            <b>Input:</b> <code>{inputStr}</code>
                           </div>
-                        </div>
-                        {testCase.explanation && (
-                          <div className="text-xs text-muted-foreground mt-1">
-                            <b>Explanation:</b> {testCase.explanation}
+                          <div>
+                            <b>Output:</b> <code>{outputStr}</code>
                           </div>
-                        )}
-                      </motion.div>
-                    ))}
+                          {testCase.explanation && (
+                            <div className="text-xs text-muted-foreground mt-1">
+                              <b>Explanation:</b> {testCase.explanation}
+                            </div>
+                          )}
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 </motion.div>
               </div>
