@@ -261,17 +261,11 @@ export default function Home() {
               </div>
 
               {/* Center - Card counter or status */}
-              <motion.div
-                key={`${index}-${shuffledProblems.length}-${isShuffling}-${filteredProblems.length}`}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.15, ease: "easeOut" }}
-                className="text-sm text-muted-foreground text-center font-medium"
-              >
+              <div className="text-sm text-muted-foreground text-center font-medium">
                 {filteredProblems.length > 0 && shuffledProblems.length > 0
                   ? `Card ${index + 1} of ${shuffledProblems.length}`
                   : `${problems.length} problems available`}
-              </motion.div>
+              </div>
 
               {/* Right side - Navigation buttons */}
               <div className="flex gap-2">
@@ -317,15 +311,12 @@ export default function Home() {
 
             {/* Progress bar - only show when there are problems */}
             {filteredProblems.length > 0 && shuffledProblems.length > 0 && (
-              <motion.div
-                className="w-full mb-6 px-2"
-                key={`progress-${index}-${shuffledProblems.length}`}
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-              >
-                <Progress value={progressValue} className="h-1.5" />
-              </motion.div>
+              <div className="w-full mb-6 px-2">
+                <Progress
+                  value={progressValue}
+                  className="h-1.5 transition-all duration-300"
+                />
+              </div>
             )}
           </div>
 
@@ -334,16 +325,9 @@ export default function Home() {
             {filteredProblems.length > 0 &&
             shuffledProblems.length > 0 &&
             shuffledProblems[index] ? (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="w-full max-w-3xl mx-auto"
-              >
+              <div key={index} className="w-full max-w-3xl mx-auto">
                 <Flashcard problem={shuffledProblems[index]} />
-              </motion.div>
+              </div>
             ) : (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
