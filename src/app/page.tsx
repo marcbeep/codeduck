@@ -96,7 +96,7 @@ export default function Home() {
       }
     });
     return Array.from(uniqueLists).sort();
-  }, []);
+  }, [problems]);
 
   // Remove lists state and use a single string for selected list
   const [selectedList, setSelectedList] = useState<string>("all");
@@ -211,7 +211,6 @@ export default function Home() {
                       onDifficultyChange={setDifficulties}
                       onCategoryChange={setCategories}
                       onListChange={setSelectedList}
-                      onShuffle={handleShuffle}
                       noCard
                     />
                   </SheetContent>
@@ -379,7 +378,6 @@ export default function Home() {
                           onDifficultyChange={setDifficulties}
                           onCategoryChange={setCategories}
                           onListChange={setSelectedList}
-                          onShuffle={handleShuffle}
                           noCard
                         />
                       </SheetContent>

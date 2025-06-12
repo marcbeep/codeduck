@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Shuffle, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -29,13 +29,12 @@ type List = string;
 interface SidebarProps {
   difficulties: Record<Difficulty, boolean>;
   categories: Record<Category, boolean>;
-  list: string; // single value
+  list: string;
   availableCategories: Category[];
   availableLists: List[];
   onDifficultyChange: Dispatch<SetStateAction<Record<Difficulty, boolean>>>;
   onCategoryChange: Dispatch<SetStateAction<Record<Category, boolean>>>;
   onListChange: (list: string) => void;
-  onShuffle: () => void;
   noCard?: boolean;
 }
 
@@ -48,7 +47,6 @@ export function Sidebar({
   onDifficultyChange,
   onCategoryChange,
   onListChange,
-  onShuffle,
   noCard = false,
 }: SidebarProps) {
   const [isDifficultyOpen, setIsDifficultyOpen] = useState(true);
@@ -92,7 +90,7 @@ export function Sidebar({
               <SelectItem value="all">All Lists</SelectItem>
               {availableLists.map((l) => (
                 <SelectItem key={l} value={l}>
-                  {l}
+                  {l === "blind75" ? "Blind 75" : l}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -179,15 +177,6 @@ export function Sidebar({
           </CollapsibleContent>
         </Collapsible>
         <Separator />
-        <Button
-          variant="outline"
-          className="w-full hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-          onClick={onShuffle}
-          disabled={false}
-        >
-          <Shuffle className="mr-2 h-4 w-4" />
-          Shuffle Deck
-        </Button>
       </div>
     </div>
   );
