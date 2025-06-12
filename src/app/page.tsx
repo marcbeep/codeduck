@@ -9,7 +9,13 @@ import { Progress } from "@/components/ui/progress";
 
 import type { LeetCodeProblem } from "@/lib/types";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { Filter, Shuffle, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Filter,
+  Shuffle,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Tooltip,
@@ -17,6 +23,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from "@/components/ui/command";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 type Topic = string;
@@ -27,6 +41,7 @@ export default function Home() {
     []
   );
   const [isShuffling, setIsShuffling] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   // Move filter state to parent
   const [difficulties, setDifficulties] = useState<Record<Difficulty, boolean>>(
@@ -106,6 +121,31 @@ export default function Home() {
     setIsShuffling(false);
   };
 
+  // Search functionality
+  const handleSearchSelect = (problemTitle: string) => {
+    const problemIndex = shuffledProblems.findIndex(
+      (problem) => problem.title === problemTitle
+    );
+    if (problemIndex !== -1) {
+      setIndex(problemIndex);
+    }
+    setSearchOpen(false);
+  };
+
+  // Get difficulty badge color
+  const getDifficultyColor = (difficulty: Difficulty) => {
+    switch (difficulty) {
+      case "Easy":
+        return "text-green-600 bg-green-100";
+      case "Medium":
+        return "text-yellow-600 bg-yellow-100";
+      case "Hard":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-gray-600 bg-gray-100";
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -113,7 +153,7 @@ export default function Home() {
           {/* Navigation bar - always visible */}
           <div className="w-full max-w-3xl mx-auto">
             <div className="flex items-center justify-between w-full mb-4 px-2 mt-8">
-              {/* Left side - Filter and Shuffle buttons */}
+              {/* Left side - Filter, Shuffle, and Search buttons */}
               <div className="flex gap-3">
                 <Sheet>
                   <SheetTrigger asChild>
@@ -161,6 +201,24 @@ export default function Home() {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Shuffle Deck</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        onClick={() => setSearchOpen(true)}
+                        className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                        disabled={shuffledProblems.length === 0}
+                      >
+                        <Search className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Search Problems</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -292,6 +350,50 @@ export default function Home() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Search Command Dialog */}
+          <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+            <CommandInput placeholder="Search problems by title, category, topic, or difficulty..." />
+            <CommandList>
+              <CommandEmpty>No problems found.</CommandEmpty>
+              <CommandGroup heading="Problems">
+                {shuffledProblems.map((problem) => (
+                  <CommandItem
+                    key={problem.id}
+                    value={`${problem.title} ${
+                      problem.category
+                    } ${problem.topics.join(" ")} ${problem.difficulty}`}
+                    onSelect={() => handleSearchSelect(problem.title)}
+                    className="flex items-center justify-between cursor-pointer"
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-medium">{problem.title}</span>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(
+                            problem.difficulty
+                          )}`}
+                        >
+                          {problem.difficulty}
+                        </span>
+                        <span>•</span>
+                        <span>{problem.category}</span>
+                        {problem.topics.length > 0 && (
+                          <>
+                            <span>•</span>
+                            <span>
+                              {problem.topics.slice(0, 2).join(", ")}
+                              {problem.topics.length > 2 ? "..." : ""}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </CommandDialog>
         </div>
       </div>
       <footer className="w-full flex justify-center items-center py-6 px-4 text-muted-foreground text-sm bg-white border-t">
