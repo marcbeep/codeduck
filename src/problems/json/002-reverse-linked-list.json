@@ -1,0 +1,34 @@
+{
+  "id": 2,
+  "title": "Reverse Linked List",
+  "description": "Given the head of a singly linked list, reverse the list, and return the reversed list.",
+  "solutions": {
+    "typescript": {
+      "code": "class ListNode {\n  val: number;\n  next: ListNode | null;\n  constructor(val?: number, next?: ListNode | null) {\n    this.val = val === undefined ? 0 : val;\n    this.next = next === undefined ? null : next;\n  }\n}\n\nfunction reverseList(head: ListNode | null): ListNode | null {\n  let prev: ListNode | null = null;\n  let curr: ListNode | null = head;\n  \n  while (curr) {\n    const next = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = next;\n  }\n  \n  return prev;\n}",
+      "explanation": "We use three pointers: prev, curr, and next. We iterate through the list, at each step reversing the link between curr and prev, then moving all pointers forward."
+    },
+    "python": {
+      "code": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef reverse_list(head: ListNode | None) -> ListNode | None:\n    prev = None\n    curr = head\n    \n    while curr:\n        next_node = curr.next\n        curr.next = prev\n        prev = curr\n        curr = next_node\n    \n    return prev",
+      "explanation": "We use three pointers: prev, curr, and next_node. We iterate through the list, at each step reversing the link between curr and prev, then moving all pointers forward."
+    }
+  },
+  "category": "Linked List",
+  "difficulty": "Easy",
+  "testCases": [
+    {
+      "input": { "head": [1, 2, 3, 4, 5] },
+      "output": [5, 4, 3, 2, 1],
+      "explanation": "The linked list 1->2->3->4->5 becomes 5->4->3->2->1"
+    },
+    {
+      "input": { "head": [1, 2] },
+      "output": [2, 1],
+      "explanation": "The linked list 1->2 becomes 2->1"
+    }
+  ],
+  "constraints": [
+    "The number of nodes in the list is in the range [0, 5000]",
+    "-5000 <= Node.val <= 5000"
+  ],
+  "topics": ["Linked List", "Recursion", "Two Pointers"]
+}

@@ -1,0 +1,36 @@
+{
+  "id": 1,
+  "title": "Two Sum",
+  "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
+  "solutions": {
+    "typescript": {
+      "code": "function twoSum(nums: number[], target: number): number[] {\n  const map: Record<number, number> = {};\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map[complement] !== undefined) {\n      return [map[complement], i];\n    }\n    map[nums[i]] = i;\n  }\n  return [];\n}",
+      "explanation": "We use a hash map to store the numbers we've seen and their indices. For each number, we check if its complement (target - current number) exists in the map. If it does, we've found our pair. If not, we add the current number and its index to the map."
+    },
+    "python": {
+      "code": "def two_sum(nums: list[int], target: int) -> list[int]:\n    num_map: dict[int, int] = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in num_map:\n            return [num_map[complement], i]\n        num_map[num] = i\n    return []",
+      "explanation": "We use a dictionary to store the numbers we've seen and their indices. For each number, we check if its complement (target - current number) exists in the dictionary. If it does, we've found our pair. If not, we add the current number and its index to the dictionary."
+    }
+  },
+  "category": "Array",
+  "difficulty": "Easy",
+  "testCases": [
+    {
+      "input": { "nums": [2, 7, 11, 15], "target": 9 },
+      "output": [0, 1],
+      "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]"
+    },
+    {
+      "input": { "nums": [3, 2, 4], "target": 6 },
+      "output": [1, 2],
+      "explanation": "Because nums[1] + nums[2] == 6, we return [1, 2]"
+    }
+  ],
+  "constraints": [
+    "2 <= nums.length <= 104",
+    "-109 <= nums[i] <= 109",
+    "-109 <= target <= 109",
+    "Only one valid answer exists"
+  ],
+  "topics": ["Array", "Hash Table", "Sorting", "Two Pointers"]
+}
