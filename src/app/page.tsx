@@ -33,8 +33,6 @@ import {
 } from "@/components/ui/command";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
-type Topic = string;
-type List = string;
 
 export default function Home() {
   const [problems, setProblems] = useState<LeetCodeProblem[]>([]);
