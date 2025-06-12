@@ -331,7 +331,9 @@ export default function Home() {
 
           {/* Content area */}
           <AnimatePresence mode="wait">
-            {filteredProblems.length > 0 && shuffledProblems.length > 0 ? (
+            {filteredProblems.length > 0 &&
+            shuffledProblems.length > 0 &&
+            shuffledProblems[index] ? (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: 100 }}
