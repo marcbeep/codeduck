@@ -10,7 +10,6 @@ They are now being integrated into this Nextjs Site slowly.
 ## Screenshots
 
 ![1.png](images/1.png)
-![2.png](images/2.png)
 
 ## Getting Started Locally
 
