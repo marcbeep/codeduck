@@ -34,6 +34,7 @@ import {
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 type Topic = string;
+type List = string;
 
 export default function Home() {
   const [index, setIndex] = useState(0);
@@ -69,14 +70,30 @@ export default function Home() {
     return initialCategories;
   });
 
+  // Get available lists
+  const availableLists = useMemo(() => {
+    const uniqueLists = new Set<string>();
+    problems.forEach((problem) => {
+      if (problem.list) {
+        uniqueLists.add(problem.list);
+      }
+    });
+    return Array.from(uniqueLists).sort();
+  }, []);
+
+  // Remove lists state and use a single string for selected list
+  const [selectedList, setSelectedList] = useState<string>("all");
+
   // Filter problems based on current filters
   const filteredProblems = useMemo(() => {
     return problems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
       const matchesCategory = categories[problem.category];
-      return matchesDifficulty && matchesCategory;
+      const matchesList =
+        selectedList === "all" || problem.list === selectedList;
+      return matchesDifficulty && matchesCategory && matchesList;
     });
-  }, [difficulties, categories]);
+  }, [difficulties, categories, selectedList]);
 
   // Initialize and update shuffled problems when filters change
   useEffect(() => {
@@ -160,9 +177,12 @@ export default function Home() {
                     <Sidebar
                       difficulties={difficulties}
                       categories={categories}
+                      list={selectedList}
                       availableCategories={availableCategories}
+                      availableLists={availableLists}
                       onDifficultyChange={setDifficulties}
                       onCategoryChange={setCategories}
+                      onListChange={setSelectedList}
                       onShuffle={handleShuffle}
                       noCard
                     />
@@ -325,9 +345,12 @@ export default function Home() {
                         <Sidebar
                           difficulties={difficulties}
                           categories={categories}
+                          list={selectedList}
                           availableCategories={availableCategories}
+                          availableLists={availableLists}
                           onDifficultyChange={setDifficulties}
                           onCategoryChange={setCategories}
+                          onListChange={setSelectedList}
                           onShuffle={handleShuffle}
                           noCard
                         />

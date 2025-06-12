@@ -1,30 +1,45 @@
 {
   "id": 1,
   "title": "Two Sum",
-  "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
+  "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
   "solution": {
-    "code": "def two_sum(nums: list[int], target: int) -> list[int]:\n    num_map: dict[int, int] = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in num_map:\n            return [num_map[complement], i]\n        num_map[num] = i\n    return []",
-    "explanation": "We use a dictionary to store the numbers we've seen and their indices. For each number, we check if its complement (target - current number) exists in the dictionary. If it does, we've found our pair. If not, we add the current number and its index to the dictionary."
+    "code": "def two_sum(nums: list[int], target: int) -> list[int]:\n    # Create a hash map to store the numbers we've seen\n    seen = {}\n    \n    # Iterate through the array\n    for i, num in enumerate(nums):\n        # Calculate the complement we need to find\n        complement = target - num\n        \n        # If we've seen the complement before, we found our pair\n        if complement in seen:\n            return [seen[complement], i]\n        \n        # Otherwise, store the current number and its index\n        seen[num] = i\n    \n    # If we get here, no solution was found (though the problem guarantees one exists)\n    return []",
+    "explanation": "This solution uses a hash map to achieve O(n) time complexity. For each number, we calculate what number we need to find (the complement) to reach the target. If we've seen that complement before, we've found our pair. If not, we store the current number and its index in the hash map and continue.\n\nThe time complexity is O(n) as we only need to iterate through the array once, and hash map operations are O(1). The space complexity is also O(n) as we might need to store up to n numbers in the hash map."
   },
   "category": "Array",
   "difficulty": "Easy",
   "testCases": [
     {
-      "input": { "nums": [2, 7, 11, 15], "target": 9 },
+      "input": {
+        "nums": [2, 7, 11, 15],
+        "target": 9
+      },
       "output": [0, 1],
-      "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]"
+      "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
     },
     {
-      "input": { "nums": [3, 2, 4], "target": 6 },
+      "input": {
+        "nums": [3, 2, 4],
+        "target": 6
+      },
       "output": [1, 2],
-      "explanation": "Because nums[1] + nums[2] == 6, we return [1, 2]"
+      "explanation": "Because nums[1] + nums[2] == 6, we return [1, 2]."
+    },
+    {
+      "input": {
+        "nums": [3, 3],
+        "target": 6
+      },
+      "output": [0, 1],
+      "explanation": "Because nums[0] + nums[1] == 6, we return [0, 1]."
     }
   ],
   "constraints": [
     "2 <= nums.length <= 104",
     "-109 <= nums[i] <= 109",
     "-109 <= target <= 109",
-    "Only one valid answer exists"
+    "Only one valid answer exists."
   ],
-  "topics": ["Array", "Hash Table", "Sorting", "Two Pointers"]
+  "topics": ["Array", "Hash Table"],
+  "list": "blind75"
 }

@@ -19,4 +19,5 @@ export type LeetCodeProblem = {
   testCases: TestCase[];
   constraints: string[];
   topics: string[];
+  list: string;
 };

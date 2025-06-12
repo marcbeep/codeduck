@@ -12,18 +12,29 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 type Category = string;
+type List = string;
 
 interface SidebarProps {
   difficulties: Record<Difficulty, boolean>;
   categories: Record<Category, boolean>;
+  list: string; // single value
   availableCategories: Category[];
+  availableLists: List[];
   onDifficultyChange: Dispatch<SetStateAction<Record<Difficulty, boolean>>>;
   onCategoryChange: Dispatch<SetStateAction<Record<Category, boolean>>>;
+  onListChange: (list: string) => void;
   onShuffle: () => void;
   noCard?: boolean;
 }
@@ -31,9 +42,12 @@ interface SidebarProps {
 export function Sidebar({
   difficulties,
   categories,
+  list,
   availableCategories,
+  availableLists,
   onDifficultyChange,
   onCategoryChange,
+  onListChange,
   onShuffle,
   noCard = false,
 }: SidebarProps) {
@@ -60,10 +74,31 @@ export function Sidebar({
     }));
   };
 
+  const handleListChange = (value: string) => {
+    onListChange(value);
+  };
+
   const content = (
     <div className="p-4">
       <h2 className="text-lg font-semibold mb-4">Filters</h2>
       <div className="space-y-4">
+        <div className="mb-2">
+          <h3 className="text-sm font-medium mb-1">List</h3>
+          <Select value={list} onValueChange={handleListChange}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select list" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Lists</SelectItem>
+              {availableLists.map((l) => (
+                <SelectItem key={l} value={l}>
+                  {l}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <Separator />
         <Collapsible
           open={isDifficultyOpen}
           onOpenChange={setIsDifficultyOpen}
@@ -101,9 +136,7 @@ export function Sidebar({
             ))}
           </CollapsibleContent>
         </Collapsible>
-
         <Separator />
-
         <Collapsible
           open={isCategoriesOpen}
           onOpenChange={setIsCategoriesOpen}
@@ -145,9 +178,7 @@ export function Sidebar({
             </ScrollArea>
           </CollapsibleContent>
         </Collapsible>
-
         <Separator />
-
         <Button
           variant="outline"
           className="w-full hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
