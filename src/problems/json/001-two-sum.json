@@ -1,0 +1,45 @@
+{
+  "id": 1,
+  "title": "Two Sum",
+  "list": ["blind75"],
+  "category": "Array",
+  "topics": ["Array", "Hash Table"],
+  "difficulty": "Easy",
+  "description": "Given an array of integers nums and an integer target, return indices of the two numbers in nums such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+  "constraints": [
+    "2 <= nums.length <= 104",
+    "-109 <= nums[i] <= 109",
+    "-109 <= target <= 109",
+    "Only one valid answer exists"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [2, 7, 11, 15],
+        "target": 9
+      },
+      "output": [0, 1],
+      "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
+    },
+    {
+      "input": {
+        "nums": [3, 2, 4],
+        "target": 6
+      },
+      "output": [1, 2],
+      "explanation": "Because nums[1] + nums[2] == 6, we return [1, 2]."
+    },
+    {
+      "input": {
+        "nums": [3, 3],
+        "target": 6
+      },
+      "output": [0, 1],
+      "explanation": "Because nums[0] + nums[1] == 6, we return [0, 1]."
+    }
+  ],
+  "solution": {
+    "code": "def two_sum(nums: list[int], target: int) -> list[int]:\n    # Create a hash map to store number -> index mapping\n    num_map = {}\n    \n    # Iterate through the array\n    for i, num in enumerate(nums):\n        # Calculate the complement needed\n        complement = target - num\n        \n        # If complement exists in map, we found our pair\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Store current number and its index\n        num_map[num] = i\n    \n    # No solution found (though problem states there will always be one)\n    return []",
+    "explanation": "This solution uses a hash map to achieve O(n) time complexity:\n1. We iterate through the array once\n2. For each number, we calculate its complement (target - current number)\n3. If the complement exists in our hash map, we've found our pair\n4. Otherwise, we store the current number and its index in the hash map\n\nThe time complexity is O(n) as we only need one pass through the array. The space complexity is O(n) as we might need to store all numbers in the hash map in the worst case."
+  }
+}

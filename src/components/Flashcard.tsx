@@ -95,6 +95,8 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                     >
                       {list === "blind75"
                         ? "Blind 75"
+                        : list === "grind75"
+                        ? "Grind 75"
                         : list === "neetcode150"
                         ? "NeetCode 150"
                         : list === "leetcode150"
