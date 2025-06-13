@@ -91,7 +91,7 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                   {problem.list.map((list) => (
                     <span
                       key={list}
-                      className="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400 font-medium"
+                      className="px-2 py-0.5 rounded-full text-xs border border-border text-muted-foreground font-medium"
                     >
                       {list === "blind75"
                         ? "Blind 75"
