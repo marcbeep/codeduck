@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/collapsible";
 import type { Dispatch, SetStateAction } from "react";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
