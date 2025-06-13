@@ -225,6 +225,35 @@ export default function Home() {
     }
   };
 
+  // Add background color state
+  const [backgroundClass, setBackgroundClass] = useState("");
+
+  // Get difficulty-based background class
+  const getDifficultyBackground = (difficulty: Difficulty) => {
+    switch (difficulty) {
+      case "Easy":
+        return "bg-green-50/30";
+      case "Medium":
+        return "bg-amber-50/30";
+      case "Hard":
+        return "bg-red-50/30";
+      default:
+        return "";
+    }
+  };
+
+  // Update background when current problem changes
+  useEffect(() => {
+    if (shuffledProblems.length > 0 && shuffledProblems[index]) {
+      const newBackgroundClass = getDifficultyBackground(
+        shuffledProblems[index].difficulty
+      );
+      setBackgroundClass(newBackgroundClass);
+    } else {
+      setBackgroundClass("");
+    }
+  }, [shuffledProblems, index]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -238,7 +267,9 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div
+        className={`flex flex-col min-h-screen transition-all duration-700 ease-in-out ${backgroundClass}`}
+      >
         <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4 mt-4">
           {/* Navigation bar - always visible */}
           <div className="w-full max-w-3xl mx-auto">
