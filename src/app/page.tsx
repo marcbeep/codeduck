@@ -113,8 +113,13 @@ export default function Home() {
     }
   }, [availableLists]);
 
+  // Add background color state
+  const [backgroundClass, setBackgroundClass] = useState("");
+  const [isResettingFilters, setIsResettingFilters] = useState(false);
+
   // Reset all filters to default state
   const resetFilters = () => {
+    setIsResettingFilters(true);
     setDifficulties({
       Easy: true,
       Medium: true,
@@ -126,6 +131,9 @@ export default function Home() {
       )
     );
     setLists(Object.fromEntries(availableLists.map((list) => [list, true])));
+
+    // Reset the animation state after a delay
+    setTimeout(() => setIsResettingFilters(false), 1200);
   };
 
   // Filter problems based on current filters
@@ -225,9 +233,6 @@ export default function Home() {
     }
   };
 
-  // Add background color state
-  const [backgroundClass, setBackgroundClass] = useState("");
-
   // Get difficulty-based background class
   const getDifficultyBackground = (difficulty: Difficulty) => {
     switch (difficulty) {
@@ -289,28 +294,19 @@ export default function Home() {
                     side="left"
                     className="p-0 max-w-xs transition-all duration-300 ease-in-out"
                   >
-                    <div className="flex flex-col h-full">
-                      <Sidebar
-                        difficulties={difficulties}
-                        categories={categories}
-                        lists={lists}
-                        availableCategories={availableCategories}
-                        availableLists={availableLists}
-                        onDifficultyChange={setDifficulties}
-                        onCategoryChange={setCategories}
-                        onListChange={setLists}
-                        noCard
-                      />
-                      <div className="p-4 mt-auto border-t">
-                        <Button
-                          variant="outline"
-                          className="w-full cursor-pointer"
-                          onClick={resetFilters}
-                        >
-                          Reset Filters
-                        </Button>
-                      </div>
-                    </div>
+                    <Sidebar
+                      difficulties={difficulties}
+                      categories={categories}
+                      lists={lists}
+                      availableCategories={availableCategories}
+                      availableLists={availableLists}
+                      onDifficultyChange={setDifficulties}
+                      onCategoryChange={setCategories}
+                      onListChange={setLists}
+                      onResetFilters={resetFilters}
+                      isResetting={isResettingFilters}
+                      noCard
+                    />
                   </SheetContent>
                 </Sheet>
 
@@ -465,6 +461,8 @@ export default function Home() {
                           onDifficultyChange={setDifficulties}
                           onCategoryChange={setCategories}
                           onListChange={setLists}
+                          onResetFilters={resetFilters}
+                          isResetting={isResettingFilters}
                           noCard
                         />
                       </SheetContent>
