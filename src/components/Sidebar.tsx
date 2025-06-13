@@ -127,33 +127,53 @@ export function Sidebar({
                   transition={{ delay: index * 0.05, duration: 0.2 }}
                   className="flex items-center space-x-2 group"
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={lists[list] ? { scale: [1, 1.2, 1] } : {}}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Checkbox
-                      id={`list-${list}`}
-                      checked={lists[list]}
-                      onCheckedChange={(checked) =>
-                        handleListChange(list, checked)
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleListChange(list, !lists[list]);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleListChange(list, !lists[list]);
                       }
-                      className="cursor-pointer"
-                    />
-                  </motion.div>
-                  <Label
-                    htmlFor={`list-${list}`}
-                    className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors"
+                    }}
+                    className="flex items-center space-x-2 w-full cursor-pointer hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors select-none"
                   >
-                    {list === "blind75"
-                      ? "Blind 75"
-                      : list === "neetcode150"
-                      ? "NeetCode 150"
-                      : list === "leetcode150"
-                      ? "LeetCode 150"
-                      : list}
-                  </Label>
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      animate={lists[list] ? { scale: [1, 1.2, 1] } : {}}
+                      transition={{ duration: 0.2 }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Checkbox
+                        id={`list-${list}`}
+                        checked={lists[list]}
+                        onCheckedChange={(checked) => {
+                          handleListChange(list, checked);
+                        }}
+                        className="cursor-pointer"
+                      />
+                    </motion.div>
+                    <Label
+                      htmlFor={`list-${list}`}
+                      className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                    >
+                      {list === "blind75"
+                        ? "Blind 75"
+                        : list === "grind75"
+                        ? "Grind 75"
+                        : list === "neetcode150"
+                        ? "NeetCode 150"
+                        : list === "leetcode150"
+                        ? "LeetCode 150"
+                        : list}
+                    </Label>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
@@ -190,29 +210,53 @@ export function Sidebar({
                     transition={{ delay: index * 0.05, duration: 0.2 }}
                     className="flex items-center space-x-2 group"
                   >
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      animate={
-                        difficulties[difficulty] ? { scale: [1, 1.2, 1] } : {}
-                      }
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Checkbox
-                        id={`difficulty-${difficulty}`}
-                        checked={difficulties[difficulty]}
-                        onCheckedChange={(checked) =>
-                          handleDifficultyChange(difficulty, checked)
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDifficultyChange(
+                          difficulty,
+                          !difficulties[difficulty]
+                        );
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleDifficultyChange(
+                            difficulty,
+                            !difficulties[difficulty]
+                          );
                         }
-                        className="cursor-pointer"
-                      />
-                    </motion.div>
-                    <Label
-                      htmlFor={`difficulty-${difficulty}`}
-                      className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors"
+                      }}
+                      className="flex items-center space-x-2 w-full cursor-pointer hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors select-none"
                     >
-                      {difficulty}
-                    </Label>
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        animate={
+                          difficulties[difficulty] ? { scale: [1, 1.2, 1] } : {}
+                        }
+                        transition={{ duration: 0.2 }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Checkbox
+                          id={`difficulty-${difficulty}`}
+                          checked={difficulties[difficulty]}
+                          onCheckedChange={(checked) => {
+                            handleDifficultyChange(difficulty, checked);
+                          }}
+                          className="cursor-pointer"
+                        />
+                      </motion.div>
+                      <Label
+                        htmlFor={`difficulty-${difficulty}`}
+                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                      >
+                        {difficulty}
+                      </Label>
+                    </div>
                   </motion.div>
                 )
               )}
@@ -250,29 +294,50 @@ export function Sidebar({
                       transition={{ delay: index * 0.02, duration: 0.2 }}
                       className="flex items-center space-x-2 group"
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        animate={
-                          categories[category] ? { scale: [1, 1.2, 1] } : {}
-                        }
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Checkbox
-                          id={`category-${category}`}
-                          checked={categories[category]}
-                          onCheckedChange={(checked) =>
-                            handleCategoryChange(category, checked)
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleCategoryChange(category, !categories[category]);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            handleCategoryChange(
+                              category,
+                              !categories[category]
+                            );
                           }
-                          className="cursor-pointer"
-                        />
-                      </motion.div>
-                      <Label
-                        htmlFor={`category-${category}`}
-                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors"
+                        }}
+                        className="flex items-center space-x-2 w-full cursor-pointer hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors select-none"
                       >
-                        {category}
-                      </Label>
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          animate={
+                            categories[category] ? { scale: [1, 1.2, 1] } : {}
+                          }
+                          transition={{ duration: 0.2 }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Checkbox
+                            id={`category-${category}`}
+                            checked={categories[category]}
+                            onCheckedChange={(checked) => {
+                              handleCategoryChange(category, checked);
+                            }}
+                            className="cursor-pointer"
+                          />
+                        </motion.div>
+                        <Label
+                          htmlFor={`category-${category}`}
+                          className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                        >
+                          {category}
+                        </Label>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
