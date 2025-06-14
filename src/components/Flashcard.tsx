@@ -10,10 +10,20 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { Separator } from "./ui/separator";
-import { Code2, Eye, EyeOff, ExternalLink, TestTube2, Tag } from "lucide-react";
+import {
+  Code2,
+  Eye,
+  EyeOff,
+  ExternalLink,
+  TestTube2,
+  Tag,
+  Link,
+  Check,
+} from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
+import { generateShareUrl, copyToClipboard } from "@/lib/sharing";
 
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
@@ -31,9 +41,20 @@ const getDifficultyColor = (difficulty: string) => {
 export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
   const [showSolution, setShowSolution] = useState(false);
   const [showTestCases, setShowTestCases] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const code = problem.solution?.code || "";
   const explanation = problem.solution?.explanation || "";
+
+  const handleShare = async () => {
+    const shareUrl = generateShareUrl(problem);
+    const success = await copyToClipboard(shareUrl);
+
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <Card className="w-full transition-all duration-300 hover:shadow-lg hover:scale-[1.01]">
@@ -52,31 +73,57 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                 {problem.difficulty}
               </span>
             </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(
-                        `https://leetcode.com/problems/${problem.title
-                          .toLowerCase()
-                          .replace(/\s+/g, "-")}`,
-                        "_blank"
-                      );
-                    }}
-                    className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Open on LeetCode</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <div className="flex items-center gap-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleShare();
+                      }}
+                      className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                    >
+                      {copied ? (
+                        <Check className="h-4 w-4 text-green-600" />
+                      ) : (
+                        <Link className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{copied ? "Copied!" : "Copy Problem Link"}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(
+                          `https://leetcode.com/problems/${problem.title
+                            .toLowerCase()
+                            .replace(/\s+/g, "-")}`,
+                          "_blank"
+                        );
+                      }}
+                      className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Open on LeetCode</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
