@@ -1,4 +1,4 @@
-# DSA Flashcards
+# 🐤 Leetcode Flashcards
 
 > You can use the deployed site [here](https://code.marc.tt)
 
