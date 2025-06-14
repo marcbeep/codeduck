@@ -58,9 +58,7 @@ export async function generateMetadata({
       siteName: "LeetCode Practice",
       images: [
         {
-          url: `/api/og?title=${encodeURIComponent(problem.title)}&difficulty=${
-            problem.difficulty
-          }&category=${problem.category}`,
+          url: "/og.png",
           width: 1200,
           height: 630,
           alt: `${problem.title} - ${problem.difficulty} Problem Solution`,
