@@ -1,4 +1,4 @@
-# 🦆 Leetcode Flashcards
+# 🦆 CodeDuck
 
 > You can use the deployed site [here](https://code.marc.tt)
 

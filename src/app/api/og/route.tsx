@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get("title") || "LeetCode Problem";
+  const title = searchParams.get("title") || "CodeDuck Problem";
   const difficulty = searchParams.get("difficulty") || "Medium";
   const category = searchParams.get("category") || "Algorithms";
 
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
           margin-bottom: 20px;
           opacity: 0.9;
         ">
-          🧩 LeetCode Practice
+          🦆 CodeDuck
         </div>
         <h1 style="
           font-size: 48px;

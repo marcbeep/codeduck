@@ -13,11 +13,11 @@ const notoSansMono = Noto_Sans_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LeetCode Flashcards - Master Coding Interviews",
+  title: "CodeDuck - Programming Interview Flashcards",
   description:
-    "Practice coding interview problems with interactive flashcards. Study algorithms, data structures, and problem-solving techniques with LeetCode-style questions.",
+    "Practice coding interview problems with interactive flashcards. Study algorithms, data structures, and problem-solving techniques with programming interview questions.",
   keywords:
-    "leetcode, coding interview, algorithms, data structures, programming, flashcards, practice, interview prep",
+    "codeduck, coding interview, algorithms, data structures, programming, flashcards, practice, interview prep, leetcode",
   authors: [
     { name: "Marc Beepath", url: "https://marc.tt" },
     { name: "Daniel Diaz", url: "https://github.com/Daniel-04" },
@@ -35,23 +35,23 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "LeetCode Flashcards - Master Coding Interviews",
+    title: "CodeDuck - Programming Interview Flashcards",
     description:
       "Practice coding interview problems with interactive flashcards. Study algorithms and data structures efficiently.",
     type: "website",
-    siteName: "LeetCode Flashcards",
+    siteName: "CodeDuck",
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "LeetCode Flashcards - Coding Interview Practice",
+        alt: "CodeDuck - Programming Interview Flashcards",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LeetCode Flashcards - Master Coding Interviews",
+    title: "CodeDuck - Programming Interview Flashcards",
     description:
       "Practice coding interview problems with interactive flashcards.",
     images: ["/og.png"],

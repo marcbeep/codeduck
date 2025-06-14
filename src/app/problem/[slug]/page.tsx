@@ -30,7 +30,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${problem.title} - ${problem.difficulty} ${problem.category} Problem | LeetCode Practice`,
+    title: `${problem.title} - ${problem.difficulty} ${problem.category} Problem | CodeDuck`,
     description: `Solve ${problem.title}, a ${problem.difficulty} ${
       problem.category
     } problem. ${problem.description.slice(0, 140)}...`,
@@ -38,7 +38,7 @@ export async function generateMetadata({
       problem.title.toLowerCase(),
       problem.difficulty.toLowerCase(),
       problem.category.toLowerCase(),
-      "leetcode",
+      "codeduck",
       "coding interview",
       "programming",
       "algorithms",
@@ -55,7 +55,7 @@ export async function generateMetadata({
       title: `${problem.title} - ${problem.difficulty} Problem`,
       description: `Master ${problem.title}, a ${problem.difficulty} ${problem.category} problem with detailed solution and explanation.`,
       type: "article",
-      siteName: "LeetCode Practice",
+      siteName: "CodeDuck",
       images: [
         {
           url: "/og.png",
@@ -128,7 +128,7 @@ export default async function ProblemPage({ params }: ProblemPageProps) {
     dateModified: new Date().toISOString(),
     publisher: {
       "@type": "Organization",
-      name: "LeetCode Flashcards",
+      name: "CodeDuck",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
