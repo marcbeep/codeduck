@@ -214,7 +214,7 @@ export function SharedProblemView({ problem }: { problem: LeetCodeProblem }) {
             </div>
           )}
 
-          {/* Action Buttons */}
+          {/* Action Buttons and Expandable Content */}
           <div className="flex flex-col gap-3 w-full">
             <Button
               variant="outline"
@@ -235,6 +235,68 @@ export function SharedProblemView({ problem }: { problem: LeetCodeProblem }) {
               )}
             </Button>
 
+            {/* Test Cases */}
+            <AnimatePresence mode="wait">
+              {showTestCases && (
+                <motion.div
+                  key="test-cases"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="space-y-3 overflow-hidden"
+                >
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    <TestTube2 className="h-4 w-4" />
+                    <span>Test Cases</span>
+                  </div>
+                  <div className="space-y-4">
+                    {problem.testCases.map((testCase, index) => {
+                      const inputStr = Object.entries(testCase.input)
+                        .map(([k, v]) => `${k} = ${JSON.stringify(v)}`)
+                        .join(", ");
+                      const outputStr =
+                        Array.isArray(testCase.output) ||
+                        typeof testCase.output === "object"
+                          ? JSON.stringify(testCase.output)
+                          : String(testCase.output);
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1, duration: 0.3 }}
+                          className="bg-accent/30 p-3 rounded-lg text-sm space-y-2"
+                        >
+                          <div className="font-medium">
+                            Test Case {index + 1}:
+                          </div>
+                          <div>
+                            <span className="font-medium">Input:</span>{" "}
+                            <code className="bg-background px-1 py-0.5 rounded text-xs">
+                              {inputStr}
+                            </code>
+                          </div>
+                          <div>
+                            <span className="font-medium">Output:</span>{" "}
+                            <code className="bg-background px-1 py-0.5 rounded text-xs">
+                              {outputStr}
+                            </code>
+                          </div>
+                          {testCase.explanation && (
+                            <div className="text-muted-foreground">
+                              <span className="font-medium">Explanation:</span>{" "}
+                              {testCase.explanation}
+                            </div>
+                          )}
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <Button
               variant="outline"
               size="sm"
@@ -253,113 +315,51 @@ export function SharedProblemView({ problem }: { problem: LeetCodeProblem }) {
                 </>
               )}
             </Button>
-          </div>
 
-          {/* Test Cases */}
-          <AnimatePresence mode="wait">
-            {showTestCases && (
-              <motion.div
-                key="test-cases"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="space-y-3 overflow-hidden"
-              >
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <TestTube2 className="h-4 w-4" />
-                  <span>Test Cases</span>
-                </div>
-                <div className="space-y-4">
-                  {problem.testCases.map((testCase, index) => {
-                    const inputStr = Object.entries(testCase.input)
-                      .map(([k, v]) => `${k} = ${JSON.stringify(v)}`)
-                      .join(", ");
-                    const outputStr =
-                      Array.isArray(testCase.output) ||
-                      typeof testCase.output === "object"
-                        ? JSON.stringify(testCase.output)
-                        : String(testCase.output);
-                    return (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1, duration: 0.3 }}
-                        className="bg-accent/30 p-3 rounded-lg text-sm space-y-2"
+            {/* Solution */}
+            <AnimatePresence mode="wait">
+              {showSolution && (
+                <motion.div
+                  key="solution"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="space-y-3 overflow-hidden"
+                >
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    <Code2 className="h-4 w-4" />
+                    <span>Solution</span>
+                  </div>
+
+                  {code && (
+                    <div className="rounded-lg overflow-hidden">
+                      <SyntaxHighlighter
+                        language="python"
+                        style={oneLight}
+                        customStyle={{
+                          margin: 0,
+                          fontSize: "14px",
+                          lineHeight: "1.4",
+                        }}
                       >
-                        <div className="font-medium">
-                          Test Case {index + 1}:
-                        </div>
-                        <div>
-                          <span className="font-medium">Input:</span>{" "}
-                          <code className="bg-background px-1 py-0.5 rounded text-xs">
-                            {inputStr}
-                          </code>
-                        </div>
-                        <div>
-                          <span className="font-medium">Output:</span>{" "}
-                          <code className="bg-background px-1 py-0.5 rounded text-xs">
-                            {outputStr}
-                          </code>
-                        </div>
-                        {testCase.explanation && (
-                          <div className="text-muted-foreground">
-                            <span className="font-medium">Explanation:</span>{" "}
-                            {testCase.explanation}
-                          </div>
-                        )}
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Solution */}
-          <AnimatePresence mode="wait">
-            {showSolution && (
-              <motion.div
-                key="solution"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="space-y-3 overflow-hidden"
-              >
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <Code2 className="h-4 w-4" />
-                  <span>Solution</span>
-                </div>
-
-                {code && (
-                  <div className="rounded-lg overflow-hidden">
-                    <SyntaxHighlighter
-                      language="python"
-                      style={oneLight}
-                      customStyle={{
-                        margin: 0,
-                        fontSize: "14px",
-                        lineHeight: "1.4",
-                      }}
-                    >
-                      {code}
-                    </SyntaxHighlighter>
-                  </div>
-                )}
-
-                {explanation && (
-                  <div className="bg-accent/30 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2 text-sm">Explanation:</h4>
-                    <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
-                      {explanation}
+                        {code}
+                      </SyntaxHighlighter>
                     </div>
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  )}
+
+                  {explanation && (
+                    <div className="bg-accent/30 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2 text-sm">Explanation:</h4>
+                      <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+                        {explanation}
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </CardContent>
       </Card>
 

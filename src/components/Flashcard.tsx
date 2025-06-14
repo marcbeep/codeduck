@@ -178,10 +178,26 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="mb-4 whitespace-pre-line text-sm text-muted-foreground"
+          className="mb-4 whitespace-pre-line text-sm text-muted-foreground leading-relaxed"
         >
           {problem.description}
         </motion.div>
+
+        {/* Constraints */}
+        {problem.constraints && problem.constraints.length > 0 && (
+          <div className="space-y-2 mb-4">
+            <h3 className="font-semibold text-sm">Constraints:</h3>
+            <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+              {problem.constraints.map((constraint, index) => (
+                <li key={index} className="list-disc">
+                  <code className="text-xs bg-accent/50 px-1 py-0.5 rounded">
+                    {constraint}
+                  </code>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="flex flex-col gap-2 w-full">
           <Button
@@ -212,7 +228,7 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="space-y-2 overflow-hidden"
                 >
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2 text-sm font-medium">
                     <TestTube2 className="h-4 w-4" />
                     <span>Test Cases</span>
                   </div>
@@ -238,20 +254,27 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1, duration: 0.3 }}
-                          className="text-sm space-y-1"
+                          className="bg-accent/30 p-3 rounded-lg text-sm space-y-2"
                         >
                           <div className="font-medium">
                             Test Case {index + 1}:
                           </div>
                           <div>
-                            <b>Input:</b> <code>{inputStr}</code>
+                            <span className="font-medium">Input:</span>{" "}
+                            <code className="bg-background px-1 py-0.5 rounded text-xs">
+                              {inputStr}
+                            </code>
                           </div>
                           <div>
-                            <b>Output:</b> <code>{outputStr}</code>
+                            <span className="font-medium">Output:</span>{" "}
+                            <code className="bg-background px-1 py-0.5 rounded text-xs">
+                              {outputStr}
+                            </code>
                           </div>
                           {testCase.explanation && (
-                            <div className="text-xs text-muted-foreground mt-1">
-                              <b>Explanation:</b> {testCase.explanation}
+                            <div className="text-muted-foreground">
+                              <span className="font-medium">Explanation:</span>{" "}
+                              {testCase.explanation}
                             </div>
                           )}
                         </motion.div>
@@ -290,37 +313,34 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="space-y-2 overflow-hidden"
                 >
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2 text-sm font-medium">
                     <Code2 className="h-4 w-4" />
-                    <span>Solution (Python)</span>
+                    <span>Solution</span>
                   </div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1, duration: 0.3 }}
-                  >
-                    <SyntaxHighlighter
-                      language="python"
-                      style={oneLight}
-                      customStyle={{
-                        borderRadius: "0.5rem",
-                        fontSize: "0.95em",
-                        padding: "1em",
-                      }}
-                      showLineNumbers
-                    >
-                      {code}
-                    </SyntaxHighlighter>
-                  </motion.div>
+
+                  {code && (
+                    <div className="rounded-lg overflow-hidden">
+                      <SyntaxHighlighter
+                        language="python"
+                        style={oneLight}
+                        customStyle={{
+                          margin: 0,
+                          fontSize: "14px",
+                          lineHeight: "1.4",
+                        }}
+                      >
+                        {code}
+                      </SyntaxHighlighter>
+                    </div>
+                  )}
+
                   {explanation && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, duration: 0.3 }}
-                      className="text-xs text-muted-foreground mt-2"
-                    >
-                      <b>Explanation:</b> {explanation}
-                    </motion.div>
+                    <div className="bg-accent/30 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2 text-sm">Explanation:</h4>
+                      <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+                        {explanation}
+                      </div>
+                    </div>
                   )}
                 </motion.div>
               </div>
