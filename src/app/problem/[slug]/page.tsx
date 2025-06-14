@@ -128,11 +128,11 @@ export default async function ProblemPage({ params }: ProblemPageProps) {
     dateModified: new Date().toISOString(),
     publisher: {
       "@type": "Organization",
-      name: "LeetCode Practice",
+      name: "LeetCode Flashcards",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://your-domain.com/problem/${slug}`,
+      "@id": `https://code.marc.tt/problem/${slug}`,
     },
     articleSection: problem.category,
     keywords: [
