@@ -362,6 +362,39 @@ export function SharedProblemView({ problem }: { problem: LeetCodeProblem }) {
           </AnimatePresence>
         </CardContent>
       </Card>
+
+      {/* Footer for SEO and credibility */}
+      <footer className="w-full flex flex-col sm:flex-row justify-center items-center gap-2 py-6 px-4 text-muted-foreground text-sm bg-white border-t text-center rounded-lg mt-8">
+        <span>Code for the solutions were contributed by</span>
+        <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-1">
+          <a
+            href="https://marc.tt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline cursor-pointer"
+          >
+            Marc Beepath
+          </a>
+          <span className="hidden sm:inline">,</span>
+          <a
+            href="https://github.com/Daniel-04"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline cursor-pointer"
+          >
+            Daniel Diaz
+          </a>
+          <span>and</span>
+          <a
+            href="https://github.com/HaowenRong"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline cursor-pointer"
+          >
+            Haowen Rong
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
