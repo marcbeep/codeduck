@@ -2,6 +2,7 @@
 
 import Flashcard from "@/components/Flashcard";
 import { Sidebar } from "@/components/Sidebar";
+import { Brand } from "@/components/Brand";
 import { getProblems } from "@/lib/actions";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
@@ -278,80 +279,92 @@ export default function Home() {
         <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4 mt-4">
           {/* Navigation bar - always visible */}
           <div className="w-full max-w-3xl mx-auto">
-            <div className="flex items-center justify-between w-full mb-4 px-2 mt-8">
-              {/* Left side - Filter, Shuffle, and Search buttons */}
-              <div className="flex gap-3">
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+            <div className="flex items-center justify-between w-full mb-4 px-2 mt-4 md:mt-8">
+              {/* Left side - Brand Logo */}
+              <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
+                <Brand size="md" showText={true} />
+
+                {/* Filter, Shuffle, and Search buttons */}
+                <div className="flex gap-1 sm:gap-2 md:gap-3">
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer text-xs sm:text-sm"
+                      >
+                        <Filter className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="hidden xs:inline">Filters</span>
+                        <span className="xs:hidden">Filter</span>
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent
+                      side="left"
+                      className="p-0 max-w-xs transition-all duration-300 ease-in-out"
                     >
-                      <Filter className="mr-2 h-4 w-4" /> Filters
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent
-                    side="left"
-                    className="p-0 max-w-xs transition-all duration-300 ease-in-out"
-                  >
-                    <Sidebar
-                      difficulties={difficulties}
-                      categories={categories}
-                      lists={lists}
-                      availableCategories={availableCategories}
-                      availableLists={availableLists}
-                      onDifficultyChange={setDifficulties}
-                      onCategoryChange={setCategories}
-                      onListChange={setLists}
-                      onResetFilters={resetFilters}
-                      isResetting={isResettingFilters}
-                      noCard
-                    />
-                  </SheetContent>
-                </Sheet>
+                      <Sidebar
+                        difficulties={difficulties}
+                        categories={categories}
+                        lists={lists}
+                        availableCategories={availableCategories}
+                        availableLists={availableLists}
+                        onDifficultyChange={setDifficulties}
+                        onCategoryChange={setCategories}
+                        onListChange={setLists}
+                        onResetFilters={resetFilters}
+                        isResetting={isResettingFilters}
+                        noCard
+                      />
+                    </SheetContent>
+                  </Sheet>
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        onClick={handleShuffle}
-                        className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
-                        disabled={filteredProblems.length === 0 || isShuffling}
-                      >
-                        <motion.div
-                          animate={
-                            isShuffling ? { rotate: 360 } : { rotate: 0 }
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleShuffle}
+                          className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                          disabled={
+                            filteredProblems.length === 0 || isShuffling
                           }
-                          transition={{ duration: 0.4, ease: "easeInOut" }}
                         >
-                          <Shuffle className="h-4 w-4" />
-                        </motion.div>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Shuffle Deck</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                          <motion.div
+                            animate={
+                              isShuffling ? { rotate: 360 } : { rotate: 0 }
+                            }
+                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                          >
+                            <Shuffle className="h-3 w-3 sm:h-4 sm:w-4" />
+                          </motion.div>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Shuffle Deck</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        onClick={() => setSearchOpen(true)}
-                        className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
-                        disabled={shuffledProblems.length === 0}
-                      >
-                        <Search className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Search Problems</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSearchOpen(true)}
+                          className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                          disabled={shuffledProblems.length === 0}
+                        >
+                          <Search className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Search Problems</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </div>
 
               {/* Center - Card counter or status */}
