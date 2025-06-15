@@ -107,7 +107,7 @@ export const Brand: React.FC<BrandProps> = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction className="bg-primary hover:bg-primary/90">
-            Let's Go!
+            Let&apos;s Go!
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
