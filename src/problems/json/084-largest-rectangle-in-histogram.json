@@ -1,0 +1,37 @@
+{
+  "id": 84,
+  "title": "Largest Rectangle in Histogram",
+  "list": ["grind75"],
+  "category": "Stack",
+  "topics": ["Array", "Stack", "Monotonic Stack"],
+  "difficulty": "Hard",
+  "description": "Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.",
+  "constraints": ["1 <= heights.length <= 105", "0 <= heights[i] <= 104"],
+  "testCases": [
+    {
+      "input": {
+        "heights": [2, 1, 5, 6, 2, 3]
+      },
+      "output": 10,
+      "explanation": "The largest rectangle is shown in the red area, which has an area = 10 units."
+    },
+    {
+      "input": {
+        "heights": [2, 4]
+      },
+      "output": 4,
+      "explanation": "The largest rectangle is shown in the red area, which has an area = 4 units."
+    },
+    {
+      "input": {
+        "heights": [1]
+      },
+      "output": 1,
+      "explanation": "The largest rectangle is shown in the red area, which has an area = 1 unit."
+    }
+  ],
+  "solution": {
+    "code": "def largestRectangleArea(heights: list[int]) -> int:\n    stack = []  # Stack to store indices\n    max_area = 0\n    \n    # Add a sentinel value at the end to handle remaining bars\n    heights.append(0)\n    \n    for i, height in enumerate(heights):\n        # While stack is not empty and current height is smaller than stack top\n        while stack and heights[stack[-1]] > height:\n            # Pop the top bar and calculate area\n            h = heights[stack.pop()]\n            # Width is from the previous bar in stack to current position\n            w = i - stack[-1] - 1 if stack else i\n            max_area = max(max_area, h * w)\n        \n        # Push current index to stack\n        stack.append(i)\n    \n    return max_area",
+    "explanation": "This solution uses a monotonic stack to find the largest rectangle:\n1. We use a stack to keep track of indices of bars in ascending order of heights\n2. For each bar, we pop all bars from stack that are taller than the current bar\n3. For each popped bar, we calculate the area of rectangle it can form\n4. The width of the rectangle is from the previous bar in stack to current position\n5. We continue until we've processed all bars\n\nKey insight: A bar can only form a rectangle with bars that are taller than or equal to it.\n\nExample: heights = [2, 1, 5, 6, 2, 3]\n- i=0, height=2: stack = [0]\n- i=1, height=1: pop 0, area = 2*1 = 2, stack = [1]\n- i=2, height=5: stack = [1, 2]\n- i=3, height=6: stack = [1, 2, 3]\n- i=4, height=2: pop 3, area = 6*1 = 6; pop 2, area = 5*2 = 10; stack = [1, 4]\n- i=5, height=3: stack = [1, 4, 5]\n- i=6, height=0: pop all, calculate areas\n- Result: max_area = 10\n\nThe time complexity is O(n) as each bar is pushed and popped at most once. The space complexity is O(n) for the stack."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": 23,
+  "title": "Merge k Sorted Lists",
+  "list": ["grind75"],
+  "category": "Linked List",
+  "topics": [
+    "Linked List",
+    "Divide and Conquer",
+    "Heap (Priority Queue)",
+    "Merge Sort"
+  ],
+  "difficulty": "Hard",
+  "description": "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.\n\nMerge all the linked-lists into one sorted linked-list and return it.",
+  "constraints": [
+    "k == lists.length",
+    "0 <= k <= 104",
+    "0 <= lists[i].length <= 500",
+    "-104 <= lists[i][j] <= 104",
+    "lists[i] is sorted in ascending order",
+    "The sum of lists[i].length will not exceed 104"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "lists": [
+          [1, 4, 5],
+          [1, 3, 4],
+          [2, 6]
+        ]
+      },
+      "output": [1, 1, 2, 3, 4, 4, 5, 6],
+      "explanation": "Merging the three lists:\n[1,4,5] + [1,3,4] + [2,6] = [1,1,2,3,4,4,5,6]"
+    },
+    {
+      "input": {
+        "lists": []
+      },
+      "output": [],
+      "explanation": "Empty list of lists."
+    },
+    {
+      "input": {
+        "lists": [[]]
+      },
+      "output": [],
+      "explanation": "List containing one empty list."
+    }
+  ],
+  "solution": {
+    "code": "import heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef mergeKLists(lists: list[ListNode]) -> ListNode:\n    if not lists:\n        return None\n    \n    # Create a min heap with (value, list_index, node) tuples\n    heap = []\n    for i, head in enumerate(lists):\n        if head:\n            heapq.heappush(heap, (head.val, i, head))\n    \n    # Create dummy head for result\n    dummy = ListNode(0)\n    current = dummy\n    \n    while heap:\n        # Get the smallest element\n        val, list_idx, node = heapq.heappop(heap)\n        \n        # Add to result\n        current.next = ListNode(val)\n        current = current.next\n        \n        # Add next node from the same list if it exists\n        if node.next:\n            heapq.heappush(heap, (node.next.val, list_idx, node.next))\n    \n    return dummy.next",
+    "explanation": "This solution uses a min heap to merge k sorted lists efficiently:\n1. We create a min heap to keep track of the smallest element from each list\n2. We initialize the heap with the first element from each non-empty list\n3. We repeatedly extract the smallest element from the heap and add it to our result\n4. After extracting an element, we add the next element from the same list to the heap\n5. We continue until the heap is empty\n\nKey insight: The heap always contains the smallest available element from each list, so we can efficiently merge them.\n\nExample: lists = [[1,4,5], [1,3,4], [2,6]]\n- Initial heap: [(1,0,node1), (1,1,node1), (2,2,node2)]\n- Extract 1 from list 0: result = [1], add (4,0,node4) to heap\n- Extract 1 from list 1: result = [1,1], add (3,1,node3) to heap\n- Extract 2 from list 2: result = [1,1,2], add (6,2,node6) to heap\n- Continue...\n- Final result: [1,1,2,3,4,4,5,6]\n\nAlternative approach using divide and conquer:\n- Merge lists in pairs recursively\n- Time complexity: O(n log k) where n is total number of nodes\n\nThe time complexity is O(n log k) where n is the total number of nodes and k is the number of lists. The space complexity is O(k) for the heap."
+  }
+}
