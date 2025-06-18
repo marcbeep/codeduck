@@ -1,0 +1,47 @@
+{
+  "id": 543,
+  "title": "Diameter of Binary Tree",
+  "list": ["blind75"],
+  "category": "Tree",
+  "topics": ["Tree", "Depth-First Search", "Binary Tree"],
+  "difficulty": "Easy",
+  "description": "Given the root of a binary tree, return the length of the diameter of the tree.\n\nThe diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.\n\nThe length of path between two nodes is represented by the number of edges between them.",
+  "constraints": [
+    "The number of nodes in the tree is in the range [1, 104]",
+    "-100 <= Node.val <= 100"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "root": [1, 2, 3, 4, 5]
+      },
+      "output": 3,
+      "explanation": "3 is the length of the path [4,2,1,3] or [5,2,1,3]."
+    },
+    {
+      "input": {
+        "root": [1, 2]
+      },
+      "output": 1,
+      "explanation": "1 is the length of the path [2,1]."
+    },
+    {
+      "input": {
+        "root": [1]
+      },
+      "output": 0,
+      "explanation": "Single node has diameter 0."
+    },
+    {
+      "input": {
+        "root": [1, 2, 3, 4, 5, 6, 7]
+      },
+      "output": 4,
+      "explanation": "The diameter is the path from node 4 to node 7 through the root."
+    }
+  ],
+  "solution": {
+    "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\ndef diameter_of_binary_tree(root):\n    # Global variable to track the maximum diameter\n    max_diameter = 0\n    \n    def height(node):\n        nonlocal max_diameter\n        \n        # Base case: if node is None, height is 0\n        if not node:\n            return 0\n        \n        # Calculate height of left and right subtrees\n        left_height = height(node.left)\n        right_height = height(node.right)\n        \n        # Update maximum diameter\n        # Diameter through current node = left_height + right_height\n        max_diameter = max(max_diameter, left_height + right_height)\n        \n        # Return height of current node\n        return max(left_height, right_height) + 1\n    \n    # Start the height calculation\n    height(root)\n    \n    return max_diameter\n\n# Alternative approach using class variable\ndef diameter_of_binary_tree_class_var(root):\n    class Solution:\n        def __init__(self):\n            self.max_diameter = 0\n        \n        def diameter_of_binary_tree(self, root):\n            def height(node):\n                if not node:\n                    return 0\n                \n                left_height = height(node.left)\n                right_height = height(node.right)\n                \n                # Update maximum diameter\n                self.max_diameter = max(self.max_diameter, left_height + right_height)\n                \n                return max(left_height, right_height) + 1\n            \n            height(root)\n            return self.max_diameter\n    \n    return Solution().diameter_of_binary_tree(root)\n\n# Alternative approach returning both height and diameter\ndef diameter_of_binary_tree_tuple(root):\n    def height_and_diameter(node):\n        if not node:\n            return 0, 0\n        \n        left_height, left_diameter = height_and_diameter(node.left)\n        right_height, right_diameter = height_and_diameter(node.right)\n        \n        # Current height\n        current_height = max(left_height, right_height) + 1\n        \n        # Current diameter (max of left diameter, right diameter, or path through root)\n        current_diameter = max(left_diameter, right_diameter, left_height + right_height)\n        \n        return current_height, current_diameter\n    \n    _, diameter = height_and_diameter(root)\n    return diameter\n\n# Alternative approach using post-order traversal\ndef diameter_of_binary_tree_postorder(root):\n    if not root:\n        return 0\n    \n    max_diameter = 0\n    \n    def postorder(node):\n        nonlocal max_diameter\n        \n        if not node:\n            return 0\n        \n        # Post-order traversal: left, right, root\n        left = postorder(node.left)\n        right = postorder(node.right)\n        \n        # Update diameter\n        max_diameter = max(max_diameter, left + right)\n        \n        # Return height\n        return max(left, right) + 1\n    \n    postorder(root)\n    return max_diameter",
+    "explanation": "Four approaches are shown:\n\n1. Global variable approach (recommended):\n   - Use a global variable to track maximum diameter\n   - Calculate height of each node\n   - Update diameter when processing each node\n   - Time complexity: O(n) where n is the number of nodes\n   - Space complexity: O(h) where h is the height of the tree\n\n2. Class variable approach:\n   - Use a class variable instead of global variable\n   - Same logic as global variable approach\n   - More object-oriented design\n   - Time complexity: O(n)\n   - Space complexity: O(h)\n\n3. Tuple return approach:\n   - Return both height and diameter from each recursive call\n   - Avoid global variables\n   - More functional programming style\n   - Time complexity: O(n)\n   - Space complexity: O(h)\n\n4. Post-order traversal approach:\n   - Use post-order traversal (left, right, root)\n   - Process children before parent\n   - Natural fit for this problem\n   - Time complexity: O(n)\n   - Space complexity: O(h)\n\nThe key insight is that the diameter of a tree is the maximum of:\n- Diameter of left subtree\n- Diameter of right subtree\n- Path through root (left height + right height)\n\nAll approaches achieve the same result, but the global variable approach is the most commonly used."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "id": 169,
+  "title": "Majority Element",
+  "list": ["blind75"],
+  "category": "Array",
+  "topics": [
+    "Array",
+    "Hash Table",
+    "Divide and Conquer",
+    "Sorting",
+    "Counting"
+  ],
+  "difficulty": "Easy",
+  "description": "Given an array nums of size n, return the majority element.\n\nThe majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.",
+  "constraints": [
+    "n == nums.length",
+    "1 <= n <= 5 * 104",
+    "-109 <= nums[i] <= 109"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [3, 2, 3]
+      },
+      "output": 3,
+      "explanation": "3 appears 2 times, which is more than ⌊3 / 2⌋ = 1 time."
+    },
+    {
+      "input": {
+        "nums": [2, 2, 1, 1, 1, 2, 2]
+      },
+      "output": 2,
+      "explanation": "2 appears 4 times, which is more than ⌊7 / 2⌋ = 3 times."
+    },
+    {
+      "input": {
+        "nums": [1]
+      },
+      "output": 1,
+      "explanation": "Single element is always the majority element."
+    },
+    {
+      "input": {
+        "nums": [6, 5, 5]
+      },
+      "output": 5,
+      "explanation": "5 appears 2 times, which is more than ⌊3 / 2⌋ = 1 time."
+    }
+  ],
+  "solution": {
+    "code": "def majority_element(nums: list[int]) -> int:\n    # Boyer-Moore Voting Algorithm (recommended)\n    count = 0\n    candidate = None\n    \n    for num in nums:\n        if count == 0:\n            candidate = num\n        \n        if num == candidate:\n            count += 1\n        else:\n            count -= 1\n    \n    return candidate\n\n# Alternative approach using hash table\ndef majority_element_hash_table(nums: list[int]) -> int:\n    # Count frequency of each element\n    count = {}\n    for num in nums:\n        count[num] = count.get(num, 0) + 1\n        \n        # If count exceeds n/2, return immediately\n        if count[num] > len(nums) // 2:\n            return num\n    \n    return None\n\n# Alternative approach using sorting\ndef majority_element_sorting(nums: list[int]) -> int:\n    # Sort the array and return the middle element\n    nums.sort()\n    return nums[len(nums) // 2]\n\n# Alternative approach using Counter\ndef majority_element_counter(nums: list[int]) -> int:\n    from collections import Counter\n    \n    # Count all elements and return the most common one\n    count = Counter(nums)\n    return count.most_common(1)[0][0]\n\n# Alternative approach using divide and conquer\ndef majority_element_divide_conquer(nums: list[int]) -> int:\n    def majority_element_rec(left: int, right: int) -> int:\n        # Base case: single element\n        if left == right:\n            return nums[left]\n        \n        # Divide: find majority in left and right halves\n        mid = (left + right) // 2\n        left_majority = majority_element_rec(left, mid)\n        right_majority = majority_element_rec(mid + 1, right)\n        \n        # Conquer: if both halves have same majority, return it\n        if left_majority == right_majority:\n            return left_majority\n        \n        # Otherwise, count which one appears more in the entire range\n        left_count = sum(1 for i in range(left, right + 1) if nums[i] == left_majority)\n        right_count = sum(1 for i in range(left, right + 1) if nums[i] == right_majority)\n        \n        return left_majority if left_count > right_count else right_majority\n    \n    return majority_element_rec(0, len(nums) - 1)",
+    "explanation": "Five approaches are shown:\n\n1. Boyer-Moore Voting Algorithm (recommended):\n   - Use a counter and candidate approach\n   - If count becomes 0, change candidate\n   - Increment count for same element, decrement for different\n   - Time complexity: O(n)\n   - Space complexity: O(1)\n\n2. Hash table approach:\n   - Count frequency of each element\n   - Return element with count > n/2\n   - Time complexity: O(n)\n   - Space complexity: O(k) where k is the number of unique elements\n\n3. Sorting approach:\n   - Sort the array and return the middle element\n   - Since majority element appears > n/2 times, it must be at position n/2\n   - Time complexity: O(n log n)\n   - Space complexity: O(1) if sorting in-place\n\n4. Counter approach:\n   - Use Python's Counter class\n   - Return the most common element\n   - Time complexity: O(n)\n   - Space complexity: O(k)\n\n5. Divide and conquer approach:\n   - Recursively find majority in left and right halves\n   - Count which majority appears more in the entire range\n   - Time complexity: O(n log n)\n   - Space complexity: O(log n) due to recursion stack\n\nThe Boyer-Moore algorithm is the most efficient as it uses constant space and is specifically designed for this problem."
+  }
+}
