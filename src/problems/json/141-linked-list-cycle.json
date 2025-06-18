@@ -1,0 +1,52 @@
+{
+  "id": 141,
+  "title": "Linked List Cycle",
+  "list": ["blind75"],
+  "category": "Linked List",
+  "topics": ["Hash Table", "Linked List", "Two Pointers"],
+  "difficulty": "Easy",
+  "description": "Given head, the head of a linked list, determine if the linked list has a cycle in it.\n\nThere is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter.\n\nReturn true if there is a cycle in the linked list. Otherwise, return false.",
+  "constraints": [
+    "The number of the nodes in the list is in the range [0, 104]",
+    "-105 <= Node.val <= 105",
+    "pos is -1 or a valid index in the linked-list"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "head": [3, 2, 0, -4],
+        "pos": 1
+      },
+      "output": true,
+      "explanation": "There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed)."
+    },
+    {
+      "input": {
+        "head": [1, 2],
+        "pos": 0
+      },
+      "output": true,
+      "explanation": "There is a cycle in the linked list, where the tail connects to the 0th node."
+    },
+    {
+      "input": {
+        "head": [1],
+        "pos": -1
+      },
+      "output": false,
+      "explanation": "There is no cycle in the linked list."
+    },
+    {
+      "input": {
+        "head": [1, 2, 3, 4],
+        "pos": -1
+      },
+      "output": false,
+      "explanation": "There is no cycle in the linked list."
+    }
+  ],
+  "solution": {
+    "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, x):\n#         self.val = x\n#         self.next = None\n\ndef has_cycle(head):\n    # Floyd's Cycle Finding Algorithm (Tortoise and Hare)\n    if not head or not head.next:\n        return False\n    \n    slow = head\n    fast = head.next\n    \n    while slow != fast:\n        # If fast reaches the end, there's no cycle\n        if not fast or not fast.next:\n            return False\n        \n        slow = slow.next\n        fast = fast.next.next\n    \n    return True\n\n# Alternative approach using hash set\ndef has_cycle_hash_set(head):\n    seen = set()\n    current = head\n    \n    while current:\n        # If we've seen this node before, there's a cycle\n        if current in seen:\n            return True\n        \n        seen.add(current)\n        current = current.next\n    \n    return False\n\n# Alternative approach with two pointers (different starting point)\ndef has_cycle_two_pointers(head):\n    if not head:\n        return False\n    \n    slow = head\n    fast = head\n    \n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        \n        if slow == fast:\n            return True\n    \n    return False",
+    "explanation": "Three approaches are shown:\n\n1. Floyd's Cycle Finding Algorithm (Tortoise and Hare) - Recommended:\n   - Use two pointers: slow (moves 1 step) and fast (moves 2 steps)\n   - If there's a cycle, they will eventually meet\n   - If fast reaches the end, there's no cycle\n   - Time complexity: O(n) where n is the number of nodes\n   - Space complexity: O(1) - only uses two pointers\n\n2. Hash Set approach:\n   - Use a set to keep track of visited nodes\n   - If we encounter a node that's already in the set, there's a cycle\n   - Time complexity: O(n)\n   - Space complexity: O(n) for the hash set\n\n3. Two Pointers with same starting point:\n   - Similar to Floyd's algorithm but both pointers start at head\n   - Slightly different implementation but same logic\n   - Time complexity: O(n)\n   - Space complexity: O(1)\n\nThe Floyd's algorithm is the most efficient as it uses constant space and is the standard solution for cycle detection."
+  }
+}

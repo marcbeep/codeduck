@@ -1,0 +1,49 @@
+{
+  "id": 235,
+  "title": "Lowest Common Ancestor of a Binary Search Tree",
+  "list": ["blind75"],
+  "category": "Tree",
+  "topics": ["Tree", "Depth-First Search", "Binary Search Tree", "Binary Tree"],
+  "difficulty": "Medium",
+  "description": "Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.\n\nAccording to the definition of LCA on Wikipedia: \"The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).\"",
+  "constraints": [
+    "The number of nodes in the tree is in the range [2, 105]",
+    "-109 <= Node.val <= 109",
+    "All Node.val are unique",
+    "p != q",
+    "p and q will exist in the BST"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "root": [6, 2, 8, 0, 4, 7, 9, null, null, 3, 5],
+        "p": 2,
+        "q": 8
+      },
+      "output": 6,
+      "explanation": "The LCA of nodes 2 and 8 is 6."
+    },
+    {
+      "input": {
+        "root": [6, 2, 8, 0, 4, 7, 9, null, null, 3, 5],
+        "p": 2,
+        "q": 4
+      },
+      "output": 2,
+      "explanation": "The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself."
+    },
+    {
+      "input": {
+        "root": [2, 1],
+        "p": 2,
+        "q": 1
+      },
+      "output": 2,
+      "explanation": "The LCA of nodes 2 and 1 is 2."
+    }
+  ],
+  "solution": {
+    "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, x):\n#         self.val = x\n#         self.left = None\n#         self.right = None\n\ndef lowest_common_ancestor(root, p, q):\n    # If both p and q are less than root, LCA is in left subtree\n    if p.val < root.val and q.val < root.val:\n        return lowest_common_ancestor(root.left, p, q)\n    \n    # If both p and q are greater than root, LCA is in right subtree\n    if p.val > root.val and q.val > root.val:\n        return lowest_common_ancestor(root.right, p, q)\n    \n    # If one is less and one is greater, or one equals root, root is LCA\n    return root\n\n# Alternative iterative approach\ndef lowest_common_ancestor_iterative(root, p, q):\n    while root:\n        # If both p and q are less than root, go left\n        if p.val < root.val and q.val < root.val:\n            root = root.left\n        # If both p and q are greater than root, go right\n        elif p.val > root.val and q.val > root.val:\n            root = root.right\n        # Otherwise, root is the LCA\n        else:\n            return root\n    \n    return None\n\n# General approach that works for any binary tree (not just BST)\ndef lowest_common_ancestor_general(root, p, q):\n    # Base case: if root is None or root is one of the target nodes\n    if not root or root == p or root == q:\n        return root\n    \n    # Recursively search in left and right subtrees\n    left = lowest_common_ancestor_general(root.left, p, q)\n    right = lowest_common_ancestor_general(root.right, p, q)\n    \n    # If both left and right return non-None, root is LCA\n    if left and right:\n        return root\n    \n    # Otherwise, return the non-None result\n    return left if left else right",
+    "explanation": "Three approaches are shown:\n\n1. Recursive BST-specific approach:\n   - Use BST property: left subtree < root < right subtree\n   - If both p and q are less than root, search left subtree\n   - If both p and q are greater than root, search right subtree\n   - Otherwise, root is the LCA\n   - Time complexity: O(h) where h is the height of the tree\n   - Space complexity: O(h) due to recursion stack\n\n2. Iterative BST-specific approach:\n   - Same logic as recursive but uses iteration\n   - More space-efficient as it doesn't use recursion stack\n   - Time complexity: O(h)\n   - Space complexity: O(1)\n\n3. General approach (works for any binary tree):\n   - Use post-order traversal\n   - If root is one of the target nodes, return root\n   - Recursively search left and right subtrees\n   - If both subtrees return non-None, root is LCA\n   - Time complexity: O(n) where n is the number of nodes\n   - Space complexity: O(h)\n\nThe BST-specific approaches are more efficient for BSTs due to the ordering property."
+  }
+}

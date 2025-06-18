@@ -1,0 +1,73 @@
+{
+  "id": 733,
+  "title": "Flood Fill",
+  "list": ["blind75"],
+  "category": "Graph",
+  "topics": ["Array", "Depth-First Search", "Breadth-First Search", "Matrix"],
+  "difficulty": "Easy",
+  "description": "An image is represented by an m x n integer grid image where image[i][j] represents the pixel value of the image.\n\nYou are also given three integers sr, sc, and color. You should perform a flood fill on the image starting from the pixel image[sr][sc].\n\nTo perform a flood fill, consider the starting pixel, plus any pixels connected 4-directionally to the starting pixel of the same color as the starting pixel, plus any pixels connected 4-directionally to those pixels (also with the same color), and so on. Replace the color of all of the aforementioned pixels with color.\n\nReturn the modified image after performing the flood fill.",
+  "constraints": [
+    "m == image.length",
+    "n == image[i].length",
+    "1 <= m, n <= 50",
+    "0 <= image[i][j], color < 216",
+    "0 <= sr < m",
+    "0 <= sc < n"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "image": [
+          [1, 1, 1],
+          [1, 1, 0],
+          [1, 0, 1]
+        ],
+        "sr": 1,
+        "sc": 1,
+        "color": 2
+      },
+      "output": [
+        [2, 2, 2],
+        [2, 2, 0],
+        [2, 0, 1]
+      ],
+      "explanation": "From the center of the image with position (sr, sc) = (1, 1), all pixels connected by a path of the same color as the starting pixel are colored with the new color."
+    },
+    {
+      "input": {
+        "image": [
+          [0, 0, 0],
+          [0, 0, 0]
+        ],
+        "sr": 0,
+        "sc": 0,
+        "color": 0
+      },
+      "output": [
+        [0, 0, 0],
+        [0, 0, 0]
+      ],
+      "explanation": "The starting pixel is already colored 0, so no changes are made to the image."
+    },
+    {
+      "input": {
+        "image": [
+          [0, 0, 0],
+          [0, 1, 1]
+        ],
+        "sr": 1,
+        "sc": 1,
+        "color": 1
+      },
+      "output": [
+        [0, 0, 0],
+        [0, 1, 1]
+      ],
+      "explanation": "The starting pixel is already colored 1, so no changes are made to the image."
+    }
+  ],
+  "solution": {
+    "code": "def flood_fill(image: list[list[int]], sr: int, sc: int, color: int) -> list[list[int]]:\n    # If the starting pixel is already the target color, return the image\n    if image[sr][sc] == color:\n        return image\n    \n    # Store the original color of the starting pixel\n    original_color = image[sr][sc]\n    \n    # Define the four directions: up, down, left, right\n    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]\n    \n    def dfs(r: int, c: int):\n        # Check if current position is valid and has the original color\n        if (0 <= r < len(image) and \n            0 <= c < len(image[0]) and \n            image[r][c] == original_color):\n            \n            # Fill the current pixel\n            image[r][c] = color\n            \n            # Recursively fill the four adjacent pixels\n            for dr, dc in directions:\n                dfs(r + dr, c + dc)\n    \n    # Start the flood fill from the given position\n    dfs(sr, sc)\n    \n    return image\n\n# Alternative BFS approach\ndef flood_fill_bfs(image: list[list[int]], sr: int, sc: int, color: int) -> list[list[int]]:\n    if image[sr][sc] == color:\n        return image\n    \n    original_color = image[sr][sc]\n    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]\n    \n    # Use a queue for BFS\n    queue = [(sr, sc)]\n    \n    while queue:\n        r, c = queue.pop(0)\n        \n        # Check if current position is valid and has the original color\n        if (0 <= r < len(image) and \n            0 <= c < len(image[0]) and \n            image[r][c] == original_color):\n            \n            # Fill the current pixel\n            image[r][c] = color\n            \n            # Add adjacent pixels to the queue\n            for dr, dc in directions:\n                queue.append((r + dr, c + dc))\n    \n    return image",
+    "explanation": "Two approaches are shown:\n\n1. Depth-First Search (DFS) approach:\n   - Use recursion to explore all connected pixels of the same color\n   - Check if the current pixel is valid and has the original color\n   - Fill the current pixel and recursively explore all four directions\n   - Time complexity: O(m * n) where m and n are the dimensions of the image\n   - Space complexity: O(m * n) in the worst case due to recursion stack\n\n2. Breadth-First Search (BFS) approach:\n   - Use a queue to process pixels level by level\n   - Same logic as DFS but uses iteration instead of recursion\n   - Time complexity: O(m * n)\n   - Space complexity: O(m * n) for the queue\n\nBoth approaches achieve the same result. DFS is more memory-efficient for deep paths, while BFS is better for wide areas."
+  }
+}
