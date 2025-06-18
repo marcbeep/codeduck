@@ -1,0 +1,42 @@
+{
+  "id": 224,
+  "title": "Basic Calculator",
+  "list": ["grind75"],
+  "category": "Stack",
+  "topics": ["Math", "String", "Stack", "Recursion"],
+  "difficulty": "Hard",
+  "description": "Given a string s representing a valid expression, implement a basic calculator to evaluate it, and return the result of the evaluation.\n\nNote: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().",
+  "constraints": [
+    "1 <= s.length <= 3 * 105",
+    "s consists of digits, '+', '-', '(', ')', and ' '",
+    "s represents a valid expression",
+    "All intermediate results will be in the range [-231, 231 - 1]"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "1 + 1"
+      },
+      "output": 2,
+      "explanation": "1 + 1 = 2"
+    },
+    {
+      "input": {
+        "s": " 2-1 + 2 "
+      },
+      "output": 3,
+      "explanation": "2 - 1 + 2 = 3"
+    },
+    {
+      "input": {
+        "s": "(1+(4+5+2)-3)+(6+8)"
+      },
+      "output": 23,
+      "explanation": "(1+(4+5+2)-3)+(6+8) = (1+11-3)+14 = 9+14 = 23"
+    }
+  ],
+  "solution": {
+    "code": "def calculate(s: str) -> int:\n    stack = []\n    result = 0\n    num = 0\n    sign = 1  # 1 for positive, -1 for negative\n    \n    for char in s:\n        if char.isdigit():\n            num = num * 10 + int(char)\n        elif char in '+-':\n            # Process the previous number\n            result += sign * num\n            num = 0\n            # Update sign\n            sign = 1 if char == '+' else -1\n        elif char == '(':\n            # Push current result and sign to stack\n            stack.append(result)\n            stack.append(sign)\n            # Reset for the subexpression\n            result = 0\n            sign = 1\n        elif char == ')':\n            # Process the current number\n            result += sign * num\n            num = 0\n            # Pop sign and previous result from stack\n            result *= stack.pop()  # sign\n            result += stack.pop()  # previous result\n    \n    # Process the last number\n    result += sign * num\n    \n    return result",
+    "explanation": "This solution uses a stack to handle parentheses and signs:\n1. We iterate through each character in the string\n2. For digits: we build the number by multiplying by 10 and adding the digit\n3. For '+' or '-': we process the previous number and update the sign\n4. For '(': we push the current result and sign to stack, then reset for the subexpression\n5. For ')': we process the current number, then pop the sign and previous result from stack\n6. We handle the last number at the end\n\nKey insight: We use a stack to remember the context when we encounter parentheses.\n\nExample: s = \"(1+(4+5+2)-3)+(6+8)\"\n- Process \"(1+(4+5+2)-3)\":\n  - Push result=0, sign=1 to stack\n  - Process \"1+(4+5+2)-3\":\n    - result = 1\n    - Push result=1, sign=1 to stack\n    - Process \"4+5+2\": result = 11\n    - Pop sign=1, result=1: result = 1 + 11 = 12\n    - Process \"-3\": result = 12 - 3 = 9\n  - Pop sign=1, result=0: result = 0 + 9 = 9\n- Process \"+(6+8)\": result = 9 + 14 = 23\n\nThe time complexity is O(n) where n is the length of the string. The space complexity is O(n) for the stack in the worst case."
+  }
+}

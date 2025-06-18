@@ -1,0 +1,49 @@
+{
+  "id": 295,
+  "title": "Find Median from Data Stream",
+  "list": ["grind75"],
+  "category": "Design",
+  "topics": [
+    "Two Pointers",
+    "Design",
+    "Sorting",
+    "Heap (Priority Queue)",
+    "Data Stream"
+  ],
+  "difficulty": "Hard",
+  "description": "The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value and the median is the mean of the two middle values.\n\nFor example, for arr = [2,3,4], the median is 3.\nFor example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.\n\nImplement the MedianFinder class:\n- MedianFinder() initializes the MedianFinder object.\n- void addNum(int num) adds the integer num from the data stream to the data structure.\n- double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted.",
+  "constraints": [
+    "-105 <= num <= 105",
+    "There will be at least one element in the data structure before calling findMedian",
+    "At most 5 * 104 calls will be made to addNum and findMedian"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": [
+          "MedianFinder",
+          "addNum",
+          "addNum",
+          "findMedian",
+          "addNum",
+          "findMedian"
+        ],
+        "values": [[], [1], [2], [], [3], []]
+      },
+      "output": [null, null, null, 1.5, null, 2.0],
+      "explanation": "MedianFinder medianFinder = new MedianFinder();\nmedianFinder.addNum(1);    // arr = [1]\nmedianFinder.addNum(2);    // arr = [1, 2]\nmedianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)\nmedianFinder.addNum(3);    // arr[1, 2, 3]\nmedianFinder.findMedian(); // return 2.0"
+    },
+    {
+      "input": {
+        "operations": ["MedianFinder", "addNum", "findMedian"],
+        "values": [[], [1], []]
+      },
+      "output": [null, null, 1.0],
+      "explanation": "MedianFinder medianFinder = new MedianFinder();\nmedianFinder.addNum(1);    // arr = [1]\nmedianFinder.findMedian(); // return 1.0"
+    }
+  ],
+  "solution": {
+    "code": "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        # Max heap for the smaller half (left side)\n        self.max_heap = []\n        # Min heap for the larger half (right side)\n        self.min_heap = []\n    \n    def addNum(self, num: int) -> None:\n        # Add to max heap first\n        heapq.heappush(self.max_heap, -num)\n        \n        # Ensure max heap has the smaller elements\n        if (self.max_heap and self.min_heap and \n            -self.max_heap[0] > self.min_heap[0]):\n            # Move largest from max heap to min heap\n            val = -heapq.heappop(self.max_heap)\n            heapq.heappush(self.min_heap, val)\n        \n        # Balance the heaps\n        if len(self.max_heap) > len(self.min_heap) + 1:\n            val = -heapq.heappop(self.max_heap)\n            heapq.heappush(self.min_heap, val)\n        elif len(self.min_heap) > len(self.max_heap):\n            val = heapq.heappop(self.min_heap)\n            heapq.heappush(self.max_heap, -val)\n    \n    def findMedian(self) -> float:\n        if len(self.max_heap) > len(self.min_heap):\n            # Odd number of elements, return from max heap\n            return -self.max_heap[0]\n        else:\n            # Even number of elements, return average\n            return (-self.max_heap[0] + self.min_heap[0]) / 2",
+    "explanation": "This solution uses two heaps to maintain the median efficiently:\n1. We use a max heap (max_heap) to store the smaller half of the numbers\n2. We use a min heap (min_heap) to store the larger half of the numbers\n3. We ensure that max_heap always has at most one more element than min_heap\n4. For addNum:\n   - We add the number to max_heap first\n   - We ensure the largest element in max_heap is smaller than the smallest in min_heap\n   - We balance the heaps if necessary\n5. For findMedian:\n   - If max_heap has more elements, return the top of max_heap\n   - Otherwise, return the average of the tops of both heaps\n\nKey insight: By maintaining two heaps, we can access the median in O(1) time.\n\nExample: addNum(1), addNum(2), addNum(3)\n- After addNum(1): max_heap = [-1], min_heap = []\n- After addNum(2): max_heap = [-1], min_heap = [2]\n- After addNum(3): max_heap = [-2], min_heap = [3]\n- findMedian: return (-(-2) + 3) / 2 = 2.5\n\nThe time complexity is O(log n) for addNum and O(1) for findMedian. The space complexity is O(n) to store all numbers."
+  }
+}
