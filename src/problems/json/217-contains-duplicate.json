@@ -1,0 +1,37 @@
+{
+  "id": 217,
+  "title": "Contains Duplicate",
+  "list": ["grind75"],
+  "category": "Array",
+  "topics": ["Array", "Hash Table", "Sorting"],
+  "difficulty": "Easy",
+  "description": "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
+  "constraints": ["1 <= nums.length <= 105", "-109 <= nums[i] <= 109"],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 2, 3, 1]
+      },
+      "output": true,
+      "explanation": "1 appears twice in the array."
+    },
+    {
+      "input": {
+        "nums": [1, 2, 3, 4]
+      },
+      "output": false,
+      "explanation": "All elements are distinct."
+    },
+    {
+      "input": {
+        "nums": [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]
+      },
+      "output": true,
+      "explanation": "Multiple duplicates exist in the array."
+    }
+  ],
+  "solution": {
+    "code": "def contains_duplicate(nums: list[int]) -> bool:\n    # Use a set to track seen numbers\n    seen = set()\n    \n    for num in nums:\n        # If we've seen this number before, we have a duplicate\n        if num in seen:\n            return True\n        # Add current number to seen set\n        seen.add(num)\n    \n    # No duplicates found\n    return False",
+    "explanation": "This solution uses a hash set to achieve O(n) time complexity:\n1. We iterate through the array once\n2. For each number, we check if it already exists in our set\n3. If it exists, we've found a duplicate and return True\n4. Otherwise, we add the number to our set and continue\n5. If we complete the loop without finding duplicates, return False\n\nThe time complexity is O(n) as we only need one pass through the array. The space complexity is O(n) as we might need to store all numbers in the set in the worst case.\n\nAlternative approach: We could also sort the array first and then check adjacent elements, which would be O(n log n) time but O(1) space (if we can modify the input array)."
+  }
+}

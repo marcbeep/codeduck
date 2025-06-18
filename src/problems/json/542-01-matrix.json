@@ -1,0 +1,72 @@
+{
+  "id": 542,
+  "title": "01 Matrix",
+  "list": ["grind75"],
+  "category": "Array",
+  "topics": ["Array", "Dynamic Programming", "Breadth-First Search", "Matrix"],
+  "difficulty": "Medium",
+  "description": "Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.\n\nThe distance between two adjacent cells is 1.",
+  "constraints": [
+    "m == mat.length",
+    "n == mat[i].length",
+    "1 <= m, n <= 104",
+    "1 <= m * n <= 104",
+    "mat[i][j] is either 0 or 1",
+    "There is at least one 0 in mat"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "mat": [
+          [0, 0, 0],
+          [0, 1, 0],
+          [0, 0, 0]
+        ]
+      },
+      "output": [
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+      ],
+      "explanation": "All cells are at most 1 distance away from a 0."
+    },
+    {
+      "input": {
+        "mat": [
+          [0, 0, 0],
+          [0, 1, 0],
+          [1, 1, 1]
+        ]
+      },
+      "output": [
+        [0, 0, 0],
+        [0, 1, 0],
+        [1, 2, 1]
+      ],
+      "explanation": "The middle cell is 1 distance away from the nearest 0, and the bottom cells are 2 distances away."
+    },
+    {
+      "input": {
+        "mat": [
+          [0, 1, 0, 1, 1],
+          [1, 1, 0, 0, 1],
+          [0, 0, 0, 1, 0],
+          [1, 0, 1, 1, 1],
+          [1, 0, 0, 0, 1]
+        ]
+      },
+      "output": [
+        [0, 1, 0, 1, 2],
+        [1, 1, 0, 0, 1],
+        [0, 0, 0, 1, 0],
+        [1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 1]
+      ],
+      "explanation": "Complex matrix with varying distances to nearest 0."
+    }
+  ],
+  "solution": {
+    "code": "from collections import deque\n\ndef update_matrix(mat: list[list[int]]) -> list[list[int]]:\n    if not mat or not mat[0]:\n        return mat\n    \n    m, n = len(mat), len(mat[0])\n    queue = deque()\n    \n    # Initialize: set all 1s to infinity, add all 0s to queue\n    for i in range(m):\n        for j in range(n):\n            if mat[i][j] == 0:\n                queue.append((i, j))\n            else:\n                mat[i][j] = float('inf')\n    \n    # BFS from all 0s\n    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n    \n    while queue:\n        i, j = queue.popleft()\n        \n        for di, dj in directions:\n            ni, nj = i + di, j + dj\n            \n            if 0 <= ni < m and 0 <= nj < n and mat[ni][nj] > mat[i][j] + 1:\n                mat[ni][nj] = mat[i][j] + 1\n                queue.append((ni, nj))\n    \n    return mat",
+    "explanation": "This solution uses BFS (Breadth-First Search) with O(m*n) time complexity:\n1. First, we initialize all 1s to infinity and add all 0s to a queue\n2. We perform BFS starting from all 0s simultaneously\n3. For each cell, we check its 4 neighbors and update their distance if we found a shorter path\n4. We continue until the queue is empty\n\nThe time complexity is O(m*n) as we visit each cell at most once. The space complexity is O(m*n) for the queue in the worst case.\n\nKey insights:\n- We start BFS from all 0s simultaneously (multi-source BFS)\n- We only update a cell if we found a shorter path to it\n- This ensures we find the shortest distance to the nearest 0 for each cell\n\nAlternative approach: We could also use dynamic programming with two passes (top-left to bottom-right, then bottom-right to top-left)."
+  }
+}
