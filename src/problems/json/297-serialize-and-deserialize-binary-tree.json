@@ -1,0 +1,47 @@
+{
+  "id": 297,
+  "title": "Serialize and Deserialize Binary Tree",
+  "list": ["grind75"],
+  "category": "Tree",
+  "topics": [
+    "String",
+    "Tree",
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Design",
+    "Binary Tree"
+  ],
+  "difficulty": "Hard",
+  "description": "Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.\n\nDesign an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.\n\nClarification: The input/output format is the same as how LeetCode serializes a binary tree. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.",
+  "constraints": [
+    "The number of nodes in the tree is in the range [0, 104]",
+    "-1000 <= Node.val <= 1000"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "root": [1, 2, 3, null, null, 4, 5]
+      },
+      "output": [1, 2, 3, null, null, 4, 5],
+      "explanation": "The tree is serialized and then deserialized back to the same structure."
+    },
+    {
+      "input": {
+        "root": []
+      },
+      "output": [],
+      "explanation": "Empty tree serializes to empty string and deserializes back to empty tree."
+    },
+    {
+      "input": {
+        "root": [1]
+      },
+      "output": [1],
+      "explanation": "Single node tree serializes and deserializes correctly."
+    }
+  ],
+  "solution": {
+    "code": "class TreeNode(object):\n    def __init__(self, x):\n        self.val = x\n        self.left = None\n        self.right = None\n\nclass Codec:\n    def serialize(self, root):\n        \"\"\"Encodes a tree to a single string.\"\"\"\n        if not root:\n            return \"\"\n        \n        def dfs(node):\n            if not node:\n                return \"null\"\n            return str(node.val) + \",\" + dfs(node.left) + \",\" + dfs(node.right)\n        \n        return dfs(root)\n    \n    def deserialize(self, data):\n        \"\"\"Decodes your encoded data to tree.\"\"\"\n        if not data:\n            return None\n        \n        # Convert string to list\n        values = data.split(\",\")\n        self.index = 0\n        \n        def dfs():\n            if self.index >= len(values) or values[self.index] == \"null\":\n                self.index += 1\n                return None\n            \n            # Create node with current value\n            node = TreeNode(int(values[self.index]))\n            self.index += 1\n            \n            # Recursively build left and right subtrees\n            node.left = dfs()\n            node.right = dfs()\n            \n            return node\n        \n        return dfs()",
+    "explanation": "This solution uses preorder traversal (DFS) for serialization and deserialization:\n1. For serialization:\n   - We use preorder traversal: root -> left -> right\n   - We represent null nodes as \"null\"\n   - We separate values with commas\n   - Example: [1,2,3,null,null,4,5] becomes \"1,2,null,null,3,4,null,null,5,null,null\"\n\n2. For deserialization:\n   - We split the string by commas to get a list of values\n   - We use a global index to track our position in the list\n   - We recursively build the tree using preorder traversal\n   - When we encounter \"null\", we return None\n   - Otherwise, we create a node and recursively build left and right subtrees\n\nKey insight: Preorder traversal allows us to reconstruct the tree uniquely because we know the root comes first, then left subtree, then right subtree.\n\nExample: [1,2,3,null,null,4,5]\n- Serialization: \"1,2,null,null,3,4,null,null,5,null,null\"\n- Deserialization:\n  - Root = 1\n  - Left child = 2, its children = null, null\n  - Right child = 3, its left = 4 (with null children), its right = 5 (with null children)\n\nThe time complexity is O(n) for both serialization and deserialization. The space complexity is O(n) for the recursion stack and the serialized string."
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": 76,
+  "title": "Minimum Window Substring",
+  "list": ["grind75"],
+  "category": "String",
+  "topics": ["Hash Table", "String", "Sliding Window"],
+  "difficulty": "Hard",
+  "description": "Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string \"\".\n\nThe testcases will be generated such that the answer is unique.\n\nA substring is a contiguous sequence of characters within the string.",
+  "constraints": [
+    "m == s.length",
+    "n == t.length",
+    "1 <= m, n <= 105",
+    "s and t consist of uppercase and lowercase English letters"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "ADOBECODEBANC",
+        "t": "ABC"
+      },
+      "output": "BANC",
+      "explanation": "The minimum window substring \"BANC\" includes 'A', 'B', and 'C' from string t."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
+      "output": "a",
+      "explanation": "The entire string s is the minimum window."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "aa"
+      },
+      "output": "",
+      "explanation": "Both 'a's from t must be included in the window. Since the maximum window size of s is 1, there is no valid window."
+    }
+  ],
+  "solution": {
+    "code": "from collections import Counter\n\ndef minWindow(s: str, t: str) -> str:\n    if not s or not t:\n        return \"\"\n    \n    # Count characters needed from t\n    need = Counter(t)\n    # Count characters in current window\n    have = Counter()\n    \n    # Track how many characters we have satisfied\n    satisfied = 0\n    required = len(need)\n    \n    # Sliding window pointers\n    left = 0\n    min_len = float('inf')\n    min_start = 0\n    \n    for right in range(len(s)):\n        # Add current character to window\n        char = s[right]\n        have[char] += 1\n        \n        # Check if we've satisfied this character requirement\n        if char in need and have[char] == need[char]:\n            satisfied += 1\n        \n        # Try to shrink window from left\n        while satisfied == required:\n            # Update minimum window if current is smaller\n            if right - left + 1 < min_len:\n                min_len = right - left + 1\n                min_start = left\n            \n            # Remove leftmost character\n            left_char = s[left]\n            have[left_char] -= 1\n            \n            # Check if we've broken a character requirement\n            if left_char in need and have[left_char] < need[left_char]:\n                satisfied -= 1\n            \n            left += 1\n    \n    return s[min_start:min_start + min_len] if min_len != float('inf') else \"\"",
+    "explanation": "This solution uses the sliding window technique with character counting:\n1. We count the frequency of each character in string t (need)\n2. We maintain a sliding window counter for string s (have)\n3. We track how many character requirements we've satisfied\n4. We expand the window by adding characters from the right\n5. When all requirements are satisfied, we try to shrink from the left\n6. We keep track of the minimum valid window found\n\nKey insight: We need to satisfy all character requirements (including duplicates) from t\n\nExample: s = \"ADOBECODEBANC\", t = \"ABC\"\n- need = {'A': 1, 'B': 1, 'C': 1}\n- Window [0,5]: \"ADOBEC\" → have = {'A': 1, 'D': 1, 'O': 1, 'B': 1, 'E': 1, 'C': 1} → satisfied = 3\n- Shrink: \"DOBEC\" → \"OBEC\" → \"BEC\" → \"EC\" → \"C\" → satisfied = 1\n- Continue expanding...\n- Final minimum window: \"BANC\"\n\nThe time complexity is O(n) where n is the length of string s. The space complexity is O(k) where k is the number of unique characters in t."
+  }
+}

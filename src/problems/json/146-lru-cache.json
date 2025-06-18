@@ -1,0 +1,48 @@
+{
+  "id": 146,
+  "title": "LRU Cache",
+  "list": ["grind75"],
+  "category": "Design",
+  "topics": ["Hash Table", "Linked List", "Design", "Doubly-Linked List"],
+  "difficulty": "Medium",
+  "description": "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.\n\nImplement the LRUCache class:\n- LRUCache(int capacity) Initialize the LRU cache with positive size capacity.\n- int get(int key) Return the value of the key if the key exists, otherwise return -1.\n- void put(int key, int value) Update the value of the key if the key exists. Otherwise, add the key-value pair to the cache. If the number of keys exceeds the capacity from this operation, evict the least recently used key.\n\nThe functions get and put must each run in O(1) average time complexity.",
+  "constraints": [
+    "1 <= capacity <= 3000",
+    "0 <= key <= 104",
+    "0 <= value <= 105",
+    "At most 2 * 105 calls will be made to get and put"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": [
+          "LRUCache",
+          "put",
+          "put",
+          "get",
+          "put",
+          "get",
+          "put",
+          "get",
+          "get",
+          "get"
+        ],
+        "values": [[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+      },
+      "output": [null, null, null, 1, null, -1, null, -1, 3, 4],
+      "explanation": "LRUCache lRUCache = new LRUCache(2);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1);    // return 1\nlRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}\nlRUCache.get(2);    // returns -1 (not found)\nlRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}\nlRUCache.get(1);    // return -1 (not found)\nlRUCache.get(3);    // return 3\nlRUCache.get(4);    // return 4"
+    },
+    {
+      "input": {
+        "operations": ["LRUCache", "put", "get"],
+        "values": [[1], [1, 1], [1]]
+      },
+      "output": [null, null, 1],
+      "explanation": "LRUCache lRUCache = new LRUCache(1);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.get(1);    // return 1"
+    }
+  ],
+  "solution": {
+    "code": "class Node:\n    def __init__(self, key=0, value=0):\n        self.key = key\n        self.value = value\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.cache = {}  # key -> node\n        \n        # Dummy head and tail nodes\n        self.head = Node()\n        self.tail = Node()\n        self.head.next = self.tail\n        self.tail.prev = self.head\n    \n    def get(self, key: int) -> int:\n        if key in self.cache:\n            # Move to front (most recently used)\n            self._moveToFront(self.cache[key])\n            return self.cache[key].value\n        return -1\n    \n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            # Update existing key\n            node = self.cache[key]\n            node.value = value\n            self._moveToFront(node)\n        else:\n            # Add new key\n            if len(self.cache) >= self.capacity:\n                # Remove least recently used (tail)\n                self._removeLRU()\n            \n            # Create new node and add to front\n            node = Node(key, value)\n            self.cache[key] = node\n            self._addToFront(node)\n    \n    def _moveToFront(self, node: Node) -> None:\n        # Remove from current position\n        node.prev.next = node.next\n        node.next.prev = node.prev\n        # Add to front\n        self._addToFront(node)\n    \n    def _addToFront(self, node: Node) -> None:\n        # Insert after head\n        node.next = self.head.next\n        node.prev = self.head\n        self.head.next.prev = node\n        self.head.next = node\n    \n    def _removeLRU(self) -> None:\n        # Remove node before tail\n        lru_node = self.tail.prev\n        self.tail.prev = lru_node.prev\n        lru_node.prev.next = self.tail\n        del self.cache[lru_node.key]",
+    "explanation": "This solution uses a hash map and doubly-linked list to implement LRU cache:\n1. We use a hash map to store key -> node mapping for O(1) access\n2. We use a doubly-linked list to maintain order (most recently used at front)\n3. We have dummy head and tail nodes for easier list manipulation\n4. For get operation:\n   - If key exists, move the node to front and return value\n   - If key doesn't exist, return -1\n5. For put operation:\n   - If key exists, update value and move to front\n   - If key doesn't exist and cache is full, remove LRU node (tail)\n   - Add new node to front\n\nKey operations:\n- _moveToFront: Remove node from current position and add to front\n- _addToFront: Insert node after head (most recently used)\n- _removeLRU: Remove node before tail (least recently used)\n\nExample: capacity = 2\n- put(1,1): cache = {1=1}, list = [head -> 1 -> tail]\n- put(2,2): cache = {1=1, 2=2}, list = [head -> 2 -> 1 -> tail]\n- get(1): move 1 to front, list = [head -> 1 -> 2 -> tail]\n\nThe time complexity is O(1) for both get and put operations. The space complexity is O(capacity) for the cache and linked list."
+  }
+}

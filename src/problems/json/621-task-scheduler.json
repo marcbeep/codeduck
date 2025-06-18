@@ -1,0 +1,50 @@
+{
+  "id": 621,
+  "title": "Task Scheduler",
+  "list": ["grind75"],
+  "category": "Greedy",
+  "topics": [
+    "Array",
+    "Hash Table",
+    "Greedy",
+    "Sorting",
+    "Heap (Priority Queue)"
+  ],
+  "difficulty": "Medium",
+  "description": "You are given an array of CPU tasks, each represented by letters A to Z, and a non-negative integer n that represents the cooling time between two same tasks (the same letter cannot be executed in two consecutive time slots).\n\nYou need to return the least number of intervals the CPU will take to finish all the given tasks.",
+  "constraints": [
+    "1 <= task.length <= 104",
+    "tasks[i] is upper-case English letter",
+    "0 <= n <= 100"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "tasks": ["A", "A", "A", "B", "B", "B"],
+        "n": 2
+      },
+      "output": 8,
+      "explanation": "A -> B -> idle -> A -> B -> idle -> A -> B\nThere is at least 2 units of time between any two same tasks."
+    },
+    {
+      "input": {
+        "tasks": ["A", "A", "A", "B", "B", "B"],
+        "n": 0
+      },
+      "output": 6,
+      "explanation": "On this case any permutation of size 6 would work since n = 0.\n[\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"]\n[\"A\",\"B\",\"A\",\"B\",\"A\",\"B\"]\n[\"B\",\"B\",\"B\",\"A\",\"A\",\"A\"]\n... and so on."
+    },
+    {
+      "input": {
+        "tasks": ["A", "A", "A", "A", "A", "A", "B", "C", "D", "E", "F", "G"],
+        "n": 2
+      },
+      "output": 16,
+      "explanation": "One possible solution is\nA -> B -> C -> A -> D -> E -> A -> F -> G -> A -> idle -> idle -> A -> idle -> idle -> A"
+    }
+  ],
+  "solution": {
+    "code": "from collections import Counter\nimport heapq\n\ndef leastInterval(tasks: list[str], n: int) -> int:\n    # Count frequency of each task\n    task_counts = Counter(tasks)\n    \n    # Create max heap (negative counts for max heap)\n    max_heap = [-count for count in task_counts.values()]\n    heapq.heapify(max_heap)\n    \n    # Queue to store tasks that are cooling down\n    queue = []  # (count, available_time)\n    \n    time = 0\n    \n    while max_heap or queue:\n        time += 1\n        \n        if max_heap:\n            # Process the most frequent task\n            count = heapq.heappop(max_heap) + 1  # +1 because count is negative\n            if count < 0:\n                # Task still has remaining occurrences\n                queue.append((count, time + n))\n        \n        # Check if any task in queue is ready to be processed\n        if queue and queue[0][1] <= time:\n            count, _ = queue.pop(0)\n            heapq.heappush(max_heap, count)\n    \n    return time",
+    "explanation": "This solution uses a max heap and queue to simulate task scheduling:\n1. We count the frequency of each task using Counter\n2. We create a max heap with negative counts (since heapq is min heap)\n3. We use a queue to track tasks that are cooling down\n4. At each time step:\n   - If there's a task available in the heap, we process it\n   - We add the task to the cooling queue if it has remaining occurrences\n   - We check if any task in the queue is ready to be processed again\n5. We continue until all tasks are completed\n\nKey insight: The optimal strategy is to always process the most frequent task first, then the second most frequent, etc.\n\nExample: tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2\n- task_counts = {'A': 3, 'B': 3}\n- max_heap = [-3, -3]\n- Time 1: Process A, add to queue: queue = [(-2, 4)]\n- Time 2: Process B, add to queue: queue = [(-2, 4), (-2, 5)]\n- Time 3: Idle (no tasks available)\n- Time 4: Process A again, add to queue: queue = [(-2, 5), (-1, 7)]\n- Continue...\n- Result: 8 time units\n\nThe time complexity is O(n * log k) where n is the number of tasks and k is the number of unique tasks. The space complexity is O(k) for the heap and queue."
+  }
+}
