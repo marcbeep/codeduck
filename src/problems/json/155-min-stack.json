@@ -1,0 +1,37 @@
+{
+  "id": 155,
+  "title": "Min Stack",
+  "list": ["grind75"],
+  "category": "Stack",
+  "topics": ["Stack", "Design"],
+  "difficulty": "Medium",
+  "description": "Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.\n\nImplement the MinStack class:\n- MinStack() initializes the stack object.\n- void push(int val) pushes the element val onto the stack.\n- void pop() removes the element on the top of the stack.\n- int top() gets the top element of the stack.\n- int getMin() retrieves the minimum element in the stack.\n\nYou must implement a solution with O(1) time complexity for each function.",
+  "constraints": [
+    "-231 <= val <= 231 - 1",
+    "Methods pop, top and getMin operations will always be called on non-empty stacks",
+    "At most 3 * 104 calls will be made to push, pop, top, and getMin"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": [
+          "MinStack",
+          "push",
+          "push",
+          "push",
+          "getMin",
+          "pop",
+          "top",
+          "getMin"
+        ],
+        "values": [[], [-2], [0], [-3], [], [], [], []]
+      },
+      "output": [null, null, null, null, -3, null, 0, -2],
+      "explanation": "MinStack minStack = new MinStack();\nminStack.push(-2);\nminStack.push(0);\nminStack.push(-3);\nminStack.getMin(); // return -3\nminStack.pop();\nminStack.top();    // return 0\nminStack.getMin(); // return -2"
+    }
+  ],
+  "solution": {
+    "code": "class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.min_stack = []\n    \n    def push(self, val: int) -> None:\n        self.stack.append(val)\n        \n        # Update min stack\n        if not self.min_stack or val <= self.min_stack[-1]:\n            self.min_stack.append(val)\n    \n    def pop(self) -> None:\n        if self.stack:\n            # If we're popping the current minimum, also pop from min stack\n            if self.stack[-1] == self.min_stack[-1]:\n                self.min_stack.pop()\n            self.stack.pop()\n    \n    def top(self) -> int:\n        return self.stack[-1]\n    \n    def get_min(self) -> int:\n        return self.min_stack[-1]",
+    "explanation": "This solution uses two stacks with O(1) time complexity for all operations:\n1. We maintain two stacks: one for the actual elements and one for minimum values\n2. For push: we always push to the main stack, and push to min stack only if the value is <= current minimum\n3. For pop: we pop from main stack, and pop from min stack only if we're removing the current minimum\n4. For top: we return the top element of the main stack\n5. For getMin: we return the top element of the min stack\n\nThe time complexity is O(1) for all operations. The space complexity is O(n) in the worst case when elements are pushed in decreasing order.\n\nKey insights:\n- We only need to track minimum values, not all values\n- We push to min stack only when we encounter a new minimum or equal minimum\n- We pop from min stack only when we're removing the current minimum\n- The min stack maintains the minimum at each point in the main stack's history\n- This ensures we can always get the current minimum in O(1) time\n\nAlternative approach: We could also store tuples of (value, current_min) in a single stack, but the two-stack approach is more memory efficient."
+  }
+}

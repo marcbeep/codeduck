@@ -1,0 +1,36 @@
+{
+  "id": 208,
+  "title": "Implement Trie (Prefix Tree)",
+  "list": ["grind75"],
+  "category": "Design",
+  "topics": ["Design", "Trie", "String"],
+  "difficulty": "Medium",
+  "description": "A trie (pronounced as \"try\") or prefix tree is a tree data structure used to efficiently store and retrieve keys in a dataset of strings. There are various applications of this data structure, such as autocomplete and spellchecker.\n\nImplement the Trie class:\n- Trie() Initializes the trie object.\n- void insert(String word) Inserts the string word into the trie.\n- boolean search(String word) Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise.\n- boolean startsWith(String prefix) Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.",
+  "constraints": [
+    "1 <= word.length, prefix.length <= 2000",
+    "word and prefix consist only of lowercase English letters",
+    "At most 3 * 104 calls in total will be made to insert, search, and startsWith"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": [
+          "Trie",
+          "insert",
+          "search",
+          "search",
+          "startsWith",
+          "insert",
+          "search"
+        ],
+        "values": [[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]
+      },
+      "output": [null, null, true, false, true, null, true],
+      "explanation": "Trie trie = new Trie();\ntrie.insert(\"apple\");\ntrie.search(\"apple\");   // return True\ntrie.search(\"app\");     // return False\ntrie.startsWith(\"app\"); // return True\ntrie.insert(\"app\");\ntrie.search(\"app\");     // return True"
+    }
+  ],
+  "solution": {
+    "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n    \n    def insert(self, word: str) -> None:\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                node.children[char] = TrieNode()\n            node = node.children[char]\n        node.is_end = True\n    \n    def search(self, word: str) -> bool:\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                return False\n            node = node.children[char]\n        return node.is_end\n    \n    def starts_with(self, prefix: str) -> bool:\n        node = self.root\n        for char in prefix:\n            if char not in node.children:\n                return False\n            node = node.children[char]\n        return True",
+    "explanation": "This solution implements a Trie data structure with O(m) time complexity for each operation:\n1. Each node contains a dictionary of children and a flag indicating if it's the end of a word\n2. For insert: we traverse the tree, creating nodes as needed, and mark the final node as end of word\n3. For search: we traverse the tree and check if we reach the end of a word\n4. For startsWith: we traverse the tree and check if we can reach the end of the prefix\n\nThe time complexity is O(m) where m is the length of the word/prefix for each operation. The space complexity is O(ALPHABET_SIZE * N * M) where N is the number of words and M is the average word length.\n\nKey insights:\n- Each node represents a character in the trie\n- The path from root to any node represents a prefix\n- We use a dictionary to store children for efficient lookups\n- The is_end flag distinguishes between prefixes and complete words\n- The trie structure allows for efficient prefix-based operations\n\nApplications: Autocomplete, spell checker, IP routing tables, and more."
+  }
+}
