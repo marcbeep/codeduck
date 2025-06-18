@@ -1,0 +1,40 @@
+{
+  "id": 3,
+  "title": "Longest Substring Without Repeating Characters",
+  "list": ["grind75"],
+  "category": "String",
+  "topics": ["String", "Hash Table", "Sliding Window"],
+  "difficulty": "Medium",
+  "description": "Given a string s, find the length of the longest substring without repeating characters.",
+  "constraints": [
+    "0 <= s.length <= 5 * 104",
+    "s consists of English letters, digits, symbols and spaces"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "abcabcbb"
+      },
+      "output": 3,
+      "explanation": "The answer is \"abc\", with the length of 3."
+    },
+    {
+      "input": {
+        "s": "bbbbb"
+      },
+      "output": 1,
+      "explanation": "The answer is \"b\", with the length of 1."
+    },
+    {
+      "input": {
+        "s": "pwwkew"
+      },
+      "output": 3,
+      "explanation": "The answer is \"wke\", with the length of 3. Notice that the answer must be a substring, \"pwke\" is a subsequence and not a substring."
+    }
+  ],
+  "solution": {
+    "code": "def length_of_longest_substring(s: str) -> int:\n    # Use sliding window with hash set\n    char_set = set()\n    left = 0\n    max_length = 0\n    \n    for right in range(len(s)):\n        # If current character is already in set, move left pointer\n        while s[right] in char_set:\n            char_set.remove(s[left])\n            left += 1\n        \n        # Add current character to set\n        char_set.add(s[right])\n        \n        # Update max length\n        max_length = max(max_length, right - left + 1)\n    \n    return max_length",
+    "explanation": "This solution uses the sliding window technique with O(n) time complexity:\n1. We use a hash set to track characters in the current window\n2. We use two pointers (left and right) to maintain the sliding window\n3. For each character, if it's already in our set, we move the left pointer until we remove the duplicate\n4. We add the current character to our set and update the max length\n5. The window always contains unique characters\n\nThe time complexity is O(n) as each character is visited at most twice (once by right pointer, once by left pointer). The space complexity is O(min(m, n)) where m is the size of the character set.\n\nKey insights:\n- The sliding window ensures we always have a substring with unique characters\n- When we encounter a duplicate, we shrink the window from the left\n- The window size gives us the length of the current substring"
+  }
+}

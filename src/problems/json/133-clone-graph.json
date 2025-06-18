@@ -1,0 +1,58 @@
+{
+  "id": 133,
+  "title": "Clone Graph",
+  "list": ["grind75"],
+  "category": "Graph",
+  "topics": [
+    "Graph",
+    "Hash Table",
+    "Depth-First Search",
+    "Breadth-First Search"
+  ],
+  "difficulty": "Medium",
+  "description": "Given a reference of a node in a connected undirected graph.\n\nReturn a deep copy (clone) of the graph.\n\nEach node in the graph contains a val (int) and a list (List[Node]) of its neighbors.",
+  "constraints": [
+    "The number of nodes in the graph is in the range [0, 100]",
+    "1 <= Node.val <= 100",
+    "Node.val is unique for each node",
+    "There are no repeated edges and no self-loops in the graph",
+    "The Graph is connected and all nodes can be visited starting from the given node"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "adjList": [
+          [2, 4],
+          [1, 3],
+          [2, 4],
+          [1, 3]
+        ]
+      },
+      "output": [
+        [2, 4],
+        [1, 3],
+        [2, 4],
+        [1, 3]
+      ],
+      "explanation": "There are 4 nodes in the graph. 1st node (val=1)'s neighbors are 2nd node (val=2) and 4th node (val=4). 2nd node (val=2)'s neighbors are 1st node (val=1) and 3rd node (val=3). 3rd node (val=3)'s neighbors are 2nd node (val=2) and 4th node (val=4). 4th node (val=4)'s neighbors are 1st node (val=1) and 3rd node (val=3)."
+    },
+    {
+      "input": {
+        "adjList": [[]]
+      },
+      "output": [[]],
+      "explanation": "Note that the input contains one empty list since the graph has only one node and no edges."
+    },
+    {
+      "input": {
+        "adjList": []
+      },
+      "output": [],
+      "explanation": "Empty graph."
+    }
+  ],
+  "solution": {
+    "code": "from typing import Optional\nfrom collections import deque\n\nclass Node:\n    def __init__(self, val = 0, neighbors = None):\n        self.val = val\n        self.neighbors = neighbors if neighbors is not None else []\n\ndef clone_graph(node: Optional['Node']) -> Optional['Node']:\n    if not node:\n        return None\n    \n    # Hash map to store original node -> cloned node mapping\n    visited = {}\n    \n    # BFS queue\n    queue = deque([node])\n    visited[node] = Node(node.val, [])\n    \n    while queue:\n        current = queue.popleft()\n        \n        # Process all neighbors\n        for neighbor in current.neighbors:\n            if neighbor not in visited:\n                # Create new node and add to visited\n                visited[neighbor] = Node(neighbor.val, [])\n                queue.append(neighbor)\n            \n            # Add the cloned neighbor to current node's neighbors\n            visited[current].neighbors.append(visited[neighbor])\n    \n    return visited[node]",
+    "explanation": "This solution uses BFS with O(n) time complexity:\n1. We use a hash map to track which nodes we've already cloned\n2. We use BFS to traverse the graph and clone nodes as we encounter them\n3. For each node, we create a new Node with the same value\n4. We process all neighbors and add them to the cloned node's neighbor list\n5. We only clone each node once, using the hash map to avoid duplicates\n\nThe time complexity is O(n) where n is the number of nodes, as we visit each node exactly once. The space complexity is O(n) for the hash map and queue.\n\nKey insights:\n- We need to avoid cloning the same node multiple times\n- The hash map serves as both visited tracking and node mapping\n- BFS ensures we process all nodes in the connected component\n- We build the neighbor relationships as we traverse\n\nAlternative approach: We could also use DFS with the same hash map approach, but BFS is often preferred for graph cloning."
+  }
+}
