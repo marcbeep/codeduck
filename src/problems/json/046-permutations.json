@@ -1,0 +1,51 @@
+{
+  "id": 46,
+  "title": "Permutations",
+  "list": ["grind75"],
+  "category": "Backtracking",
+  "topics": ["Array", "Backtracking"],
+  "difficulty": "Medium",
+  "description": "Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.",
+  "constraints": [
+    "1 <= nums.length <= 6",
+    "-10 <= nums[i] <= 10",
+    "All the integers of nums are unique"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 2, 3]
+      },
+      "output": [
+        [1, 2, 3],
+        [1, 3, 2],
+        [2, 1, 3],
+        [2, 3, 1],
+        [3, 1, 2],
+        [3, 2, 1]
+      ],
+      "explanation": "All possible permutations of [1, 2, 3]."
+    },
+    {
+      "input": {
+        "nums": [0, 1]
+      },
+      "output": [
+        [0, 1],
+        [1, 0]
+      ],
+      "explanation": "All possible permutations of [0, 1]."
+    },
+    {
+      "input": {
+        "nums": [1]
+      },
+      "output": [[1]],
+      "explanation": "Single element array has only one permutation."
+    }
+  ],
+  "solution": {
+    "code": "def permute(nums: list[int]) -> list[list[int]]:\n    def backtrack(start):\n        # If we've used all numbers, add current permutation\n        if start == len(nums):\n            result.append(nums[:])\n            return\n        \n        # Try each number as the current position\n        for i in range(start, len(nums)):\n            # Swap current position with position i\n            nums[start], nums[i] = nums[i], nums[start]\n            # Recurse to next position\n            backtrack(start + 1)\n            # Backtrack: swap back\n            nums[start], nums[i] = nums[i], nums[start]\n    \n    result = []\n    backtrack(0)\n    return result",
+    "explanation": "This solution uses backtracking to generate all permutations:\n1. We use a recursive approach where we fix one element at a time\n2. For each position, we try swapping with every remaining element\n3. After each swap, we recurse to the next position\n4. When we reach the end, we add the current permutation to our result\n5. We backtrack by swapping back to try other combinations\n\nThe time complexity is O(n!) as there are n! permutations. The space complexity is O(n) for the recursion stack."
+  }
+}

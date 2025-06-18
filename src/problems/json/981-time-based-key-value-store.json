@@ -1,0 +1,53 @@
+{
+  "id": 981,
+  "title": "Time Based Key-Value Store",
+  "list": ["grind75"],
+  "category": "Design",
+  "topics": ["Hash Table", "Binary Search", "Design"],
+  "difficulty": "Medium",
+  "description": "Design a time-based key-value data structure that can store multiple values for the same key at different time stamps and retrieve the key's value at a certain timestamp.\n\nImplement the TimeMap class:\n- TimeMap() Initializes the object of the data structure.\n- void set(String key, String value, int timestamp) Stores the key key with the value value at the given time timestamp.\n- String get(String key, int timestamp) Returns a value such that set was called previously, with timestamp_prev <= timestamp. If there are multiple such values, it returns the value associated with the largest timestamp_prev. If there are no values, it returns \"\".",
+  "constraints": [
+    "1 <= key.length, value.length <= 100",
+    "key and value consist of lowercase English letters and digits",
+    "1 <= timestamp <= 107",
+    "All the timestamps timestamp of set are strictly increasing",
+    "At most 2 * 105 calls will be made to set and get"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": ["TimeMap", "set", "get", "get", "set", "get", "get"],
+        "values": [
+          [],
+          ["foo", "bar", 1],
+          ["foo", 1],
+          ["foo", 3],
+          ["foo", "bar2", 4],
+          ["foo", 4],
+          ["foo", 5]
+        ]
+      },
+      "output": [null, null, "bar", "bar", null, "bar2", "bar2"],
+      "explanation": "TimeMap timeMap = new TimeMap();\ntimeMap.set(\"foo\", \"bar\", 1);\ntimeMap.get(\"foo\", 1);    // return \"bar\"\ntimeMap.get(\"foo\", 3);    // return \"bar\", since there is no value corresponding to foo at timestamp 3 and timestamp 2, then the only value is at timestamp 1 is \"bar\".\ntimeMap.set(\"foo\", \"bar2\", 4);\ntimeMap.get(\"foo\", 4);    // return \"bar2\"\ntimeMap.get(\"foo\", 5);    // return \"bar2\""
+    },
+    {
+      "input": {
+        "operations": ["TimeMap", "set", "set", "get", "get", "get"],
+        "values": [
+          [],
+          ["love", "high", 10],
+          ["love", "low", 20],
+          ["love", 5],
+          ["love", 10],
+          ["love", 15]
+        ]
+      },
+      "output": [null, null, null, "", "high", "high"],
+      "explanation": "TimeMap timeMap = new TimeMap();\ntimeMap.set(\"love\", \"high\", 10);\ntimeMap.set(\"love\", \"low\", 20);\ntimeMap.get(\"love\", 5);   // return \"\"\ntimeMap.get(\"love\", 10);  // return \"high\"\ntimeMap.get(\"love\", 15);  // return \"high\""
+    }
+  ],
+  "solution": {
+    "code": "from collections import defaultdict\nimport bisect\n\nclass TimeMap:\n    def __init__(self):\n        # key -> list of (timestamp, value) pairs\n        self.store = defaultdict(list)\n    \n    def set(self, key: str, value: str, timestamp: int) -> None:\n        # Append to the list (timestamps are strictly increasing)\n        self.store[key].append((timestamp, value))\n    \n    def get(self, key: str, timestamp: int) -> str:\n        if key not in self.store:\n            return \"\"\n        \n        # Get the list of (timestamp, value) pairs for this key\n        values = self.store[key]\n        \n        # Binary search to find the largest timestamp <= target\n        left, right = 0, len(values) - 1\n        \n        while left <= right:\n            mid = (left + right) // 2\n            if values[mid][0] <= timestamp:\n                left = mid + 1\n            else:\n                right = mid - 1\n        \n        # If we found a valid timestamp, return its value\n        if right >= 0:\n            return values[right][1]\n        \n        return \"\"",
+    "explanation": "This solution uses a hash map with binary search:\n1. We use a defaultdict to store lists of (timestamp, value) pairs for each key\n2. For set operations, we simply append to the list (timestamps are strictly increasing)\n3. For get operations, we use binary search to find the largest timestamp <= target\n4. If we find a valid timestamp, we return its corresponding value\n5. Otherwise, we return an empty string\n\nThe time complexity is O(1) for set and O(log n) for get where n is the number of timestamps for the key. The space complexity is O(n) to store all the timestamp-value pairs."
+  }
+}

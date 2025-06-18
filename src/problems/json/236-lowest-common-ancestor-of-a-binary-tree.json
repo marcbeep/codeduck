@@ -1,0 +1,49 @@
+{
+  "id": 236,
+  "title": "Lowest Common Ancestor of a Binary Tree",
+  "list": ["grind75"],
+  "category": "Tree",
+  "topics": ["Tree", "Depth-First Search", "Binary Tree"],
+  "difficulty": "Medium",
+  "description": "Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.\n\nAccording to the definition of LCA on Wikipedia: \"The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).\"",
+  "constraints": [
+    "The number of nodes in the tree is in the range [2, 105]",
+    "-109 <= Node.val <= 109",
+    "All Node.val are unique",
+    "p != q",
+    "p and q will exist in the tree"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "root": [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4],
+        "p": 5,
+        "q": 1
+      },
+      "output": 3,
+      "explanation": "The LCA of nodes 5 and 1 is 3."
+    },
+    {
+      "input": {
+        "root": [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4],
+        "p": 5,
+        "q": 4
+      },
+      "output": 5,
+      "explanation": "The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself."
+    },
+    {
+      "input": {
+        "root": [1, 2],
+        "p": 1,
+        "q": 2
+      },
+      "output": 1,
+      "explanation": "The LCA of nodes 1 and 2 is 1."
+    }
+  ],
+  "solution": {
+    "code": "class TreeNode:\n    def __init__(self, x):\n        self.val = x\n        self.left = None\n        self.right = None\n\ndef lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n    # Base case: if root is None or root is one of the target nodes\n    if not root or root == p or root == q:\n        return root\n    \n    # Recursively search in left and right subtrees\n    left = lowestCommonAncestor(root.left, p, q)\n    right = lowestCommonAncestor(root.right, p, q)\n    \n    # If both left and right return non-None, root is the LCA\n    if left and right:\n        return root\n    \n    # If only one subtree returns a node, return that node\n    return left if left else right",
+    "explanation": "This solution uses a recursive approach to find the LCA:\n1. Base case: if root is None or root is one of the target nodes, return root\n2. Recursively search for p and q in the left and right subtrees\n3. If both left and right subtrees return non-None values, the current root is the LCA\n4. If only one subtree returns a node, that node is the LCA\n5. If neither subtree returns a node, return None\n\nThe time complexity is O(n) as we visit each node at most once. The space complexity is O(h) where h is the height of the tree for the recursion stack."
+  }
+}

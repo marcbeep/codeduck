@@ -1,0 +1,68 @@
+{
+  "id": 721,
+  "title": "Accounts Merge",
+  "list": ["grind75"],
+  "category": "Graph",
+  "topics": [
+    "Array",
+    "String",
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Union Find"
+  ],
+  "difficulty": "Medium",
+  "description": "Given a list of accounts where each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.\n\nNow, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some common email to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.\n\nAfter merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails in sorted order. The accounts themselves can be returned in any order.",
+  "constraints": [
+    "1 <= accounts.length <= 1000",
+    "2 <= accounts[i].length <= 10",
+    "1 <= accounts[i][j].length <= 30",
+    "accounts[i][0] consists of English letters",
+    "accounts[i][j] (for j > 0) is a valid email"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "accounts": [
+          ["John", "johnsmith@mail.com", "john_newyork@mail.com"],
+          ["John", "johnsmith@mail.com", "john00@mail.com"],
+          ["Mary", "mary@mail.com"],
+          ["John", "johnnybravo@mail.com"]
+        ]
+      },
+      "output": [
+        [
+          "John",
+          "john00@mail.com",
+          "john_newyork@mail.com",
+          "johnsmith@mail.com"
+        ],
+        ["John", "johnnybravo@mail.com"],
+        ["Mary", "mary@mail.com"]
+      ],
+      "explanation": "The first and second John's accounts can be merged because they share the email \"johnsmith@mail.com\". The third John's account is kept separate because it doesn't share any email with the other accounts. The Mary's account is kept separate because it doesn't share any email with the other accounts."
+    },
+    {
+      "input": {
+        "accounts": [
+          ["Gabe", "Gabe0@m.co", "Gabe3@m.co", "Gabe1@m.co"],
+          ["Kevin", "Kevin3@m.co", "Kevin5@m.co", "Kevin0@m.co"],
+          ["Ethan", "Ethan5@m.co", "Ethan4@m.co", "Ethan0@m.co"],
+          ["Hanzo", "Hanzo3@m.co", "Hanzo1@m.co", "Hanzo0@m.co"],
+          ["Fern", "Fern5@m.co", "Fern1@m.co", "Fern0@m.co"]
+        ]
+      },
+      "output": [
+        ["Ethan", "Ethan0@m.co", "Ethan4@m.co", "Ethan5@m.co"],
+        ["Gabe", "Gabe0@m.co", "Gabe1@m.co", "Gabe3@m.co"],
+        ["Hanzo", "Hanzo0@m.co", "Hanzo1@m.co", "Hanzo3@m.co"],
+        ["Kevin", "Kevin0@m.co", "Kevin3@m.co", "Kevin5@m.co"],
+        ["Fern", "Fern0@m.co", "Fern1@m.co", "Fern5@m.co"]
+      ],
+      "explanation": "All accounts belong to different people, so no merging is needed."
+    }
+  ],
+  "solution": {
+    "code": "from collections import defaultdict\n\ndef accountsMerge(accounts: list[list[str]]) -> list[list[str]]:\n    # Create email to name mapping\n    email_to_name = {}\n    # Create graph: email -> set of connected emails\n    graph = defaultdict(set)\n    \n    # Build the graph\n    for account in accounts:\n        name = account[0]\n        for email in account[1:]:\n            email_to_name[email] = name\n            # Connect first email to all other emails in this account\n            graph[account[1]].add(email)\n            graph[email].add(account[1])\n    \n    # DFS to find connected components\n    visited = set()\n    result = []\n    \n    def dfs(email, component):\n        if email in visited:\n            return\n        visited.add(email)\n        component.append(email)\n        for neighbor in graph[email]:\n            dfs(neighbor, component)\n    \n    # Process each email\n    for email in email_to_name:\n        if email not in visited:\n            component = []\n            dfs(email, component)\n            # Sort emails and add name\n            result.append([email_to_name[email]] + sorted(component))\n    \n    return result",
+    "explanation": "This solution uses a graph-based approach with DFS:\n1. We build a graph where emails are nodes and edges connect emails from the same account\n2. We create a mapping from email to name for later use\n3. We use DFS to find connected components (groups of emails that belong to the same person)\n4. For each connected component, we create a result entry with the name and sorted emails\n5. We return all the merged accounts\n\nThe time complexity is O(n * m * log m) where n is the number of accounts and m is the average number of emails per account. The space complexity is O(n * m) to store the graph and visited set."
+  }
+}
