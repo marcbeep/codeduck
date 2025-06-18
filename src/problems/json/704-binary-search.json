@@ -1,0 +1,53 @@
+{
+  "id": 704,
+  "title": "Binary Search",
+  "list": ["blind75"],
+  "category": "Array",
+  "topics": ["Array", "Binary Search"],
+  "difficulty": "Easy",
+  "description": "Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.\n\nYou must write an algorithm with O(log n) runtime complexity.",
+  "constraints": [
+    "1 <= nums.length <= 104",
+    "-104 < nums[i], target < 104",
+    "All the integers in nums are unique",
+    "nums is sorted in ascending order"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [-1, 0, 3, 5, 9, 12],
+        "target": 9
+      },
+      "output": 4,
+      "explanation": "9 exists in nums and its index is 4."
+    },
+    {
+      "input": {
+        "nums": [-1, 0, 3, 5, 9, 12],
+        "target": 2
+      },
+      "output": -1,
+      "explanation": "2 does not exist in nums so return -1."
+    },
+    {
+      "input": {
+        "nums": [5],
+        "target": 5
+      },
+      "output": 0,
+      "explanation": "Single element array with target found."
+    },
+    {
+      "input": {
+        "nums": [1, 2, 3, 4, 5],
+        "target": 1
+      },
+      "output": 0,
+      "explanation": "Target is the first element."
+    }
+  ],
+  "solution": {
+    "code": "def search(nums: list[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    \n    while left <= right:\n        # Calculate middle index (avoiding overflow)\n        mid = left + (right - left) // 2\n        \n        # If target is found at mid, return it\n        if nums[mid] == target:\n            return mid\n        \n        # If target is greater, ignore left half\n        elif nums[mid] < target:\n            left = mid + 1\n        \n        # If target is smaller, ignore right half\n        else:\n            right = mid - 1\n    \n    # Target not found\n    return -1\n\n# Alternative recursive approach\ndef search_recursive(nums: list[int], target: int) -> int:\n    def binary_search(left: int, right: int) -> int:\n        if left > right:\n            return -1\n        \n        mid = left + (right - left) // 2\n        \n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            return binary_search(mid + 1, right)\n        else:\n            return binary_search(left, mid - 1)\n    \n    return binary_search(0, len(nums) - 1)",
+    "explanation": "Two approaches are shown:\n\n1. Iterative approach:\n   - Use two pointers (left and right) to define the search range\n   - Calculate middle index using left + (right - left) // 2 to avoid overflow\n   - Compare target with middle element\n   - If equal, return the index\n   - If target is greater, search right half\n   - If target is smaller, search left half\n   - Time complexity: O(log n)\n   - Space complexity: O(1)\n\n2. Recursive approach:\n   - Same logic but implemented recursively\n   - Base case: if left > right, return -1\n   - Recursive case: search left or right half based on comparison\n   - Time complexity: O(log n)\n   - Space complexity: O(log n) due to recursion stack\n\nThe iterative approach is preferred as it uses constant space and is more efficient."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": 242,
+  "title": "Valid Anagram",
+  "list": ["blind75"],
+  "category": "String",
+  "topics": ["String", "Hash Table", "Sorting"],
+  "difficulty": "Easy",
+  "description": "Given two strings s and t, return true if t is an anagram of s, and false otherwise.\n\nAn Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
+  "constraints": [
+    "1 <= s.length, t.length <= 5 * 104",
+    "s and t consist of lowercase English letters"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "anagram",
+        "t": "nagaram"
+      },
+      "output": true,
+      "explanation": "Both strings contain the same characters with the same frequencies."
+    },
+    {
+      "input": {
+        "s": "rat",
+        "t": "car"
+      },
+      "output": false,
+      "explanation": "The strings contain different characters."
+    },
+    {
+      "input": {
+        "s": "listen",
+        "t": "silent"
+      },
+      "output": true,
+      "explanation": "Both strings are anagrams of each other."
+    },
+    {
+      "input": {
+        "s": "hello",
+        "t": "world"
+      },
+      "output": false,
+      "explanation": "Different character frequencies."
+    }
+  ],
+  "solution": {
+    "code": "def is_anagram(s: str, t: str) -> bool:\n    # If lengths are different, they can't be anagrams\n    if len(s) != len(t):\n        return False\n    \n    # Count characters in both strings\n    char_count = {}\n    \n    # Count characters in string s\n    for char in s:\n        char_count[char] = char_count.get(char, 0) + 1\n    \n    # Decrement counts for characters in string t\n    for char in t:\n        if char not in char_count:\n            return False\n        char_count[char] -= 1\n        if char_count[char] < 0:\n            return False\n    \n    return True\n\n# Alternative approach using sorting\ndef is_anagram_sorting(s: str, t: str) -> bool:\n    return sorted(s) == sorted(t)\n\n# Alternative approach using Counter from collections\ndef is_anagram_counter(s: str, t: str) -> bool:\n    from collections import Counter\n    return Counter(s) == Counter(t)",
+    "explanation": "Three approaches are shown:\n\n1. Hash Table approach:\n   - Count characters in string s\n   - Decrement counts for characters in string t\n   - If any character is missing or has negative count, return False\n   - Time complexity: O(n)\n   - Space complexity: O(k) where k is the number of unique characters\n\n2. Sorting approach:\n   - Sort both strings and compare\n   - Time complexity: O(n log n) due to sorting\n   - Space complexity: O(n) for the sorted strings\n\n3. Counter approach (using collections):\n   - Use Python's Counter class to count characters\n   - Compare the counters directly\n   - Time complexity: O(n)\n   - Space complexity: O(k)\n\nThe hash table approach is the most efficient and commonly used solution."
+  }
+}
