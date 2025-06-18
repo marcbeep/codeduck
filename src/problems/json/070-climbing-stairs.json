@@ -1,0 +1,44 @@
+{
+  "id": 70,
+  "title": "Climbing Stairs",
+  "list": ["blind75"],
+  "category": "Dynamic Programming",
+  "topics": ["Math", "Dynamic Programming", "Memoization"],
+  "difficulty": "Easy",
+  "description": "You are climbing a staircase. It takes n steps to reach the top.\n\nEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+  "constraints": ["1 <= n <= 45"],
+  "testCases": [
+    {
+      "input": {
+        "n": 2
+      },
+      "output": 2,
+      "explanation": "There are two ways to climb to the top:\n1. 1 step + 1 step\n2. 2 steps"
+    },
+    {
+      "input": {
+        "n": 3
+      },
+      "output": 3,
+      "explanation": "There are three ways to climb to the top:\n1. 1 step + 1 step + 1 step\n2. 1 step + 2 steps\n3. 2 steps + 1 step"
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "output": 1,
+      "explanation": "There is only one way to climb 1 step."
+    },
+    {
+      "input": {
+        "n": 4
+      },
+      "output": 5,
+      "explanation": "There are five ways to climb to the top:\n1. 1+1+1+1\n2. 1+1+2\n3. 1+2+1\n4. 2+1+1\n5. 2+2"
+    }
+  ],
+  "solution": {
+    "code": "def climb_stairs(n: int) -> int:\n    # Base cases\n    if n <= 2:\n        return n\n    \n    # Use dynamic programming with constant space\n    prev1, prev2 = 1, 2\n    \n    for i in range(3, n + 1):\n        current = prev1 + prev2\n        prev1, prev2 = prev2, current\n    \n    return prev2\n\n# Alternative approach using memoization\ndef climb_stairs_memoization(n: int) -> int:\n    memo = {}\n    \n    def climb(n):\n        if n in memo:\n            return memo[n]\n        \n        if n <= 2:\n            return n\n        \n        memo[n] = climb(n - 1) + climb(n - 2)\n        return memo[n]\n    \n    return climb(n)\n\n# Alternative approach using array\ndef climb_stairs_array(n: int) -> int:\n    if n <= 2:\n        return n\n    \n    # Create array to store results\n    dp = [0] * (n + 1)\n    dp[1] = 1\n    dp[2] = 2\n    \n    for i in range(3, n + 1):\n        dp[i] = dp[i - 1] + dp[i - 2]\n    \n    return dp[n]\n\n# Mathematical approach using Fibonacci formula\ndef climb_stairs_math(n: int) -> int:\n    if n <= 2:\n        return n\n    \n    # This is essentially the Fibonacci sequence\n    # We can use the closed-form formula or matrix exponentiation\n    # For simplicity, we'll use the iterative approach\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    \n    return b\n\n# Recursive approach (not recommended for large n)\ndef climb_stairs_recursive(n: int) -> int:\n    if n <= 2:\n        return n\n    \n    return climb_stairs_recursive(n - 1) + climb_stairs_recursive(n - 2)",
+    "explanation": "Five approaches are shown:\n\n1. Dynamic programming with constant space (recommended):\n   - Use only two variables to store previous results\n   - Iterate from 3 to n, updating the two variables\n   - Time complexity: O(n)\n   - Space complexity: O(1)\n\n2. Memoization approach:\n   - Use a dictionary to cache results\n   - Avoid recalculating the same subproblems\n   - Time complexity: O(n)\n   - Space complexity: O(n)\n\n3. Array-based dynamic programming:\n   - Use an array to store all intermediate results\n   - More memory usage but clearer logic\n   - Time complexity: O(n)\n   - Space complexity: O(n)\n\n4. Mathematical approach:\n   - Recognize that this is the Fibonacci sequence\n   - Can use closed-form formulas or matrix exponentiation\n   - Time complexity: O(n) for iterative, O(log n) for matrix exponentiation\n   - Space complexity: O(1)\n\n5. Recursive approach:\n   - Simple recursive solution\n   - Not recommended due to exponential time complexity\n   - Time complexity: O(2^n)\n   - Space complexity: O(n) due to recursion stack\n\nThe first approach is the most efficient and commonly used solution."
+  }
+}

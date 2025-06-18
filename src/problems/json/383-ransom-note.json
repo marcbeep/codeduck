@@ -1,0 +1,51 @@
+{
+  "id": 383,
+  "title": "Ransom Note",
+  "list": ["blind75"],
+  "category": "String",
+  "topics": ["String", "Hash Table", "Counting"],
+  "difficulty": "Easy",
+  "description": "Given two strings ransomNote and magazine, return true if ransomNote can be constructed by using the letters from magazine and false otherwise.\n\nEach letter in magazine can only be used once in ransomNote.",
+  "constraints": [
+    "1 <= ransomNote.length, magazine.length <= 105",
+    "ransomNote and magazine consist of lowercase English letters"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "ransomNote": "a",
+        "magazine": "b"
+      },
+      "output": false,
+      "explanation": "The letter 'a' is not in magazine."
+    },
+    {
+      "input": {
+        "ransomNote": "aa",
+        "magazine": "ab"
+      },
+      "output": false,
+      "explanation": "The letter 'a' appears only once in magazine, but we need two 'a's for ransomNote."
+    },
+    {
+      "input": {
+        "ransomNote": "aa",
+        "magazine": "aab"
+      },
+      "output": true,
+      "explanation": "We can construct 'aa' using the letters from 'aab'."
+    },
+    {
+      "input": {
+        "ransomNote": "abc",
+        "magazine": "def"
+      },
+      "output": false,
+      "explanation": "None of the letters in ransomNote are in magazine."
+    }
+  ],
+  "solution": {
+    "code": "def can_construct(ransom_note: str, magazine: str) -> bool:\n    # Count characters in magazine\n    char_count = {}\n    for char in magazine:\n        char_count[char] = char_count.get(char, 0) + 1\n    \n    # Check if we can construct ransom note\n    for char in ransom_note:\n        if char not in char_count or char_count[char] == 0:\n            return False\n        char_count[char] -= 1\n    \n    return True\n\n# Alternative approach using Counter from collections\ndef can_construct_counter(ransom_note: str, magazine: str) -> bool:\n    from collections import Counter\n    \n    # Count characters in both strings\n    ransom_count = Counter(ransom_note)\n    magazine_count = Counter(magazine)\n    \n    # Check if magazine has enough of each character\n    for char, count in ransom_count.items():\n        if magazine_count[char] < count:\n            return False\n    \n    return True\n\n# Alternative approach using list instead of dictionary\ndef can_construct_list(ransom_note: str, magazine: str) -> bool:\n    # Use a list to count characters (assuming ASCII lowercase letters)\n    char_count = [0] * 26\n    \n    # Count characters in magazine\n    for char in magazine:\n        char_count[ord(char) - ord('a')] += 1\n    \n    # Check if we can construct ransom note\n    for char in ransom_note:\n        index = ord(char) - ord('a')\n        if char_count[index] == 0:\n            return False\n        char_count[index] -= 1\n    \n    return True\n\n# One-liner approach using Counter\ndef can_construct_oneliner(ransom_note: str, magazine: str) -> bool:\n    from collections import Counter\n    return not (Counter(ransom_note) - Counter(magazine))",
+    "explanation": "Four approaches are shown:\n\n1. Hash table approach (recommended):\n   - Count characters in magazine using a dictionary\n   - For each character in ransom note, check if it's available\n   - Decrement count when using a character\n   - Time complexity: O(m + n) where m and n are the lengths of the strings\n   - Space complexity: O(k) where k is the number of unique characters\n\n2. Counter approach:\n   - Use Python's Counter class to count characters\n   - Compare counts directly\n   - More concise and readable\n   - Time complexity: O(m + n)\n   - Space complexity: O(k)\n\n3. List approach:\n   - Use a fixed-size list for character counting\n   - Assumes ASCII lowercase letters only\n   - More memory efficient for this specific case\n   - Time complexity: O(m + n)\n   - Space complexity: O(1) since the list size is fixed\n\n4. One-liner approach:\n   - Uses Counter subtraction to check if ransom note can be constructed\n   - Very concise but less readable\n   - Time complexity: O(m + n)\n   - Space complexity: O(k)\n\nThe hash table approach is the most general and readable solution."
+  }
+}
