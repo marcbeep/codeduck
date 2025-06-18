@@ -1,0 +1,40 @@
+{
+  "id": 8,
+  "title": "String to Integer (atoi)",
+  "list": ["grind75"],
+  "category": "String",
+  "topics": ["String"],
+  "difficulty": "Medium",
+  "description": "Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++'s atoi function).\n\nThe algorithm for myAtoi(string s) is as follows:\n1. Read in and ignore any leading whitespace.\n2. Check if the next character (if not already at the end of the string) is '-' or '+'. Read this character in if it is either. This determines if the final result is negative or positive respectively. If neither is present, then the result is positive.\n3. Read in next the characters until the next non-digit character or the end of the input is reached. The rest of the string is ignored.\n4. Convert these digits into an integer (i.e. \"123\" -> 123, \"0032\" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).\n5. If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then clamp the integer so that it remains in the range. Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.\n6. Return the integer as the final result.",
+  "constraints": [
+    "0 <= s.length <= 200",
+    "s consists of English letters (lower-case and upper-case), digits (0-9), ' ', '+', '-', and '.'"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "42"
+      },
+      "output": 42,
+      "explanation": "The underlined characters are what is read in, the caret is the current reader position."
+    },
+    {
+      "input": {
+        "s": "   -42"
+      },
+      "output": -42,
+      "explanation": "Step 1: \"   -42\" (leading whitespace is read and ignored)\nStep 2: \"   -42\" ('-' is read, so the result should be negative)\nStep 3: \"   -42\" (\"42\" is read in)\nResult: -42"
+    },
+    {
+      "input": {
+        "s": "4193 with words"
+      },
+      "output": 4193,
+      "explanation": "Step 1: \"4193 with words\" (no characters read because there is no leading whitespace)\nStep 2: \"4193 with words\" (no characters read because there is neither a '-' nor '+')\nStep 3: \"4193 with words\" (\"4193\" is read in; reading stops because the next character is a non-digit)\nResult: 4193"
+    }
+  ],
+  "solution": {
+    "code": "def myAtoi(s: str) -> int:\n    # Remove leading whitespace\n    s = s.strip()\n    \n    if not s:\n        return 0\n    \n    # Check for sign\n    sign = 1\n    if s[0] in ['+', '-']:\n        if s[0] == '-':\n            sign = -1\n        s = s[1:]\n    \n    # Read digits\n    result = 0\n    for char in s:\n        if char.isdigit():\n            result = result * 10 + int(char)\n        else:\n            break\n    \n    # Apply sign\n    result *= sign\n    \n    # Clamp to 32-bit signed integer range\n    INT_MIN = -2**31\n    INT_MAX = 2**31 - 1\n    \n    if result < INT_MIN:\n        return INT_MIN\n    elif result > INT_MAX:\n        return INT_MAX\n    else:\n        return result",
+    "explanation": "This solution implements the atoi function step by step:\n1. Remove leading whitespace using strip()\n2. Check for empty string after stripping\n3. Handle sign (+ or -) and remove it from the string\n4. Read consecutive digits and build the number\n5. Apply the sign to the result\n6. Clamp the result to the 32-bit signed integer range [-2³¹, 2³¹-1]\n\nKey points:\n- We stop reading when we encounter a non-digit character\n- Leading zeros are automatically handled by the digit building process\n- We need to handle overflow by clamping to the integer limits\n\nExample: s = \"   -42\"\n- After strip: \"-42\"\n- Sign: -1\n- Digits: \"42\"\n- Result: -42\n\nThe time complexity is O(n) where n is the length of the string. The space complexity is O(1) as we only use a constant amount of extra space."
+  }
+}

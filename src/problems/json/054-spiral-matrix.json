@@ -1,0 +1,53 @@
+{
+  "id": 54,
+  "title": "Spiral Matrix",
+  "list": ["grind75"],
+  "category": "Array",
+  "topics": ["Array", "Matrix", "Simulation"],
+  "difficulty": "Medium",
+  "description": "Given an m x n matrix, return all elements of the matrix in spiral order.",
+  "constraints": [
+    "m == matrix.length",
+    "n == matrix[i].length",
+    "1 <= m, n <= 10",
+    "-100 <= matrix[i][j] <= 100"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "matrix": [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9]
+        ]
+      },
+      "output": [1, 2, 3, 6, 9, 8, 7, 4, 5],
+      "explanation": "We go right, down, left, up, then right again to complete the spiral."
+    },
+    {
+      "input": {
+        "matrix": [
+          [1, 2, 3, 4],
+          [5, 6, 7, 8],
+          [9, 10, 11, 12]
+        ]
+      },
+      "output": [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7],
+      "explanation": "We traverse the matrix in spiral order: right, down, left, up, right, down."
+    },
+    {
+      "input": {
+        "matrix": [
+          [1, 2],
+          [3, 4]
+        ]
+      },
+      "output": [1, 2, 4, 3],
+      "explanation": "Simple 2x2 matrix spiral traversal."
+    }
+  ],
+  "solution": {
+    "code": "def spiralOrder(matrix: list[list[int]]) -> list[int]:\n    if not matrix:\n        return []\n    \n    result = []\n    top, bottom = 0, len(matrix) - 1\n    left, right = 0, len(matrix[0]) - 1\n    \n    while top <= bottom and left <= right:\n        # Traverse right\n        for j in range(left, right + 1):\n            result.append(matrix[top][j])\n        top += 1\n        \n        # Traverse down\n        for i in range(top, bottom + 1):\n            result.append(matrix[i][right])\n        right -= 1\n        \n        # Traverse left (if there are still rows to traverse)\n        if top <= bottom:\n            for j in range(right, left - 1, -1):\n                result.append(matrix[bottom][j])\n            bottom -= 1\n        \n        # Traverse up (if there are still columns to traverse)\n        if left <= right:\n            for i in range(bottom, top - 1, -1):\n                result.append(matrix[i][left])\n            left += 1\n    \n    return result",
+    "explanation": "This solution uses four pointers to track the boundaries of the spiral:\n1. top: top row boundary\n2. bottom: bottom row boundary\n3. left: left column boundary\n4. right: right column boundary\n\nAlgorithm:\n1. Traverse right along the top row, then increment top\n2. Traverse down along the right column, then decrement right\n3. Traverse left along the bottom row (if top <= bottom), then decrement bottom\n4. Traverse up along the left column (if left <= right), then increment left\n5. Repeat until all boundaries meet\n\nExample: matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\n- First iteration: right [1,2,3], down [6,9], left [8,7], up [4]\n- Second iteration: right [5]\n- Result: [1,2,3,6,9,8,7,4,5]\n\nThe time complexity is O(m * n) as we visit each element exactly once. The space complexity is O(1) excluding the output array."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": 139,
+  "title": "Word Break",
+  "list": ["grind75"],
+  "category": "Dynamic Programming",
+  "topics": [
+    "Hash Table",
+    "String",
+    "Dynamic Programming",
+    "Trie",
+    "Memoization"
+  ],
+  "difficulty": "Medium",
+  "description": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.\n\nNote that the same word in the dictionary may be reused multiple times in the segmentation.",
+  "constraints": [
+    "1 <= s.length <= 300",
+    "1 <= wordDict.length <= 1000",
+    "1 <= wordDict[i].length <= 20",
+    "s and wordDict[i] consist of only lowercase English letters",
+    "All the strings of wordDict are unique"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "leetcode",
+        "wordDict": ["leet", "code"]
+      },
+      "output": true,
+      "explanation": "Return true because \"leetcode\" can be segmented as \"leet code\"."
+    },
+    {
+      "input": {
+        "s": "applepenapple",
+        "wordDict": ["apple", "pen"]
+      },
+      "output": true,
+      "explanation": "Return true because \"applepenapple\" can be segmented as \"apple pen apple\"."
+    },
+    {
+      "input": {
+        "s": "catsandog",
+        "wordDict": ["cats", "dog", "sand", "and", "cat"]
+      },
+      "output": false,
+      "explanation": "Return false because \"catsandog\" cannot be segmented into words from the dictionary."
+    }
+  ],
+  "solution": {
+    "code": "def wordBreak(s: str, wordDict: list[str]) -> bool:\n    # Convert wordDict to set for O(1) lookup\n    word_set = set(wordDict)\n    n = len(s)\n    \n    # dp[i] represents if s[0:i] can be segmented\n    dp = [False] * (n + 1)\n    dp[0] = True  # Empty string is always valid\n    \n    for i in range(1, n + 1):\n        for j in range(i):\n            # Check if s[j:i] is in wordDict and s[0:j] can be segmented\n            if dp[j] and s[j:i] in word_set:\n                dp[i] = True\n                break\n    \n    return dp[n]",
+    "explanation": "This solution uses dynamic programming:\n1. We create a boolean array dp where dp[i] represents if the substring s[0:i] can be segmented\n2. dp[0] = True (empty string is always valid)\n3. For each position i, we check all previous positions j\n4. If dp[j] is True and s[j:i] is in wordDict, then dp[i] = True\n5. We return dp[n] which represents if the entire string can be segmented\n\nExample: s = \"leetcode\", wordDict = [\"leet\", \"code\"]\n- dp[0] = True (empty string)\n- dp[4] = True (\"leet\" is in wordDict)\n- dp[8] = True (\"code\" is in wordDict and dp[4] = True)\n\nThe time complexity is O(n² * m) where n is the length of s and m is the average length of words in wordDict. The space complexity is O(n) for the dp array."
+  }
+}

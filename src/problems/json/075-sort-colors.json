@@ -1,0 +1,41 @@
+{
+  "id": 75,
+  "title": "Sort Colors",
+  "list": ["grind75"],
+  "category": "Array",
+  "topics": ["Array", "Two Pointers", "Sorting"],
+  "difficulty": "Medium",
+  "description": "Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.\n\nWe will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.\n\nYou must solve this problem without using the library's sort function.",
+  "constraints": [
+    "n == nums.length",
+    "1 <= n <= 300",
+    "nums[i] is either 0, 1, or 2"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [2, 0, 2, 1, 1, 0]
+      },
+      "output": [0, 0, 1, 1, 2, 2],
+      "explanation": "After sorting, the array becomes [0, 0, 1, 1, 2, 2] with red (0), white (1), and blue (2) in order."
+    },
+    {
+      "input": {
+        "nums": [2, 0, 1]
+      },
+      "output": [0, 1, 2],
+      "explanation": "After sorting, the array becomes [0, 1, 2]."
+    },
+    {
+      "input": {
+        "nums": [0]
+      },
+      "output": [0],
+      "explanation": "Single element array is already sorted."
+    }
+  ],
+  "solution": {
+    "code": "def sortColors(nums: list[int]) -> None:\n    # Dutch National Flag algorithm\n    # Use three pointers: left (for 0s), mid (for 1s), right (for 2s)\n    left, mid, right = 0, 0, len(nums) - 1\n    \n    while mid <= right:\n        if nums[mid] == 0:\n            # Swap with left pointer and move both left and mid\n            nums[left], nums[mid] = nums[mid], nums[left]\n            left += 1\n            mid += 1\n        elif nums[mid] == 1:\n            # 1 is in correct position, just move mid\n            mid += 1\n        else:  # nums[mid] == 2\n            # Swap with right pointer and move right pointer left\n            nums[mid], nums[right] = nums[right], nums[mid]\n            right -= 1",
+    "explanation": "This solution uses the Dutch National Flag algorithm with three pointers:\n1. left pointer: tracks the boundary for 0s (red)\n2. mid pointer: current element being processed\n3. right pointer: tracks the boundary for 2s (blue)\n\nAlgorithm:\n- If current element is 0: swap with left pointer, move both left and mid\n- If current element is 1: just move mid pointer (1 is in correct position)\n- If current element is 2: swap with right pointer, move right pointer left\n\nThis ensures 0s go to the left, 2s go to the right, and 1s stay in the middle.\n\nThe time complexity is O(n) as we only need one pass through the array. The space complexity is O(1) as we sort in-place."
+  }
+}
