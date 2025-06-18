@@ -1,7 +1,7 @@
 {
   "id": 70,
   "title": "Climbing Stairs",
-  "list": ["blind75"],
+  "list": ["grind75"],
   "category": "Dynamic Programming",
   "topics": ["Math", "Dynamic Programming", "Memoization"],
   "difficulty": "Easy",

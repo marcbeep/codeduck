@@ -1,7 +1,7 @@
 {
   "id": 110,
   "title": "Balanced Binary Tree",
-  "list": ["blind75"],
+  "list": ["grind75"],
   "category": "Tree",
   "topics": ["Tree", "Depth-First Search", "Binary Tree"],
   "difficulty": "Easy",

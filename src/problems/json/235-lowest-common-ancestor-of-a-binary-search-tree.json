@@ -1,7 +1,7 @@
 {
   "id": 235,
   "title": "Lowest Common Ancestor of a Binary Search Tree",
-  "list": ["blind75"],
+  "list": ["grind75"],
   "category": "Tree",
   "topics": ["Tree", "Depth-First Search", "Binary Search Tree", "Binary Tree"],
   "difficulty": "Medium",

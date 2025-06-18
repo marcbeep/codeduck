@@ -1,7 +1,7 @@
 {
   "id": 733,
   "title": "Flood Fill",
-  "list": ["blind75"],
+  "list": ["grind75"],
   "category": "Graph",
   "topics": ["Array", "Depth-First Search", "Breadth-First Search", "Matrix"],
   "difficulty": "Easy",

@@ -1,7 +1,7 @@
 {
   "id": 409,
   "title": "Longest Palindrome",
-  "list": ["blind75"],
+  "list": ["grind75"],
   "category": "String",
   "topics": ["String", "Hash Table", "Greedy"],
   "difficulty": "Easy",
