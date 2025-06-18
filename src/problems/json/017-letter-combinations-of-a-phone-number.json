@@ -1,0 +1,40 @@
+{
+  "id": 17,
+  "title": "Letter Combinations of a Phone Number",
+  "list": ["grind75"],
+  "category": "Backtracking",
+  "topics": ["Hash Table", "String", "Backtracking"],
+  "difficulty": "Medium",
+  "description": "Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.\n\nA mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.\n\n2 -> abc\n3 -> def\n4 -> ghi\n5 -> jkl\n6 -> mno\n7 -> pqrs\n8 -> tuv\n9 -> wxyz",
+  "constraints": [
+    "0 <= digits.length <= 4",
+    "digits[i] is a digit in the range ['2', '9']"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "digits": "23"
+      },
+      "output": ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"],
+      "explanation": "2 maps to 'abc' and 3 maps to 'def', so we get all combinations: ad, ae, af, bd, be, bf, cd, ce, cf."
+    },
+    {
+      "input": {
+        "digits": ""
+      },
+      "output": [],
+      "explanation": "Empty string returns empty list."
+    },
+    {
+      "input": {
+        "digits": "2"
+      },
+      "output": ["a", "b", "c"],
+      "explanation": "2 maps to 'abc', so we get a, b, c."
+    }
+  ],
+  "solution": {
+    "code": "def letterCombinations(digits: str) -> list[str]:\n    if not digits:\n        return []\n    \n    # Define the digit to letter mapping\n    digit_map = {\n        '2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl',\n        '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'\n    }\n    \n    def backtrack(index: int, current: str):\n        # If we've processed all digits, add current combination\n        if index == len(digits):\n            result.append(current)\n            return\n        \n        # Get letters for current digit\n        letters = digit_map[digits[index]]\n        \n        # Try each letter for current digit\n        for letter in letters:\n            backtrack(index + 1, current + letter)\n    \n    result = []\n    backtrack(0, \"\")\n    return result",
+    "explanation": "This solution uses backtracking to generate all possible letter combinations:\n1. We define a mapping from digits to their corresponding letters\n2. We use a recursive function that takes the current digit index and current combination\n3. Base case: if we've processed all digits, add the current combination to result\n4. For each letter corresponding to the current digit, we recurse with the next digit\n5. We build the combination by concatenating letters\n\nExample: digits = \"23\"\n- Start with index = 0, current = \"\"\n- For digit '2': try 'a', 'b', 'c'\n  - With 'a': recurse with index = 1, current = \"a\"\n    - For digit '3': try 'd', 'e', 'f'\n      - Result: \"ad\", \"ae\", \"af\"\n  - With 'b': recurse with index = 1, current = \"b\"\n    - Result: \"bd\", \"be\", \"bf\"\n  - With 'c': recurse with index = 1, current = \"c\"\n    - Result: \"cd\", \"ce\", \"cf\"\n- Final result: [\"ad\", \"ae\", \"af\", \"bd\", \"be\", \"bf\", \"cd\", \"ce\", \"cf\"]\n\nThe time complexity is O(4^n) in the worst case (when digits contain mostly 7s and 9s which have 4 letters each). The space complexity is O(n) for the recursion stack."
+  }
+}

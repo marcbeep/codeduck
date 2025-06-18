@@ -1,0 +1,58 @@
+{
+  "id": 79,
+  "title": "Word Search",
+  "list": ["grind75"],
+  "category": "Backtracking",
+  "topics": ["Array", "String", "Backtracking", "Matrix"],
+  "difficulty": "Medium",
+  "description": "Given an m x n grid of characters board and a string word, return true if word exists in the grid.\n\nThe word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.",
+  "constraints": [
+    "m == board.length",
+    "n == board[i].length",
+    "1 <= m, n <= 6",
+    "1 <= word.length <= 15",
+    "board and word consist of only lowercase and uppercase English letters"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "board": [
+          ["A", "B", "C", "E"],
+          ["S", "F", "C", "S"],
+          ["A", "D", "E", "E"]
+        ],
+        "word": "ABCCED"
+      },
+      "output": true,
+      "explanation": "The word \"ABCCED\" can be found in the grid by following the path: A → B → C → C → E → D."
+    },
+    {
+      "input": {
+        "board": [
+          ["A", "B", "C", "E"],
+          ["S", "F", "C", "S"],
+          ["A", "D", "E", "E"]
+        ],
+        "word": "SEE"
+      },
+      "output": true,
+      "explanation": "The word \"SEE\" can be found in the grid."
+    },
+    {
+      "input": {
+        "board": [
+          ["A", "B", "C", "E"],
+          ["S", "F", "C", "S"],
+          ["A", "D", "E", "E"]
+        ],
+        "word": "ABCB"
+      },
+      "output": false,
+      "explanation": "The word \"ABCB\" cannot be found in the grid."
+    }
+  ],
+  "solution": {
+    "code": "def exist(board: list[list[str]], word: str) -> bool:\n    def dfs(row: int, col: int, word_index: int) -> bool:\n        # If we've found all characters, return True\n        if word_index == len(word):\n            return True\n        \n        # Check bounds and if current cell matches\n        if (row < 0 or row >= len(board) or \n            col < 0 or col >= len(board[0]) or \n            board[row][col] != word[word_index]):\n            return False\n        \n        # Mark current cell as visited\n        temp = board[row][col]\n        board[row][col] = '#'\n        \n        # Try all four directions\n        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n        for dr, dc in directions:\n            if dfs(row + dr, col + dc, word_index + 1):\n                return True\n        \n        # Backtrack: restore the cell\n        board[row][col] = temp\n        return False\n    \n    # Try starting from each cell\n    for row in range(len(board)):\n        for col in range(len(board[0])):\n            if dfs(row, col, 0):\n                return True\n    \n    return False",
+    "explanation": "This solution uses DFS with backtracking:\n1. We try starting the word search from every cell in the grid\n2. For each starting position, we use DFS to explore all possible paths\n3. At each step, we check if the current cell matches the current character in the word\n4. We mark visited cells with '#' to avoid revisiting them\n5. We try all four directions (up, down, left, right)\n6. If we find the complete word, we return True\n7. If no path works, we backtrack by restoring the cell and return False\n\nExample: board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCCED\"\n- Start at (0,0): 'A' matches word[0]\n- Mark (0,0) as visited, try directions\n- Go right to (0,1): 'B' matches word[1]\n- Continue until we find the complete word\n\nThe time complexity is O(m * n * 4^L) where m and n are grid dimensions and L is word length. The space complexity is O(L) for the recursion stack."
+  }
+}
