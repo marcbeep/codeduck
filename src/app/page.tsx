@@ -118,6 +118,9 @@ export default function Home() {
   const [backgroundClass, setBackgroundClass] = useState("");
   const [isResettingFilters, setIsResettingFilters] = useState(false);
 
+  // Add max cards state
+  const [maxCards, setMaxCards] = useState(50);
+
   // Reset all filters to default state
   const resetFilters = () => {
     setIsResettingFilters(true);
@@ -132,6 +135,7 @@ export default function Home() {
       )
     );
     setLists(Object.fromEntries(availableLists.map((list) => [list, true])));
+    setMaxCards(50); // Reset max cards to default
 
     // Reset the animation state after a delay
     setTimeout(() => setIsResettingFilters(false), 1200);
@@ -139,7 +143,7 @@ export default function Home() {
 
   // Filter problems based on current filters
   const filteredProblems = useMemo(() => {
-    return problems.filter((problem) => {
+    const filtered = problems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
       const matchesCategory = categories[problem.category];
 
@@ -151,6 +155,25 @@ export default function Home() {
 
       return matchesDifficulty && matchesCategory && matchesList;
     });
+
+    // Limit the number of problems based on maxCards setting
+    return filtered.slice(0, maxCards);
+  }, [difficulties, categories, lists, problems, maxCards]);
+
+  // Get the total number of problems that match the filters (before limiting)
+  const totalFilteredProblems = useMemo(() => {
+    return problems.filter((problem) => {
+      const matchesDifficulty = difficulties[problem.difficulty];
+      const matchesCategory = categories[problem.category];
+
+      // Check if problem matches any selected list
+      const matchesList =
+        problem.list && Array.isArray(problem.list)
+          ? problem.list.some((list) => lists[list])
+          : false;
+
+      return matchesDifficulty && matchesCategory && matchesList;
+    }).length;
   }, [difficulties, categories, lists, problems]);
 
   // Shuffle function that can be reused
@@ -260,6 +283,17 @@ export default function Home() {
     }
   }, [shuffledProblems, index]);
 
+  // Add this useEffect after the state declarations and before the return
+  useEffect(() => {
+    if (!isLoading && totalFilteredProblems > 0) {
+      setMaxCards((prev) => {
+        if (prev > totalFilteredProblems) return totalFilteredProblems;
+        if (prev === 50) return totalFilteredProblems;
+        return prev;
+      });
+    }
+  }, [isLoading, totalFilteredProblems]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -308,9 +342,12 @@ export default function Home() {
                         lists={lists}
                         availableCategories={availableCategories}
                         availableLists={availableLists}
+                        maxCards={maxCards}
+                        maxCardsAvailable={totalFilteredProblems}
                         onDifficultyChange={setDifficulties}
                         onCategoryChange={setCategories}
                         onListChange={setLists}
+                        onMaxCardsChange={setMaxCards}
                         onResetFilters={resetFilters}
                         isResetting={isResettingFilters}
                         noCard
@@ -370,7 +407,11 @@ export default function Home() {
               {/* Center - Card counter or status */}
               <div className="text-sm text-muted-foreground text-center font-medium">
                 {filteredProblems.length > 0 && shuffledProblems.length > 0
-                  ? `${index + 1} / ${shuffledProblems.length}`
+                  ? `${index + 1} / ${shuffledProblems.length}${
+                      totalFilteredProblems > maxCards
+                        ? ` (of ${totalFilteredProblems})`
+                        : ""
+                    }`
                   : `${problems.length} problems available`}
               </div>
 
@@ -471,9 +512,12 @@ export default function Home() {
                           lists={lists}
                           availableCategories={availableCategories}
                           availableLists={availableLists}
+                          maxCards={maxCards}
+                          maxCardsAvailable={totalFilteredProblems}
                           onDifficultyChange={setDifficulties}
                           onCategoryChange={setCategories}
                           onListChange={setLists}
+                          onMaxCardsChange={setMaxCards}
                           onResetFilters={resetFilters}
                           isResetting={isResettingFilters}
                           noCard

@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Slider } from "@/components/ui/slider";
 import { ChevronDown } from "lucide-react";
 import {
   Collapsible,
@@ -26,9 +27,12 @@ interface SidebarProps {
   lists: Record<List, boolean>;
   availableCategories: Category[];
   availableLists: List[];
+  maxCards: number;
+  maxCardsAvailable: number;
   onDifficultyChange: Dispatch<SetStateAction<Record<Difficulty, boolean>>>;
   onCategoryChange: Dispatch<SetStateAction<Record<Category, boolean>>>;
   onListChange: Dispatch<SetStateAction<Record<List, boolean>>>;
+  onMaxCardsChange: (value: number) => void;
   onResetFilters?: () => void;
   noCard?: boolean;
   isResetting?: boolean;
@@ -40,9 +44,12 @@ export function Sidebar({
   lists,
   availableCategories,
   availableLists,
+  maxCards,
+  maxCardsAvailable,
   onDifficultyChange,
   onCategoryChange,
   onListChange,
+  onMaxCardsChange,
   onResetFilters,
   noCard = false,
   isResetting = false,
@@ -88,6 +95,50 @@ export function Sidebar({
     }));
   };
 
+  // Handler functions must be defined before JSX uses them
+  const clearLists = () => {
+    onListChange((prev: Record<string, boolean>) => {
+      const cleared = { ...prev };
+      Object.keys(cleared).forEach((key) => (cleared[key] = false));
+      return cleared;
+    });
+  };
+  const selectAllLists = () => {
+    onListChange((prev: Record<string, boolean>) => {
+      const selected = { ...prev };
+      Object.keys(selected).forEach((key) => (selected[key] = true));
+      return selected;
+    });
+  };
+  const clearDifficulties = () => {
+    onDifficultyChange(() => ({
+      Easy: false,
+      Medium: false,
+      Hard: false,
+    }));
+  };
+  const selectAllDifficulties = () => {
+    onDifficultyChange(() => ({
+      Easy: true,
+      Medium: true,
+      Hard: true,
+    }));
+  };
+  const clearCategories = () => {
+    onCategoryChange((prev: Record<string, boolean>) => {
+      const cleared = { ...prev };
+      Object.keys(cleared).forEach((key) => (cleared[key] = false));
+      return cleared;
+    });
+  };
+  const selectAllCategories = () => {
+    onCategoryChange((prev: Record<string, boolean>) => {
+      const selected = { ...prev };
+      Object.keys(selected).forEach((key) => (selected[key] = true));
+      return selected;
+    });
+  };
+
   const content = (
     <motion.div
       className="p-4"
@@ -103,15 +154,40 @@ export function Sidebar({
           onOpenChange={setIsListsOpen}
           className="space-y-2"
         >
-          <CollapsibleTrigger className="flex items-center justify-between w-full hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors cursor-pointer">
-            <h3 className="text-sm font-medium">Lists</h3>
-            <motion.div
-              animate={{ rotate: isListsOpen ? 180 : 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-            >
-              <ChevronDown className="h-4 w-4" />
-            </motion.div>
-          </CollapsibleTrigger>
+          <div className="flex items-center justify-between w-full px-2 py-1.5">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-medium">Lists</h3>
+              <button
+                type="button"
+                onClick={selectAllLists}
+                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+                tabIndex={0}
+              >
+                Select All
+              </button>
+              <button
+                type="button"
+                onClick={clearLists}
+                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+                tabIndex={0}
+              >
+                Clear
+              </button>
+            </div>
+            <CollapsibleTrigger asChild>
+              <button
+                type="button"
+                className="ml-2 p-1 rounded hover:bg-accent/50 transition-colors"
+              >
+                <motion.div
+                  animate={{ rotate: isListsOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </motion.div>
+              </button>
+            </CollapsibleTrigger>
+          </div>
           <CollapsibleContent className="pl-2">
             <motion.div
               initial={false}
@@ -127,53 +203,36 @@ export function Sidebar({
                   transition={{ delay: index * 0.05, duration: 0.2 }}
                   className="flex items-center space-x-2 group"
                 >
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleListChange(list, !lists[list]);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        handleListChange(list, !lists[list]);
-                      }
-                    }}
-                    className="flex items-center space-x-2 w-full cursor-pointer hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors select-none"
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    animate={lists[list] ? { scale: [1, 1.2, 1] } : {}}
+                    transition={{ duration: 0.2 }}
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      animate={lists[list] ? { scale: [1, 1.2, 1] } : {}}
-                      transition={{ duration: 0.2 }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Checkbox
-                        id={`list-${list}`}
-                        checked={lists[list]}
-                        onCheckedChange={(checked) => {
-                          handleListChange(list, checked);
-                        }}
-                        className="cursor-pointer"
-                      />
-                    </motion.div>
-                    <Label
-                      htmlFor={`list-${list}`}
-                      className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
-                    >
-                      {list === "blind75"
-                        ? "Blind 75"
-                        : list === "grind75"
-                        ? "Grind 75"
-                        : list === "neetcode150"
-                        ? "NeetCode 150"
-                        : list === "leetcode150"
-                        ? "LeetCode 150"
-                        : list}
-                    </Label>
-                  </div>
+                    <Checkbox
+                      id={`list-${list}`}
+                      checked={lists[list]}
+                      onCheckedChange={(checked) => {
+                        handleListChange(list, checked);
+                      }}
+                      className="cursor-pointer"
+                    />
+                  </motion.div>
+                  <Label
+                    htmlFor={`list-${list}`}
+                    className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                  >
+                    {list === "blind75"
+                      ? "Blind 75"
+                      : list === "grind75"
+                      ? "Grind 75"
+                      : list === "neetcode150"
+                      ? "NeetCode 150"
+                      : list === "leetcode150"
+                      ? "LeetCode 150"
+                      : list}
+                  </Label>
                 </motion.div>
               ))}
             </motion.div>
@@ -185,15 +244,40 @@ export function Sidebar({
           onOpenChange={setIsDifficultyOpen}
           className="space-y-2"
         >
-          <CollapsibleTrigger className="flex items-center justify-between w-full hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors cursor-pointer">
-            <h3 className="text-sm font-medium">Difficulty</h3>
-            <motion.div
-              animate={{ rotate: isDifficultyOpen ? 180 : 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-            >
-              <ChevronDown className="h-4 w-4" />
-            </motion.div>
-          </CollapsibleTrigger>
+          <div className="flex items-center justify-between w-full px-2 py-1.5">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-medium">Difficulty</h3>
+              <button
+                type="button"
+                onClick={selectAllDifficulties}
+                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+                tabIndex={0}
+              >
+                Select All
+              </button>
+              <button
+                type="button"
+                onClick={clearDifficulties}
+                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+                tabIndex={0}
+              >
+                Clear
+              </button>
+            </div>
+            <CollapsibleTrigger asChild>
+              <button
+                type="button"
+                className="ml-2 p-1 rounded hover:bg-accent/50 transition-colors"
+              >
+                <motion.div
+                  animate={{ rotate: isDifficultyOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </motion.div>
+              </button>
+            </CollapsibleTrigger>
+          </div>
           <CollapsibleContent className="pl-2">
             <motion.div
               initial={false}
@@ -210,53 +294,30 @@ export function Sidebar({
                     transition={{ delay: index * 0.05, duration: 0.2 }}
                     className="flex items-center space-x-2 group"
                   >
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleDifficultyChange(
-                          difficulty,
-                          !difficulties[difficulty]
-                        );
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          handleDifficultyChange(
-                            difficulty,
-                            !difficulties[difficulty]
-                          );
-                        }
-                      }}
-                      className="flex items-center space-x-2 w-full cursor-pointer hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors select-none"
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      animate={
+                        difficulties[difficulty] ? { scale: [1, 1.2, 1] } : {}
+                      }
+                      transition={{ duration: 0.2 }}
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        animate={
-                          difficulties[difficulty] ? { scale: [1, 1.2, 1] } : {}
-                        }
-                        transition={{ duration: 0.2 }}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Checkbox
-                          id={`difficulty-${difficulty}`}
-                          checked={difficulties[difficulty]}
-                          onCheckedChange={(checked) => {
-                            handleDifficultyChange(difficulty, checked);
-                          }}
-                          className="cursor-pointer"
-                        />
-                      </motion.div>
-                      <Label
-                        htmlFor={`difficulty-${difficulty}`}
-                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
-                      >
-                        {difficulty}
-                      </Label>
-                    </div>
+                      <Checkbox
+                        id={`difficulty-${difficulty}`}
+                        checked={difficulties[difficulty]}
+                        onCheckedChange={(checked) => {
+                          handleDifficultyChange(difficulty, checked);
+                        }}
+                        className="cursor-pointer"
+                      />
+                    </motion.div>
+                    <Label
+                      htmlFor={`difficulty-${difficulty}`}
+                      className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                    >
+                      {difficulty}
+                    </Label>
                   </motion.div>
                 )
               )}
@@ -269,15 +330,40 @@ export function Sidebar({
           onOpenChange={setIsCategoriesOpen}
           className="space-y-2"
         >
-          <CollapsibleTrigger className="flex items-center justify-between w-full hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors cursor-pointer">
-            <h3 className="text-sm font-medium">Categories</h3>
-            <motion.div
-              animate={{ rotate: isCategoriesOpen ? 180 : 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-            >
-              <ChevronDown className="h-4 w-4" />
-            </motion.div>
-          </CollapsibleTrigger>
+          <div className="flex items-center justify-between w-full px-2 py-1.5">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-medium">Categories</h3>
+              <button
+                type="button"
+                onClick={selectAllCategories}
+                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+                tabIndex={0}
+              >
+                Select All
+              </button>
+              <button
+                type="button"
+                onClick={clearCategories}
+                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+                tabIndex={0}
+              >
+                Clear
+              </button>
+            </div>
+            <CollapsibleTrigger asChild>
+              <button
+                type="button"
+                className="ml-2 p-1 rounded hover:bg-accent/50 transition-colors"
+              >
+                <motion.div
+                  animate={{ rotate: isCategoriesOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </motion.div>
+              </button>
+            </CollapsibleTrigger>
+          </div>
           <CollapsibleContent className="pl-2">
             <motion.div
               initial={false}
@@ -294,50 +380,30 @@ export function Sidebar({
                       transition={{ delay: index * 0.02, duration: 0.2 }}
                       className="flex items-center space-x-2 group"
                     >
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleCategoryChange(category, !categories[category]);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            handleCategoryChange(
-                              category,
-                              !categories[category]
-                            );
-                          }
-                        }}
-                        className="flex items-center space-x-2 w-full cursor-pointer hover:bg-accent/50 rounded-md px-2 py-1.5 transition-colors select-none"
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        animate={
+                          categories[category] ? { scale: [1, 1.2, 1] } : {}
+                        }
+                        transition={{ duration: 0.2 }}
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        <motion.div
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                          animate={
-                            categories[category] ? { scale: [1, 1.2, 1] } : {}
-                          }
-                          transition={{ duration: 0.2 }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Checkbox
-                            id={`category-${category}`}
-                            checked={categories[category]}
-                            onCheckedChange={(checked) => {
-                              handleCategoryChange(category, checked);
-                            }}
-                            className="cursor-pointer"
-                          />
-                        </motion.div>
-                        <Label
-                          htmlFor={`category-${category}`}
-                          className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
-                        >
-                          {category}
-                        </Label>
-                      </div>
+                        <Checkbox
+                          id={`category-${category}`}
+                          checked={categories[category]}
+                          onCheckedChange={(checked) => {
+                            handleCategoryChange(category, checked);
+                          }}
+                          className="cursor-pointer"
+                        />
+                      </motion.div>
+                      <Label
+                        htmlFor={`category-${category}`}
+                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                      >
+                        {category}
+                      </Label>
                     </motion.div>
                   ))}
                 </div>
@@ -345,6 +411,34 @@ export function Sidebar({
             </motion.div>
           </CollapsibleContent>
         </Collapsible>
+        <Separator />
+
+        {/* Max Cards Slider */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-medium">Max Cards</h3>
+            <span className="text-xs text-muted-foreground">
+              {maxCards} / {maxCardsAvailable}
+            </span>
+          </div>
+          <div className="px-2">
+            <Slider
+              value={[maxCards]}
+              onValueChange={(value) => onMaxCardsChange(value[0])}
+              min={1}
+              max={Math.max(1, maxCardsAvailable)}
+              step={1}
+              className="w-full"
+            />
+          </div>
+          <div className="text-xs text-muted-foreground px-2">
+            {maxCardsAvailable === 0
+              ? "No problems match your filters"
+              : maxCards === maxCardsAvailable
+              ? "Showing all available problems"
+              : `Showing ${maxCards} of ${maxCardsAvailable} problems`}
+          </div>
+        </div>
         <Separator />
       </div>
     </motion.div>
