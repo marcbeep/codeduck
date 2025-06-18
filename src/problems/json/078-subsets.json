@@ -1,0 +1,41 @@
+{
+  "id": 78,
+  "title": "Subsets",
+  "list": ["grind75"],
+  "category": "Backtracking",
+  "topics": ["Array", "Backtracking", "Bit Manipulation"],
+  "difficulty": "Medium",
+  "description": "Given an integer array nums of unique elements, return all possible subsets (the power set).\n\nThe solution set must not contain duplicate subsets. Return the solution in any order.",
+  "constraints": [
+    "1 <= nums.length <= 10",
+    "-10 <= nums[i] <= 10",
+    "All the numbers of nums are unique"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 2, 3]
+      },
+      "output": [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]],
+      "explanation": "All possible subsets of [1, 2, 3] are shown."
+    },
+    {
+      "input": {
+        "nums": [0]
+      },
+      "output": [[], [0]],
+      "explanation": "The subsets of a single element are the empty set and the element itself."
+    },
+    {
+      "input": {
+        "nums": [1, 2]
+      },
+      "output": [[], [1], [2], [1, 2]],
+      "explanation": "All possible subsets of [1, 2]."
+    }
+  ],
+  "solution": {
+    "code": "def subsets(nums: list[int]) -> list[list[int]]:\n    def backtrack(start, current):\n        # Add current subset to result\n        result.append(current[:])\n        \n        # Try adding each element from start onwards\n        for i in range(start, len(nums)):\n            current.append(nums[i])\n            backtrack(i + 1, current)\n            current.pop()  # Backtrack\n    \n    result = []\n    backtrack(0, [])\n    return result",
+    "explanation": "This solution uses backtracking to generate all possible subsets:\n1. We use a recursive function that takes a start index and current subset\n2. At each step, we add the current subset to our result\n3. We iterate through all elements starting from the start index\n4. For each element, we include it in the current subset and recurse\n5. After recursion, we backtrack by removing the element\n6. This ensures we explore all possible combinations\n\nExample: nums = [1, 2, 3]\n- Start with []\n- Add 1: [1], then add 2: [1,2], then add 3: [1,2,3]\n- Backtrack: [1,2], [1], [1,3], [1]\n- Continue with [2], [2,3], [2]\n- Continue with [3]\n- Result: [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]\n\nThe time complexity is O(2^n) as there are 2^n possible subsets. The space complexity is O(n) for the recursion stack."
+  }
+}
