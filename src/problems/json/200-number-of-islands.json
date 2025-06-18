@@ -1,0 +1,51 @@
+{
+  "id": 200,
+  "title": "Number of Islands",
+  "list": ["grind75"],
+  "category": "Graph",
+  "topics": [
+    "Array",
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Union Find",
+    "Matrix"
+  ],
+  "difficulty": "Medium",
+  "description": "Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.\n\nAn island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are surrounded by water.",
+  "constraints": [
+    "m == grid.length",
+    "n == grid[i].length",
+    "1 <= m, n <= 300",
+    "grid[i][j] is '0' or '1'"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          ["1", "1", "1", "1", "0"],
+          ["1", "1", "0", "1", "0"],
+          ["1", "1", "0", "0", "0"],
+          ["0", "0", "0", "0", "0"]
+        ]
+      },
+      "output": 1,
+      "explanation": "There is one island in the grid."
+    },
+    {
+      "input": {
+        "grid": [
+          ["1", "1", "0", "0", "0"],
+          ["1", "1", "0", "0", "0"],
+          ["0", "0", "1", "0", "0"],
+          ["0", "0", "0", "1", "1"]
+        ]
+      },
+      "output": 3,
+      "explanation": "There are three islands in the grid."
+    }
+  ],
+  "solution": {
+    "code": "def num_islands(grid: list[list[str]]) -> int:\n    if not grid or not grid[0]:\n        return 0\n    \n    m, n = len(grid), len(grid[0])\n    count = 0\n    \n    def dfs(i: int, j: int):\n        # Base case: out of bounds or water\n        if i < 0 or i >= m or j < 0 or j >= n or grid[i][j] == '0':\n            return\n        \n        # Mark current cell as visited\n        grid[i][j] = '0'\n        \n        # Explore all four directions\n        dfs(i+1, j)  # down\n        dfs(i-1, j)  # up\n        dfs(i, j+1)  # right\n        dfs(i, j-1)  # left\n    \n    # Iterate through the grid\n    for i in range(m):\n        for j in range(n):\n            if grid[i][j] == '1':\n                count += 1\n                dfs(i, j)  # Mark entire island as visited\n    \n    return count",
+    "explanation": "This solution uses DFS with O(m*n) time complexity:\n1. We iterate through each cell in the grid\n2. When we find a '1' (land), we increment our island count\n3. We use DFS to mark all connected land cells as visited (change to '0')\n4. We explore all four directions (up, down, left, right) from each land cell\n5. The DFS ensures we mark the entire island before moving to the next one\n\nThe time complexity is O(m*n) as we visit each cell at most once. The space complexity is O(m*n) in the worst case due to the recursion stack.\n\nKey insights:\n- Each '1' that hasn't been visited represents a new island\n- We use DFS to explore and mark all connected land cells\n- We modify the grid in-place to mark visited cells\n- The four-directional exploration covers all adjacent land cells\n- We only count islands when we find unvisited land cells\n\nAlternative approaches:\n- BFS: Use a queue instead of recursion\n- Union Find: More complex but useful for dynamic island merging\n- Iterative DFS: Use a stack to avoid recursion stack overflow"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": 98,
+  "title": "Validate Binary Search Tree",
+  "list": ["grind75"],
+  "category": "Tree",
+  "topics": ["Tree", "Depth-First Search", "Binary Search Tree", "Binary Tree"],
+  "difficulty": "Medium",
+  "description": "Given the root of a binary tree, determine if it is a valid binary search tree (BST).\n\nA valid BST is defined as follows:\n- The left subtree of a node contains only nodes with keys less than the node's key.\n- The right subtree of a node contains only nodes with keys greater than the node's key.\n- Both the left and right subtrees must also be binary search trees.",
+  "constraints": [
+    "The number of nodes in the tree is in the range [1, 104]",
+    "-231 <= Node.val <= 231 - 1"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "root": [2, 1, 3]
+      },
+      "output": true,
+      "explanation": "The tree is a valid BST: left subtree (1) < root (2) < right subtree (3)."
+    },
+    {
+      "input": {
+        "root": [5, 1, 4, null, null, 3, 6]
+      },
+      "output": false,
+      "explanation": "The root node's value is 5 but its right child's value is 4, which violates the BST property."
+    },
+    {
+      "input": {
+        "root": [1, 1]
+      },
+      "output": false,
+      "explanation": "The root node's value is 1 and its left child's value is also 1, which violates the BST property."
+    }
+  ],
+  "solution": {
+    "code": "from typing import Optional\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef is_valid_bst(root: Optional[TreeNode]) -> bool:\n    def validate(node: Optional[TreeNode], low: float, high: float) -> bool:\n        if not node:\n            return True\n        \n        # Check if current node's value is within bounds\n        if node.val <= low or node.val >= high:\n            return False\n        \n        # Recursively validate left and right subtrees\n        return (validate(node.left, low, node.val) and \n                validate(node.right, node.val, high))\n    \n    return validate(root, float('-inf'), float('inf'))",
+    "explanation": "This solution uses DFS with bounds checking with O(n) time complexity:\n1. We use a helper function that takes a node and valid range bounds (low, high)\n2. For each node, we check if its value is within the valid range\n3. For the left subtree, we update the upper bound to the current node's value\n4. For the right subtree, we update the lower bound to the current node's value\n5. We use float('-inf') and float('inf') as initial bounds\n\nThe time complexity is O(n) as we visit each node exactly once. The space complexity is O(h) where h is the height of the tree (due to recursion stack).\n\nKey insights:\n- A BST requires each node to be within a specific range\n- The range is determined by the path from root to current node\n- Left children must be less than their parent\n- Right children must be greater than their parent\n- We pass down the valid range to each recursive call\n\nAlternative approach: We could also use inorder traversal and check if the result is sorted, but the bounds approach is more efficient and doesn't require storing all values."
+  }
+}

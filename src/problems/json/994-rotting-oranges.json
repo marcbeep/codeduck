@@ -1,0 +1,50 @@
+{
+  "id": 994,
+  "title": "Rotting Oranges",
+  "list": ["grind75"],
+  "category": "Graph",
+  "topics": ["Array", "Breadth-First Search", "Matrix"],
+  "difficulty": "Medium",
+  "description": "You are given an m x n grid where each cell can have one of three values:\n- 0 representing an empty cell,\n- 1 representing a fresh orange, or\n- 2 representing a rotten orange.\n\nEvery minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.\n\nReturn the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.",
+  "constraints": [
+    "m == grid.length",
+    "n == grid[i].length",
+    "1 <= m, n <= 10",
+    "grid[i][j] is 0, 1, or 2"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [2, 1, 1],
+          [1, 1, 0],
+          [0, 1, 1]
+        ]
+      },
+      "output": 4,
+      "explanation": "After 4 minutes, all oranges will be rotten."
+    },
+    {
+      "input": {
+        "grid": [
+          [2, 1, 1],
+          [0, 1, 1],
+          [1, 0, 1]
+        ]
+      },
+      "output": -1,
+      "explanation": "The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally."
+    },
+    {
+      "input": {
+        "grid": [[0, 2]]
+      },
+      "output": 0,
+      "explanation": "Since there are no fresh oranges, no time passes."
+    }
+  ],
+  "solution": {
+    "code": "from collections import deque\n\ndef oranges_rotting(grid: list[list[int]]) -> int:\n    if not grid or not grid[0]:\n        return 0\n    \n    m, n = len(grid), len(grid[0])\n    queue = deque()\n    fresh_count = 0\n    \n    # Find all rotten oranges and count fresh ones\n    for i in range(m):\n        for j in range(n):\n            if grid[i][j] == 2:\n                queue.append((i, j, 0))  # (row, col, time)\n            elif grid[i][j] == 1:\n                fresh_count += 1\n    \n    if fresh_count == 0:\n        return 0\n    \n    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n    max_time = 0\n    \n    while queue:\n        i, j, time = queue.popleft()\n        \n        # Check all four directions\n        for di, dj in directions:\n            ni, nj = i + di, j + dj\n            \n            if 0 <= ni < m and 0 <= nj < n and grid[ni][nj] == 1:\n                grid[ni][nj] = 2  # Mark as rotten\n                fresh_count -= 1\n                queue.append((ni, nj, time + 1))\n                max_time = max(max_time, time + 1)\n    \n    return max_time if fresh_count == 0 else -1",
+    "explanation": "This solution uses BFS with O(m*n) time complexity:\n1. We first scan the grid to find all rotten oranges and count fresh ones\n2. We use a queue to process rotten oranges level by level (by time)\n3. For each rotten orange, we check all four adjacent cells\n4. If we find a fresh orange, we mark it as rotten and add it to the queue\n5. We track the maximum time needed to rot all oranges\n6. If any fresh oranges remain, we return -1\n\nThe time complexity is O(m*n) as we visit each cell at most once. The space complexity is O(m*n) for the queue in the worst case.\n\nKey insights:\n- This is a multi-source BFS problem (all rotten oranges start simultaneously)\n- We process oranges level by level based on when they become rotten\n- We need to track both the position and time for each rotten orange\n- We can only rot fresh oranges that are adjacent to rotten ones\n- If any fresh oranges remain after BFS, it's impossible to rot them all\n\nAlternative approach: We could also use DFS with a visited set, but BFS is more natural for this level-by-level propagation problem."
+  }
+}
