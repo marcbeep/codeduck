@@ -135,7 +135,7 @@ export default function Home() {
       )
     );
     setLists(Object.fromEntries(availableLists.map((list) => [list, true])));
-    setMaxCards(50); // Reset max cards to default
+    // maxCards will be automatically set by the useEffect when filters change
 
     // Reset the animation state after a delay
     setTimeout(() => setIsResettingFilters(false), 1200);
@@ -283,16 +283,12 @@ export default function Home() {
     }
   }, [shuffledProblems, index]);
 
-  // Add this useEffect after the state declarations and before the return
+  // Auto-reset maxCards whenever filters change
   useEffect(() => {
     if (!isLoading && totalFilteredProblems > 0) {
-      setMaxCards((prev) => {
-        if (prev > totalFilteredProblems) return totalFilteredProblems;
-        if (prev === 50) return totalFilteredProblems;
-        return prev;
-      });
+      setMaxCards(totalFilteredProblems);
     }
-  }, [isLoading, totalFilteredProblems]);
+  }, [isLoading, totalFilteredProblems, difficulties, categories, lists]);
 
   if (isLoading) {
     return (
