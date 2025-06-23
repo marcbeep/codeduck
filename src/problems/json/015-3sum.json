@@ -1,68 +1,34 @@
 {
   "id": 15,
   "title": "3Sum",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75", "neetcode150"],
   "category": "Two Pointers",
   "difficulty": "Medium",
   "description": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.\n\nNotice that the solution set must not contain duplicate triplets.",
-  "constraints": [
-    "3 <= nums.length <= 3000",
-    "-105 <= nums[i] <= 105"
-  ],
+  "constraints": ["3 <= nums.length <= 3000", "-105 <= nums[i] <= 105"],
   "testCases": [
     {
       "input": {
-        "nums": [
-          -1,
-          0,
-          1,
-          2,
-          -1,
-          -4
-        ]
+        "nums": [-1, 0, 1, 2, -1, -4]
       },
       "output": [
-        [
-          -1,
-          -1,
-          2
-        ],
-        [
-          -1,
-          0,
-          1
-        ]
+        [-1, -1, 2],
+        [-1, 0, 1]
       ],
       "explanation": "The triplets that sum to zero are [-1,-1,2] and [-1,0,1]. Notice that the order of the output and the order of the triplets does not matter."
     },
     {
       "input": {
-        "nums": [
-          0,
-          1,
-          1
-        ]
+        "nums": [0, 1, 1]
       },
       "output": [],
       "explanation": "The only possible triplet does not sum up to 0."
     },
     {
       "input": {
-        "nums": [
-          0,
-          0,
-          0
-        ]
+        "nums": [0, 0, 0]
       },
-      "output": [
-        [
-          0,
-          0,
-          0
-        ]
-      ],
+      "output": [[0, 0, 0]],
       "explanation": "The only possible triplet sums up to 0."
     }
   ],
