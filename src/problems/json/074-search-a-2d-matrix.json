@@ -1,0 +1,52 @@
+{
+  "id": 74,
+  "title": "Search a 2D Matrix",
+  "list": ["neetcode150"],
+  "category": "Binary Search",
+  "difficulty": "Medium",
+  "description": "You are given an m x n integer matrix matrix with the following two properties:\n\n- Each row is sorted in non-decreasing order.\n- The first integer of each row is greater than the last integer of the previous row.\n\nGiven an integer target, return true if target is in matrix or false otherwise.\n\nYou must write a solution in O(log(m * n)) time complexity.",
+  "constraints": [
+    "m == matrix.length",
+    "n == matrix[i].length",
+    "1 <= m, n <= 100",
+    "-104 <= matrix[i][j], target <= 104"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "matrix": [
+          [1, 3, 5, 7],
+          [10, 11, 16, 20],
+          [23, 30, 34, 60]
+        ],
+        "target": 3
+      },
+      "output": true,
+      "explanation": "Target 3 is found in the first row at index 1."
+    },
+    {
+      "input": {
+        "matrix": [
+          [1, 3, 5, 7],
+          [10, 11, 16, 20],
+          [23, 30, 34, 60]
+        ],
+        "target": 13
+      },
+      "output": false,
+      "explanation": "Target 13 is not found in the matrix."
+    },
+    {
+      "input": {
+        "matrix": [[1]],
+        "target": 1
+      },
+      "output": true,
+      "explanation": "Target 1 is found in the single element matrix."
+    }
+  ],
+  "solution": {
+    "code": "def search_matrix(matrix: list[list[int]], target: int) -> bool:\n    if not matrix or not matrix[0]:\n        return False\n    \n    m, n = len(matrix), len(matrix[0])\n    left, right = 0, m * n - 1\n    \n    while left <= right:\n        mid = (left + right) // 2\n        # Convert 1D index to 2D coordinates\n        row, col = mid // n, mid % n\n        \n        if matrix[row][col] == target:\n            return True\n        elif matrix[row][col] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    \n    return False",
+    "explanation": "This solution uses binary search with O(log(m * n)) time complexity:\n1. We treat the 2D matrix as a 1D sorted array since it has the given properties\n2. We use binary search on the flattened array indices (0 to m*n-1)\n3. At each step, we convert the 1D index to 2D coordinates using integer division and modulo\n4. We compare the target with the element at the calculated position\n5. We continue binary search until we find the target or exhaust the search space\n\nKey insights:\n- The matrix can be treated as a sorted 1D array due to the given properties\n- Each row is sorted in non-decreasing order\n- The first integer of each row is greater than the last integer of the previous row\n- This allows us to use standard binary search on the flattened array\n- Converting 1D index to 2D: row = index // n, col = index % n\n\nExample: matrix = [[1,3,5,7], [10,11,16,20], [23,30,34,60]], target = 3\n- Flattened array: [1,3,5,7,10,11,16,20,23,30,34,60]\n- Binary search on indices 0-11\n- mid = 5, row = 5//4 = 1, col = 5%4 = 1, matrix[1][1] = 11 > 3\n- Search left half: indices 0-4\n- mid = 2, row = 2//4 = 0, col = 2%4 = 2, matrix[0][2] = 5 > 3\n- Search left half: indices 0-1\n- mid = 0, row = 0//4 = 0, col = 0%4 = 0, matrix[0][0] = 1 < 3\n- Search right half: index 1\n- mid = 1, row = 1//4 = 0, col = 1%4 = 1, matrix[0][1] = 3 == target\n- Return True\n\nThe time complexity is O(log(m * n)) as we use binary search on the flattened array. The space complexity is O(1) as we only use constant extra space."
+  }
+}

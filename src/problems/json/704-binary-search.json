@@ -1,9 +1,7 @@
 {
   "id": 704,
   "title": "Binary Search",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75", "neetcode150"],
   "category": "Binary Search",
   "difficulty": "Easy",
   "description": "Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.\n\nYou must write an algorithm with O(log n) runtime complexity.",
@@ -16,14 +14,7 @@
   "testCases": [
     {
       "input": {
-        "nums": [
-          -1,
-          0,
-          3,
-          5,
-          9,
-          12
-        ],
+        "nums": [-1, 0, 3, 5, 9, 12],
         "target": 9
       },
       "output": 4,
@@ -31,14 +22,7 @@
     },
     {
       "input": {
-        "nums": [
-          -1,
-          0,
-          3,
-          5,
-          9,
-          12
-        ],
+        "nums": [-1, 0, 3, 5, 9, 12],
         "target": 2
       },
       "output": -1,
@@ -46,9 +30,7 @@
     },
     {
       "input": {
-        "nums": [
-          5
-        ],
+        "nums": [5],
         "target": 5
       },
       "output": 0,
@@ -56,13 +38,7 @@
     },
     {
       "input": {
-        "nums": [
-          1,
-          2,
-          3,
-          4,
-          5
-        ],
+        "nums": [1, 2, 3, 4, 5],
         "target": 1
       },
       "output": 0,

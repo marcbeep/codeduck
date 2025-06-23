@@ -1,0 +1,43 @@
+{
+  "id": 875,
+  "title": "Koko Eating Bananas",
+  "list": ["neetcode150"],
+  "category": "Binary Search",
+  "difficulty": "Medium",
+  "description": "Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours.\n\nKoko can decide her bananas-per-hour eating speed of k. Each hour, she chooses some pile of bananas and eats k bananas from that pile. If the pile has less than k bananas, she eats all of them instead and will not eat any more bananas during this hour.\n\nKoko likes to eat slowly but still wants to finish eating all the bananas before the guards come back.\n\nReturn the minimum integer k such that she can eat all the bananas within h hours.",
+  "constraints": [
+    "1 <= piles.length <= 104",
+    "piles.length <= h <= 109",
+    "1 <= piles[i] <= 109"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "piles": [3, 6, 7, 11],
+        "h": 8
+      },
+      "output": 4,
+      "explanation": "With k=4, Koko can eat: Hour 1: 3 bananas from pile 0. Hour 2: 4 bananas from pile 1. Hour 3: 2 bananas from pile 1. Hour 4: 4 bananas from pile 2. Hour 5: 3 bananas from pile 2. Hour 6: 4 bananas from pile 3. Hour 7: 7 bananas from pile 3. Total: 8 hours."
+    },
+    {
+      "input": {
+        "piles": [30, 11, 23, 4, 20],
+        "h": 5
+      },
+      "output": 30,
+      "explanation": "With k=30, Koko can eat all piles in 5 hours."
+    },
+    {
+      "input": {
+        "piles": [30, 11, 23, 4, 20],
+        "h": 6
+      },
+      "output": 23,
+      "explanation": "With k=23, Koko can eat all piles in 6 hours."
+    }
+  ],
+  "solution": {
+    "code": "def min_eating_speed(piles: list[int], h: int) -> int:\n    def can_eat_all(k: int) -> bool:\n        hours = 0\n        for pile in piles:\n            hours += (pile + k - 1) // k  # Ceiling division\n        return hours <= h\n    \n    # Binary search on the eating speed k\n    left, right = 1, max(piles)\n    \n    while left < right:\n        mid = (left + right) // 2\n        \n        if can_eat_all(mid):\n            # Try a smaller speed\n            right = mid\n        else:\n            # Need a larger speed\n            left = mid + 1\n    \n    return left",
+    "explanation": "This solution uses binary search with O(n log M) time complexity:\n1. We use binary search on the eating speed k, where k ranges from 1 to max(piles)\n2. For each speed k, we check if Koko can eat all bananas within h hours\n3. We calculate hours needed for each pile using ceiling division: (pile + k - 1) // k\n4. If total hours <= h, we try a smaller speed (search left half)\n5. If total hours > h, we need a larger speed (search right half)\n6. We continue until left == right, which gives us the minimum valid speed\n\nKey insights:\n- The answer must be between 1 and max(piles)\n- If speed k works, any speed > k also works\n- If speed k doesn't work, any speed < k also doesn't work\n- This monotonic property allows us to use binary search\n- We use ceiling division to handle cases where pile size is not divisible by k\n\nExample: piles = [3,6,7,11], h = 8\n- Binary search on k: left = 1, right = 11\n- mid = 6: can_eat_all(6) = True (hours = 1+1+2+2 = 6 <= 8)\n- Search left: left = 1, right = 6\n- mid = 3: can_eat_all(3) = False (hours = 1+2+3+4 = 10 > 8)\n- Search right: left = 4, right = 6\n- mid = 5: can_eat_all(5) = True (hours = 1+2+2+3 = 8 <= 8)\n- Search left: left = 4, right = 5\n- mid = 4: can_eat_all(4) = True (hours = 1+2+2+3 = 8 <= 8)\n- Search left: left = 4, right = 4\n- Return 4\n\nThe time complexity is O(n log M) where n is the number of piles and M is the maximum pile size. The space complexity is O(1) as we only use constant extra space."
+  }
+}
