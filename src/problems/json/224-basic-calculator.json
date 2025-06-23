@@ -1,7 +1,9 @@
 {
   "id": 224,
   "title": "Basic Calculator",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "Stack",
   "difficulty": "Hard",
   "description": "Given a string s representing a valid expression, implement a basic calculator to evaluate it, and return the result of the evaluation.\n\nNote: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().",

@@ -1,15 +1,10 @@
 {
   "id": 169,
   "title": "Majority Element",
-  "list": ["grind75"],
-  "category": "Array",
-  "topics": [
-    "Array",
-    "Hash Table",
-    "Divide and Conquer",
-    "Sorting",
-    "Counting"
+  "list": [
+    "grind75"
   ],
+  "category": "Array",
   "difficulty": "Easy",
   "description": "Given an array nums of size n, return the majority element.\n\nThe majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.",
   "constraints": [
@@ -20,28 +15,46 @@
   "testCases": [
     {
       "input": {
-        "nums": [3, 2, 3]
+        "nums": [
+          3,
+          2,
+          3
+        ]
       },
       "output": 3,
       "explanation": "3 appears 2 times, which is more than ⌊3 / 2⌋ = 1 time."
     },
     {
       "input": {
-        "nums": [2, 2, 1, 1, 1, 2, 2]
+        "nums": [
+          2,
+          2,
+          1,
+          1,
+          1,
+          2,
+          2
+        ]
       },
       "output": 2,
       "explanation": "2 appears 4 times, which is more than ⌊7 / 2⌋ = 3 times."
     },
     {
       "input": {
-        "nums": [1]
+        "nums": [
+          1
+        ]
       },
       "output": 1,
       "explanation": "Single element is always the majority element."
     },
     {
       "input": {
-        "nums": [6, 5, 5]
+        "nums": [
+          6,
+          5,
+          5
+        ]
       },
       "output": 5,
       "explanation": "5 appears 2 times, which is more than ⌊3 / 2⌋ = 1 time."

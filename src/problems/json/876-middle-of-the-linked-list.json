@@ -1,7 +1,9 @@
 {
   "id": 876,
   "title": "Middle of the Linked List",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "Linked List",
   "difficulty": "Easy",
   "description": "Given the head of a singly linked list, return the middle node of the linked list.\n\nIf there are two middle nodes, return the second middle node.",
@@ -12,30 +14,60 @@
   "testCases": [
     {
       "input": {
-        "head": [1, 2, 3, 4, 5]
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
       },
-      "output": [3, 4, 5],
+      "output": [
+        3,
+        4,
+        5
+      ],
       "explanation": "The middle node of the list is node 3."
     },
     {
       "input": {
-        "head": [1, 2, 3, 4, 5, 6]
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
       },
-      "output": [4, 5, 6],
+      "output": [
+        4,
+        5,
+        6
+      ],
       "explanation": "Since the list has two middle nodes with values 3 and 4, we return the second one."
     },
     {
       "input": {
-        "head": [1]
+        "head": [
+          1
+        ]
       },
-      "output": [1],
+      "output": [
+        1
+      ],
       "explanation": "Single node is the middle node."
     },
     {
       "input": {
-        "head": [1, 2]
+        "head": [
+          1,
+          2
+        ]
       },
-      "output": [2],
+      "output": [
+        2
+      ],
       "explanation": "Since there are two middle nodes, return the second one."
     }
   ],

@@ -1,7 +1,9 @@
 {
   "id": 438,
   "title": "Find All Anagrams in a String",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "String",
   "difficulty": "Medium",
   "description": "Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.\n\nAn Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
@@ -15,7 +17,10 @@
         "s": "cbaebabacd",
         "p": "abc"
       },
-      "output": [0, 6],
+      "output": [
+        0,
+        6
+      ],
       "explanation": "The substring with start index = 0 is \"cba\", which is an anagram of \"abc\".\nThe substring with start index = 6 is \"bac\", which is an anagram of \"abc\"."
     },
     {
@@ -23,7 +28,11 @@
         "s": "abab",
         "p": "ab"
       },
-      "output": [0, 1, 2],
+      "output": [
+        0,
+        1,
+        2
+      ],
       "explanation": "The substring with start index = 0 is \"ab\", which is an anagram of \"ab\".\nThe substring with start index = 1 is \"ba\", which is an anagram of \"ab\".\nThe substring with start index = 2 is \"ab\", which is an anagram of \"ab\"."
     },
     {

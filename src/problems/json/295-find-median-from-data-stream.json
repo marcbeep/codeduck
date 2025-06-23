@@ -1,15 +1,10 @@
 {
   "id": 295,
   "title": "Find Median from Data Stream",
-  "list": ["grind75"],
-  "category": "Design",
-  "topics": [
-    "Two Pointers",
-    "Design",
-    "Sorting",
-    "Heap (Priority Queue)",
-    "Data Stream"
+  "list": [
+    "grind75"
   ],
+  "category": "Design",
   "difficulty": "Hard",
   "description": "The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value and the median is the mean of the two middle values.\n\nFor example, for arr = [2,3,4], the median is 3.\nFor example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.\n\nImplement the MedianFinder class:\n- MedianFinder() initializes the MedianFinder object.\n- void addNum(int num) adds the integer num from the data stream to the data structure.\n- double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted.",
   "constraints": [
@@ -28,17 +23,51 @@
           "addNum",
           "findMedian"
         ],
-        "values": [[], [1], [2], [], [3], []]
+        "values": [
+          [],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [],
+          [
+            3
+          ],
+          []
+        ]
       },
-      "output": [null, null, null, 1.5, null, 2.0],
+      "output": [
+        null,
+        null,
+        null,
+        1.5,
+        null,
+        2.0
+      ],
       "explanation": "MedianFinder medianFinder = new MedianFinder();\nmedianFinder.addNum(1);    // arr = [1]\nmedianFinder.addNum(2);    // arr = [1, 2]\nmedianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)\nmedianFinder.addNum(3);    // arr[1, 2, 3]\nmedianFinder.findMedian(); // return 2.0"
     },
     {
       "input": {
-        "operations": ["MedianFinder", "addNum", "findMedian"],
-        "values": [[], [1], []]
+        "operations": [
+          "MedianFinder",
+          "addNum",
+          "findMedian"
+        ],
+        "values": [
+          [],
+          [
+            1
+          ],
+          []
+        ]
       },
-      "output": [null, null, 1.0],
+      "output": [
+        null,
+        null,
+        1.0
+      ],
       "explanation": "MedianFinder medianFinder = new MedianFinder();\nmedianFinder.addNum(1);    // arr = [1]\nmedianFinder.findMedian(); // return 1.0"
     }
   ],

@@ -1,7 +1,9 @@
 {
   "id": 994,
   "title": "Rotting Oranges",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "Graph",
   "difficulty": "Medium",
   "description": "You are given an m x n grid where each cell can have one of three values:\n- 0 representing an empty cell,\n- 1 representing a fresh orange, or\n- 2 representing a rotten orange.\n\nEvery minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.\n\nReturn the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.",
@@ -15,9 +17,21 @@
     {
       "input": {
         "grid": [
-          [2, 1, 1],
-          [1, 1, 0],
-          [0, 1, 1]
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1
+          ]
         ]
       },
       "output": 4,
@@ -26,9 +40,21 @@
     {
       "input": {
         "grid": [
-          [2, 1, 1],
-          [0, 1, 1],
-          [1, 0, 1]
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ]
         ]
       },
       "output": -1,
@@ -36,7 +62,12 @@
     },
     {
       "input": {
-        "grid": [[0, 2]]
+        "grid": [
+          [
+            0,
+            2
+          ]
+        ]
       },
       "output": 0,
       "explanation": "Since there are no fresh oranges, no time passes."

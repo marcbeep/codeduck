@@ -1,7 +1,9 @@
 {
   "id": 206,
   "title": "Reverse Linked List",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "Linked List",
   "difficulty": "Easy",
   "description": "Given the head of a singly linked list, reverse the list, and return the reversed list.",
@@ -12,16 +14,34 @@
   "testCases": [
     {
       "input": {
-        "head": [1, 2, 3, 4, 5]
+        "head": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
       },
-      "output": [5, 4, 3, 2, 1],
+      "output": [
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
       "explanation": "The linked list is reversed: 1->2->3->4->5 becomes 5->4->3->2->1."
     },
     {
       "input": {
-        "head": [1, 2]
+        "head": [
+          1,
+          2
+        ]
       },
-      "output": [2, 1],
+      "output": [
+        2,
+        1
+      ],
       "explanation": "The linked list is reversed: 1->2 becomes 2->1."
     },
     {
@@ -33,9 +53,13 @@
     },
     {
       "input": {
-        "head": [1]
+        "head": [
+          1
+        ]
       },
-      "output": [1],
+      "output": [
+        1
+      ],
       "explanation": "A single node linked list remains the same."
     }
   ],

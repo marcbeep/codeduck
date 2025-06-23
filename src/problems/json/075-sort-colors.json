@@ -1,7 +1,9 @@
 {
   "id": 75,
   "title": "Sort Colors",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "Two Pointers",
   "difficulty": "Medium",
   "description": "Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.\n\nWe will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.\n\nYou must solve this problem without using the library's sort function.",
@@ -13,23 +15,49 @@
   "testCases": [
     {
       "input": {
-        "nums": [2, 0, 2, 1, 1, 0]
+        "nums": [
+          2,
+          0,
+          2,
+          1,
+          1,
+          0
+        ]
       },
-      "output": [0, 0, 1, 1, 2, 2],
+      "output": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+      ],
       "explanation": "After sorting, the array becomes [0, 0, 1, 1, 2, 2] with red (0), white (1), and blue (2) in order."
     },
     {
       "input": {
-        "nums": [2, 0, 1]
+        "nums": [
+          2,
+          0,
+          1
+        ]
       },
-      "output": [0, 1, 2],
+      "output": [
+        0,
+        1,
+        2
+      ],
       "explanation": "After sorting, the array becomes [0, 1, 2]."
     },
     {
       "input": {
-        "nums": [0]
+        "nums": [
+          0
+        ]
       },
-      "output": [0],
+      "output": [
+        0
+      ],
       "explanation": "Single element array is already sorted."
     }
   ],

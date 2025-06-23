@@ -1,7 +1,9 @@
 {
   "id": 3,
   "title": "Longest Substring Without Repeating Characters",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "Sliding Window",
   "difficulty": "Medium",
   "description": "Given a string s, find the length of the longest substring without repeating characters.",

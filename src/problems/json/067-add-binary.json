@@ -1,7 +1,9 @@
 {
   "id": 67,
   "title": "Add Binary",
-  "list": ["grind75"],
+  "list": [
+    "grind75"
+  ],
   "category": "Array/String",
   "difficulty": "Easy",
   "description": "Given two binary strings a and b, return their sum as a binary string.",
