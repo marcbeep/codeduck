@@ -39,7 +39,6 @@ type Difficulty = "Easy" | "Medium" | "Hard";
 export default function Home() {
   const [problems, setProblems] = useState<LeetCodeProblem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     async function loadProblems() {
@@ -203,26 +202,9 @@ export default function Home() {
   // Handle initial load and filter changes
   useEffect(() => {
     if (filteredProblems.length > 0 && !isLoading) {
-      if (isInitialLoad) {
-        // On initial load, shuffle the problems
-        shuffleProblems(filteredProblems);
-        setIsInitialLoad(false);
-      } else if (shuffledProblems.length === 0) {
-        // If we somehow have no shuffled problems (shouldn't happen), shuffle them
-        shuffleProblems(filteredProblems);
-      } else {
-        // On filter changes, just update the problems without shuffling
-        setShuffledProblems(filteredProblems);
-        setIndex(0);
-      }
+      shuffleProblems(filteredProblems);
     }
-  }, [
-    filteredProblems,
-    isLoading,
-    isInitialLoad,
-    shuffleProblems,
-    shuffledProblems.length,
-  ]);
+  }, [filteredProblems, isLoading, shuffleProblems]);
 
   const handleShuffle = () => {
     shuffleProblems(filteredProblems);
