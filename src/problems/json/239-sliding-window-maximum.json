@@ -1,0 +1,43 @@
+{
+  "id": 239,
+  "title": "Sliding Window Maximum",
+  "list": ["neetcode150"],
+  "category": "Sliding Window",
+  "difficulty": "Hard",
+  "description": "You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.\n\nReturn the max sliding window.",
+  "constraints": [
+    "1 <= nums.length <= 105",
+    "-104 <= nums[i] <= 104",
+    "1 <= k <= nums.length"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 3, -1, -3, 5, 3, 6, 7],
+        "k": 3
+      },
+      "output": [3, 3, 5, 5, 6, 7],
+      "explanation": "Window position                Max\n[1  3  -1] -3  5  3  6  7       3\n 1 [3  -1  -3] 5  3  6  7       3\n 1  3 [-1  -3  5] 3  6  7       5\n 1  3  -1 [-3  5  3] 6  7       5\n 1  3  -1  -3 [5  3  6] 7       6\n 1  3  -1  -3  5 [3  6  7]      7"
+    },
+    {
+      "input": {
+        "nums": [1],
+        "k": 1
+      },
+      "output": [1],
+      "explanation": "Single element window."
+    },
+    {
+      "input": {
+        "nums": [1, -1],
+        "k": 1
+      },
+      "output": [1, -1],
+      "explanation": "Each window contains one element."
+    }
+  ],
+  "solution": {
+    "code": "def max_sliding_window(nums: list[int], k: int) -> list[int]:\n    from collections import deque\n    \n    if not nums or k == 0:\n        return []\n    \n    # Use deque to store indices of potential maximum elements\n    dq = deque()\n    result = []\n    \n    for i in range(len(nums)):\n        # Remove indices of elements outside the current window\n        while dq and dq[0] < i - k + 1:\n            dq.popleft()\n        \n        # Remove indices of elements smaller than current element\n        # from the back of deque (they can't be maximum in any future window)\n        while dq and nums[dq[-1]] < nums[i]:\n            dq.pop()\n        \n        # Add current index to deque\n        dq.append(i)\n        \n        # Add maximum to result if we have a complete window\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    \n    return result",
+    "explanation": "This solution uses a monotonic deque with O(n) time complexity:\n1. We use a deque to store indices of potential maximum elements\n2. For each element, we remove indices outside the current window from the front\n3. We remove indices of smaller elements from the back (they can't be maximum)\n4. We add the current index to the deque\n5. We add the maximum (front of deque) to result when we have a complete window\n\nKey insights:\n- We maintain a decreasing sequence of indices in the deque\n- The front of deque always contains the index of the maximum element in the current window\n- We remove smaller elements from the back because they can't be maximum in any future window\n- We only add to result when we have a complete window (i >= k-1)\n\nExample: nums = [1,3,-1,-3,5,3,6,7], k = 3\n- i=0: dq = [0], no result yet\n- i=1: dq = [1] (remove 0, add 1), no result yet\n- i=2: dq = [1,2], result = [3] (nums[1])\n- i=3: dq = [1,2,3], result = [3,3]\n- i=4: dq = [4] (remove all smaller), result = [3,3,5]\n- i=5: dq = [4,5], result = [3,3,5,5]\n- i=6: dq = [6], result = [3,3,5,5,6]\n- i=7: dq = [7], result = [3,3,5,5,6,7]\n\nResult: [3,3,5,5,6,7]\n\nThe time complexity is O(n) as each element is pushed and popped at most once. The space complexity is O(k) for the deque."
+  }
+}

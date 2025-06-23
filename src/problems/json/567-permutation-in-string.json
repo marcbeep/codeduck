@@ -1,0 +1,42 @@
+{
+  "id": 567,
+  "title": "Permutation in String",
+  "list": ["neetcode150"],
+  "category": "Sliding Window",
+  "difficulty": "Medium",
+  "description": "Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.\n\nIn other words, return true if one of s1's permutations is the substring of s2.",
+  "constraints": [
+    "1 <= s1.length, s2.length <= 104",
+    "s1 and s2 consist of lowercase English letters"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s1": "ab",
+        "s2": "eidbaooo"
+      },
+      "output": true,
+      "explanation": "s2 contains one permutation of s1 (\"ba\")."
+    },
+    {
+      "input": {
+        "s1": "ab",
+        "s2": "eidboaoo"
+      },
+      "output": false,
+      "explanation": "s2 does not contain any permutation of s1."
+    },
+    {
+      "input": {
+        "s1": "hello",
+        "s2": "ooolleoooleh"
+      },
+      "output": false,
+      "explanation": "s2 does not contain any permutation of s1."
+    }
+  ],
+  "solution": {
+    "code": "def check_inclusion(s1: str, s2: str) -> bool:\n    from collections import Counter\n    \n    if len(s1) > len(s2):\n        return False\n    \n    # Count characters in s1\n    s1_count = Counter(s1)\n    # Count characters in current window of s2\n    window_count = Counter()\n    \n    # Initialize window with first len(s1) characters\n    for i in range(len(s1)):\n        window_count[s2[i]] += 1\n    \n    # Check if initial window is a permutation\n    if window_count == s1_count:\n        return True\n    \n    # Slide the window\n    for i in range(len(s1), len(s2)):\n        # Add new character to window\n        window_count[s2[i]] += 1\n        # Remove leftmost character from window\n        window_count[s2[i - len(s1)]] -= 1\n        \n        # Remove zero counts to make comparison accurate\n        if window_count[s2[i - len(s1)]] == 0:\n            del window_count[s2[i - len(s1)]]\n        \n        # Check if current window is a permutation\n        if window_count == s1_count:\n            return True\n    \n    return False",
+    "explanation": "This solution uses the sliding window technique with O(n) time complexity:\n1. We use Counter to count the frequency of characters in s1\n2. We maintain a sliding window of size len(s1) in s2\n3. We count characters in the current window\n4. We compare the window count with s1 count to check if it's a permutation\n5. We slide the window by adding one character and removing one character\n6. We continue until we find a match or exhaust all possible windows\n\nKey insights:\n- A permutation has the same character frequencies as the original string\n- We can use a fixed-size sliding window of length len(s1)\n- We compare character counts to check if the window is a permutation\n- We need to handle zero counts properly when removing characters\n\nExample: s1 = \"ab\", s2 = \"eidbaooo\"\n- s1_count = {'a': 1, 'b': 1}\n- Initial window [0,1]: \"ei\" → window_count = {'e': 1, 'i': 1} ≠ s1_count\n- Window [1,2]: \"id\" → window_count = {'i': 1, 'd': 1} ≠ s1_count\n- Window [2,3]: \"db\" → window_count = {'d': 1, 'b': 1} ≠ s1_count\n- Window [3,4]: \"ba\" → window_count = {'b': 1, 'a': 1} = s1_count ✓\n- Return True\n\nThe time complexity is O(n) where n is the length of s2. The space complexity is O(1) as we only store character counts (bounded by alphabet size)."
+  }
+}
