@@ -60,7 +60,6 @@ export default function Home() {
   );
   const [isShuffling, setIsShuffling] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  // Add state to track whether we should use shuffled order
   const [isShuffled, setIsShuffled] = useState(false);
 
   // Move filter state to parent
@@ -124,9 +123,11 @@ export default function Home() {
   // Add max cards state
   const [maxCards, setMaxCards] = useState(50);
 
-  // Filter problems based on current filters
-  const filteredProblems = useMemo(() => {
-    const filtered = problems.filter((problem) => {
+  // The definitive list of problems to be displayed, based on shuffle state and filters.
+  const displayedProblems = useMemo(() => {
+    const sourceProblems = isShuffled ? shuffledProblems : problems;
+
+    const filtered = sourceProblems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
       const matchesCategory = categories[problem.category];
 
@@ -141,11 +142,21 @@ export default function Home() {
 
     // Limit the number of problems based on maxCards setting
     return filtered.slice(0, maxCards);
-  }, [difficulties, categories, lists, problems, maxCards]);
+  }, [
+    difficulties,
+    categories,
+    lists,
+    problems,
+    maxCards,
+    isShuffled,
+    shuffledProblems,
+  ]);
 
   // Get the total number of problems that match the filters (before limiting)
   const totalFilteredProblems = useMemo(() => {
-    return problems.filter((problem) => {
+    const sourceProblems = isShuffled ? shuffledProblems : problems;
+
+    return sourceProblems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
       const matchesCategory = categories[problem.category];
 
@@ -157,64 +168,47 @@ export default function Home() {
 
       return matchesDifficulty && matchesCategory && matchesList;
     }).length;
-  }, [difficulties, categories, lists, problems]);
+  }, [difficulties, categories, lists, problems, isShuffled, shuffledProblems]);
 
-  // Shuffle function that can be reused
-  const shuffleProblems = useCallback(
-    async (problemsToShuffle: LeetCodeProblem[]) => {
-      if (problemsToShuffle.length === 0) return;
+  // Shuffle the entire deck of available problems once.
+  const handleShuffle = useCallback(async () => {
+    if (problems.length === 0) return;
 
-      setIsShuffling(true);
-      // Brief delay to show animation
-      await new Promise((resolve) => setTimeout(resolve, 400));
+    setIsShuffling(true);
+    await new Promise((resolve) => setTimeout(resolve, 400));
 
-      const shuffled = [...problemsToShuffle];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      setShuffledProblems(shuffled);
-      setIndex(0);
-      setIsShuffled(true);
-      setIsShuffling(false);
-    },
-    []
-  );
-
-  // Handle initial load and filter changes - use default order unless explicitly shuffled
-  useEffect(() => {
-    if (filteredProblems.length > 0 && !isLoading) {
-      if (isShuffled) {
-        // If user has shuffled, maintain the shuffled order but update with new filtered problems
-        shuffleProblems(filteredProblems);
-      } else {
-        // Use default sorted order
-        setShuffledProblems(filteredProblems);
-        setIndex(0);
-      }
+    const shuffled = [...problems];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-  }, [filteredProblems, isLoading, isShuffled, shuffleProblems]);
 
-  const handleShuffle = () => {
+    setShuffledProblems(shuffled);
     setIsShuffled(true);
-    shuffleProblems(filteredProblems);
-  };
+    setIndex(0);
+    setIsShuffling(false);
+  }, [problems]);
+
+  // Effect to reset index when filters change the displayed problems
+  useEffect(() => {
+    setIndex(0);
+  }, [displayedProblems]);
 
   // Calculate progress percentage
   const progressValue =
-    shuffledProblems.length > 0
-      ? ((index + 1) / shuffledProblems.length) * 100
+    displayedProblems.length > 0
+      ? ((index + 1) / displayedProblems.length) * 100
       : 0;
 
   const next = () => {
-    if (shuffledProblems.length === 0) return;
-    setIndex((i) => (i + 1) % shuffledProblems.length);
+    if (displayedProblems.length === 0) return;
+    setIndex((i) => (i + 1) % displayedProblems.length);
   };
 
   const prev = () => {
-    if (shuffledProblems.length === 0) return;
+    if (displayedProblems.length === 0) return;
     setIndex(
-      (i) => (i - 1 + shuffledProblems.length) % shuffledProblems.length
+      (i) => (i - 1 + displayedProblems.length) % displayedProblems.length
     );
   };
 
@@ -248,15 +242,15 @@ export default function Home() {
 
   // Update background when current problem changes
   useEffect(() => {
-    if (shuffledProblems.length > 0 && shuffledProblems[index]) {
+    if (displayedProblems.length > 0 && displayedProblems[index]) {
       const newBackgroundClass = getDifficultyBackground(
-        shuffledProblems[index].difficulty
+        displayedProblems[index].difficulty
       );
       setBackgroundClass(newBackgroundClass);
     } else {
       setBackgroundClass("");
     }
-  }, [shuffledProblems, index]);
+  }, [displayedProblems, index]);
 
   // Auto-reset maxCards whenever filters change
   useEffect(() => {
@@ -332,9 +326,7 @@ export default function Home() {
                           size="sm"
                           onClick={handleShuffle}
                           className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
-                          disabled={
-                            filteredProblems.length === 0 || isShuffling
-                          }
+                          disabled={problems.length === 0 || isShuffling}
                         >
                           <motion.div
                             animate={
@@ -361,7 +353,7 @@ export default function Home() {
                           size="sm"
                           onClick={() => setSearchOpen(true)}
                           className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
-                          disabled={shuffledProblems.length === 0}
+                          disabled={displayedProblems.length === 0}
                         >
                           <Search className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
@@ -376,8 +368,8 @@ export default function Home() {
 
               {/* Center - Card counter or status */}
               <div className="text-sm text-muted-foreground text-center font-medium">
-                {filteredProblems.length > 0 && shuffledProblems.length > 0
-                  ? `${index + 1} / ${shuffledProblems.length}${
+                {displayedProblems.length > 0
+                  ? `${index + 1} / ${displayedProblems.length}${
                       totalFilteredProblems > maxCards
                         ? ` (of ${totalFilteredProblems})`
                         : ""
@@ -395,7 +387,7 @@ export default function Home() {
                         size="icon"
                         onClick={prev}
                         className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-transform duration-150 cursor-pointer"
-                        disabled={shuffledProblems.length === 0}
+                        disabled={displayedProblems.length === 0}
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </Button>
@@ -414,7 +406,7 @@ export default function Home() {
                         size="icon"
                         onClick={next}
                         className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-transform duration-150 cursor-pointer"
-                        disabled={shuffledProblems.length === 0}
+                        disabled={displayedProblems.length === 0}
                       >
                         <ChevronRight className="h-4 w-4" />
                       </Button>
@@ -428,7 +420,7 @@ export default function Home() {
             </div>
 
             {/* Progress bar - only show when there are problems */}
-            {filteredProblems.length > 0 && shuffledProblems.length > 0 && (
+            {displayedProblems.length > 0 && (
               <div className="w-full mb-6 px-2">
                 <Progress
                   value={progressValue}
@@ -440,9 +432,7 @@ export default function Home() {
 
           {/* Content area */}
           <AnimatePresence mode="wait">
-            {filteredProblems.length > 0 &&
-            shuffledProblems.length > 0 &&
-            shuffledProblems[index] ? (
+            {displayedProblems.length > 0 && displayedProblems[index] ? (
               <motion.div
                 key={index}
                 className="w-full max-w-3xl mx-auto"
@@ -452,7 +442,7 @@ export default function Home() {
                 transition={{ duration: 0.15 }}
                 style={{ willChange: "opacity" }}
               >
-                <Flashcard problem={shuffledProblems[index]} />
+                <Flashcard problem={displayedProblems[index]} />
               </motion.div>
             ) : (
               <motion.div
@@ -513,12 +503,12 @@ export default function Home() {
             <CommandList>
               <CommandEmpty>No problems found.</CommandEmpty>
               <CommandGroup heading="Problems">
-                {shuffledProblems.map((problem) => (
+                {displayedProblems.map((problem) => (
                   <CommandItem
                     key={problem.id}
                     value={problem.title}
                     onSelect={() => {
-                      const problemIndex = shuffledProblems.findIndex(
+                      const problemIndex = displayedProblems.findIndex(
                         (p) => p.title === problem.title
                       );
                       if (problemIndex !== -1) {
