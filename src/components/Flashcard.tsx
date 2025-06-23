@@ -179,14 +179,14 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
             {showTestCases && (
               <motion.div
                 key="test-cases"
-                initial={{ opacity: 0, maxHeight: 0 }}
-                animate={{ opacity: 1, maxHeight: 1000 }}
-                exit={{ opacity: 0, maxHeight: 0 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 className="overflow-hidden"
-                style={{ willChange: "opacity, max-height" }}
+                style={{ willChange: "opacity, height" }}
               >
-                <div className="space-y-2 pt-2 max-h-[800px] overflow-y-auto">
+                <div className="space-y-2 pt-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <TestTube2 className="h-4 w-4" />
                     <span>Test Cases</span>
@@ -257,14 +257,14 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
             {showSolution && (
               <motion.div
                 key="solution"
-                initial={{ opacity: 0, maxHeight: 0 }}
-                animate={{ opacity: 1, maxHeight: 1000 }}
-                exit={{ opacity: 0, maxHeight: 0 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 className="overflow-hidden"
-                style={{ willChange: "opacity, max-height" }}
+                style={{ willChange: "opacity, height" }}
               >
-                <div className="space-y-2 pt-2 max-h-[800px] overflow-y-auto">
+                <div className="space-y-2 pt-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <Code2 className="h-4 w-4" />
                     <span>Solution</span>
