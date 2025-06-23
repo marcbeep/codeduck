@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
+  Calendar,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -61,6 +62,8 @@ export default function Home() {
   const [isShuffling, setIsShuffling] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isShuffled, setIsShuffled] = useState(false);
+  const [isDailyMode, setIsDailyMode] = useState(false);
+  const [dailyProblems, setDailyProblems] = useState<LeetCodeProblem[]>([]);
 
   // Move filter state to parent
   const [difficulties, setDifficulties] = useState<Record<Difficulty, boolean>>(
@@ -125,7 +128,20 @@ export default function Home() {
 
   // The definitive list of problems to be displayed, based on shuffle state and filters.
   const displayedProblems = useMemo(() => {
-    const sourceProblems = isShuffled ? shuffledProblems : problems;
+    let sourceProblems: LeetCodeProblem[];
+
+    if (isDailyMode) {
+      sourceProblems = dailyProblems;
+    } else if (isShuffled) {
+      sourceProblems = shuffledProblems;
+    } else {
+      sourceProblems = problems;
+    }
+
+    // In daily mode, don't apply filters since problems are already curated
+    if (isDailyMode) {
+      return sourceProblems;
+    }
 
     const filtered = sourceProblems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
@@ -150,11 +166,26 @@ export default function Home() {
     maxCards,
     isShuffled,
     shuffledProblems,
+    isDailyMode,
+    dailyProblems,
   ]);
 
   // Get the total number of problems that match the filters (before limiting)
   const totalFilteredProblems = useMemo(() => {
-    const sourceProblems = isShuffled ? shuffledProblems : problems;
+    let sourceProblems: LeetCodeProblem[];
+
+    if (isDailyMode) {
+      sourceProblems = dailyProblems;
+    } else if (isShuffled) {
+      sourceProblems = shuffledProblems;
+    } else {
+      sourceProblems = problems;
+    }
+
+    // In daily mode, return the total daily problems without filtering
+    if (isDailyMode) {
+      return sourceProblems.length;
+    }
 
     return sourceProblems.filter((problem) => {
       const matchesDifficulty = difficulties[problem.difficulty];
@@ -168,7 +199,23 @@ export default function Home() {
 
       return matchesDifficulty && matchesCategory && matchesList;
     }).length;
-  }, [difficulties, categories, lists, problems, isShuffled, shuffledProblems]);
+  }, [
+    difficulties,
+    categories,
+    lists,
+    problems,
+    isShuffled,
+    shuffledProblems,
+    isDailyMode,
+    dailyProblems,
+  ]);
+
+  // Exit daily mode and return to normal view
+  const exitDailyMode = useCallback(() => {
+    setIsDailyMode(false);
+    setDailyProblems([]);
+    setIndex(0);
+  }, []);
 
   // Shuffle the entire deck of available problems once.
   const handleShuffle = useCallback(async () => {
@@ -188,6 +235,34 @@ export default function Home() {
     setIndex(0);
     setIsShuffling(false);
   }, [problems]);
+
+  // Handle daily problems - select one random problem from each category
+  const handleDailyProblems = useCallback(async () => {
+    if (problems.length === 0) return;
+
+    setIsShuffling(true);
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
+    const daily: LeetCodeProblem[] = [];
+
+    // Get one random problem from each category in the order defined in types.ts
+    availableCategories.forEach((category) => {
+      const categoryProblems = problems.filter(
+        (problem) => problem.category === category
+      );
+      if (categoryProblems.length > 0) {
+        const randomIndex = Math.floor(Math.random() * categoryProblems.length);
+        daily.push(categoryProblems[randomIndex]);
+      }
+    });
+
+    // Keep the problems in the default category order (no shuffling)
+    setDailyProblems(daily);
+    setIsDailyMode(true);
+    setIsShuffled(false);
+    setIndex(0);
+    setIsShuffling(false);
+  }, [problems, availableCategories]);
 
   // Effect to reset index when filters change the displayed problems
   useEffect(() => {
@@ -285,38 +360,52 @@ export default function Home() {
 
                 {/* Filter, Shuffle, and Search buttons */}
                 <div className="flex gap-1 sm:gap-2 md:gap-3">
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer text-xs sm:text-sm"
-                      >
-                        <Filter className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                        <span className="hidden xs:inline">Filters</span>
-                        <span className="xs:hidden">Filter</span>
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent
-                      side="left"
-                      className="p-0 max-w-xs transition-all duration-300 ease-in-out"
-                    >
-                      <Sidebar
-                        difficulties={difficulties}
-                        categories={categories}
-                        lists={lists}
-                        availableCategories={availableCategories}
-                        availableLists={availableLists}
-                        maxCards={maxCards}
-                        maxCardsAvailable={totalFilteredProblems}
-                        onDifficultyChange={setDifficulties}
-                        onCategoryChange={setCategories}
-                        onListChange={setLists}
-                        onMaxCardsChange={setMaxCards}
-                        noCard
-                      />
-                    </SheetContent>
-                  </Sheet>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Sheet>
+                          <SheetTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer text-xs sm:text-sm"
+                              disabled={isDailyMode}
+                            >
+                              <Filter className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                              <span className="hidden xs:inline">Filters</span>
+                              <span className="xs:hidden">Filter</span>
+                            </Button>
+                          </SheetTrigger>
+                          <SheetContent
+                            side="left"
+                            className="p-0 max-w-xs transition-all duration-300 ease-in-out"
+                          >
+                            <Sidebar
+                              difficulties={difficulties}
+                              categories={categories}
+                              lists={lists}
+                              availableCategories={availableCategories}
+                              availableLists={availableLists}
+                              maxCards={maxCards}
+                              maxCardsAvailable={totalFilteredProblems}
+                              onDifficultyChange={setDifficulties}
+                              onCategoryChange={setCategories}
+                              onListChange={setLists}
+                              onMaxCardsChange={setMaxCards}
+                              noCard
+                            />
+                          </SheetContent>
+                        </Sheet>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          {isDailyMode
+                            ? "Filters disabled in daily mode"
+                            : "Filters"}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
 
                   <TooltipProvider>
                     <Tooltip>
@@ -326,7 +415,9 @@ export default function Home() {
                           size="sm"
                           onClick={handleShuffle}
                           className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
-                          disabled={problems.length === 0 || isShuffling}
+                          disabled={
+                            problems.length === 0 || isShuffling || isDailyMode
+                          }
                         >
                           <motion.div
                             animate={
@@ -340,7 +431,42 @@ export default function Home() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Shuffle Deck</p>
+                        <p>
+                          {isDailyMode
+                            ? "Shuffle disabled in daily mode"
+                            : "Shuffle Deck"}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={isDailyMode ? "default" : "outline"}
+                          size="sm"
+                          onClick={
+                            isDailyMode ? exitDailyMode : handleDailyProblems
+                          }
+                          className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
+                          disabled={problems.length === 0 || isShuffling}
+                        >
+                          <motion.div
+                            animate={
+                              isShuffling ? { rotate: 360 } : { rotate: 0 }
+                            }
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            style={{ willChange: "transform" }}
+                          >
+                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                          </motion.div>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          {isDailyMode ? "Exit Daily Mode" : "Daily Problems"}
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -353,13 +479,19 @@ export default function Home() {
                           size="sm"
                           onClick={() => setSearchOpen(true)}
                           className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
-                          disabled={displayedProblems.length === 0}
+                          disabled={
+                            displayedProblems.length === 0 || isDailyMode
+                          }
                         >
                           <Search className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Search Problems</p>
+                        <p>
+                          {isDailyMode
+                            ? "Search disabled in daily mode"
+                            : "Search Problems"}
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -370,10 +502,10 @@ export default function Home() {
               <div className="text-sm text-muted-foreground text-center font-medium">
                 {displayedProblems.length > 0
                   ? `${index + 1} / ${displayedProblems.length}${
-                      totalFilteredProblems > maxCards
+                      !isDailyMode && totalFilteredProblems > maxCards
                         ? ` (of ${totalFilteredProblems})`
                         : ""
-                    }`
+                    }${isDailyMode ? " • Daily" : ""}`
                   : `${problems.length} problems available`}
               </div>
 
