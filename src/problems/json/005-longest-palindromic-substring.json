@@ -1,10 +1,8 @@
 {
   "id": 5,
   "title": "Longest Palindromic Substring",
-  "list": [
-    "grind75"
-  ],
-  "category": "1D DP",
+  "list": ["grind75"],
+  "category": "Two Pointers",
   "difficulty": "Medium",
   "description": "Given a string s, return the longest palindromic substring in s.",
   "constraints": [

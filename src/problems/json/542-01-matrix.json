@@ -1,10 +1,8 @@
 {
   "id": 542,
   "title": "01 Matrix",
-  "list": [
-    "grind75"
-  ],
-  "category": "Array / String",
+  "list": ["grind75"],
+  "category": "Matrix",
   "difficulty": "Medium",
   "description": "Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.\n\nThe distance between two adjacent cells is 1.",
   "constraints": [
@@ -19,157 +17,49 @@
     {
       "input": {
         "mat": [
-          [
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            1,
-            0
-          ],
-          [
-            0,
-            0,
-            0
-          ]
+          [0, 0, 0],
+          [0, 1, 0],
+          [0, 0, 0]
         ]
       },
       "output": [
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ]
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
       ],
       "explanation": "All cells are at most 1 distance away from a 0."
     },
     {
       "input": {
         "mat": [
-          [
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            1
-          ]
+          [0, 0, 0],
+          [0, 1, 0],
+          [1, 1, 1]
         ]
       },
       "output": [
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          0
-        ],
-        [
-          1,
-          2,
-          1
-        ]
+        [0, 0, 0],
+        [0, 1, 0],
+        [1, 2, 1]
       ],
       "explanation": "The middle cell is 1 distance away from the nearest 0, and the bottom cells are 2 distances away."
     },
     {
       "input": {
         "mat": [
-          [
-            0,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            1
-          ],
-          [
-            0,
-            0,
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            1
-          ]
+          [0, 1, 0, 1, 1],
+          [1, 1, 0, 0, 1],
+          [0, 0, 0, 1, 0],
+          [1, 0, 1, 1, 1],
+          [1, 0, 0, 0, 1]
         ]
       },
       "output": [
-        [
-          0,
-          1,
-          0,
-          1,
-          2
-        ],
-        [
-          1,
-          1,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          1,
-          0,
-          1,
-          1,
-          1
-        ],
-        [
-          1,
-          0,
-          0,
-          0,
-          1
-        ]
+        [0, 1, 0, 1, 2],
+        [1, 1, 0, 0, 1],
+        [0, 0, 0, 1, 0],
+        [1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 1]
       ],
       "explanation": "Complex matrix with varying distances to nearest 0."
     }
