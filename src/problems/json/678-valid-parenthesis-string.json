@@ -1,0 +1,43 @@
+{
+  "id": 678,
+  "title": "Valid Parenthesis String",
+  "list": ["neetcode150"],
+  "category": "Greedy",
+  "difficulty": "Medium",
+  "description": "Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid.\n\nThe following rules define a valid string:\n\nAny left parenthesis '(' must have a corresponding right parenthesis ')'.\nAny right parenthesis ')' must have a corresponding left parenthesis '('.\nLeft parenthesis '(' must go before the corresponding right parenthesis ')'.\n'*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string \"\".",
+  "constraints": ["1 <= s.length <= 100", "s[i] is '(', ')' or '*'."],
+  "testCases": [
+    {
+      "input": {
+        "s": "()"
+      },
+      "output": true,
+      "explanation": "Simple valid case."
+    },
+    {
+      "input": {
+        "s": "(*)"
+      },
+      "output": true,
+      "explanation": "The '*' can be treated as an empty string, making it \"()\"."
+    },
+    {
+      "input": {
+        "s": "(*)))"
+      },
+      "output": true,
+      "explanation": "The '*' can be treated as '(', making it \"(())\"."
+    },
+    {
+      "input": {
+        "s": "(((((*(()((((*((**(((()()*)()()()*((((**)())*)*)))))))(())(()))())((*()()(((()((()*(())*(()**)()(())"
+      },
+      "output": false,
+      "explanation": "This string is not valid."
+    }
+  ],
+  "solution": {
+    "code": "def checkValidString(s: str) -> bool:\n    # Keep track of minimum and maximum open parentheses\n    min_open = 0\n    max_open = 0\n    \n    for char in s:\n        if char == '(':\n            min_open += 1\n            max_open += 1\n        elif char == ')':\n            min_open -= 1\n            max_open -= 1\n        else:  # char == '*'\n            min_open -= 1  # treat as ')'\n            max_open += 1  # treat as '('\n        \n        # If max_open becomes negative, we have too many ')'\n        if max_open < 0:\n            return False\n        \n        # min_open cannot be negative\n        min_open = max(min_open, 0)\n    \n    # Check if we can balance the parentheses\n    return min_open == 0",
+    "explanation": "This solution uses a greedy approach with O(n) time complexity:\n1. Keep track of minimum and maximum possible open parentheses\n2. For '(', increment both min and max\n3. For ')', decrement both min and max\n4. For '*', decrement min (treat as ')') and increment max (treat as '(')\n5. If max becomes negative, return False (too many ')')\n6. Keep min non-negative\n7. At the end, check if min_open == 0\n\nThe key insight is that we need to track both the minimum and maximum possible open parentheses to handle the wildcard '*'."
+  }
+}

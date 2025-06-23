@@ -1,0 +1,43 @@
+{
+  "id": 846,
+  "title": "Hand of Straights",
+  "list": ["neetcode150"],
+  "category": "Greedy",
+  "difficulty": "Medium",
+  "description": "Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards.\n\nGiven an integer array hand where hand[i] is the value written on the ith card and an integer groupSize, return true if she can rearrange the cards, or false otherwise.",
+  "constraints": [
+    "1 <= hand.length <= 104",
+    "0 <= hand[i] <= 109",
+    "1 <= groupSize <= hand.length"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "hand": [1, 2, 3, 6, 2, 3, 4, 7, 8],
+        "groupSize": 3
+      },
+      "output": true,
+      "explanation": "Alice's hand can be rearranged as [1,2,3],[2,3,4],[6,7,8]"
+    },
+    {
+      "input": {
+        "hand": [1, 2, 3, 4, 5],
+        "groupSize": 4
+      },
+      "output": false,
+      "explanation": "Alice's hand cannot be rearranged into groups of 4."
+    },
+    {
+      "input": {
+        "hand": [1, 2, 3, 4, 5, 6],
+        "groupSize": 2
+      },
+      "output": true,
+      "explanation": "Alice's hand can be rearranged as [1,2],[3,4],[5,6]"
+    }
+  ],
+  "solution": {
+    "code": "from collections import Counter\nimport heapq\n\ndef isNStraightHand(hand: list[int], groupSize: int) -> bool:\n    if len(hand) % groupSize != 0:\n        return False\n    \n    # Count frequency of each card\n    count = Counter(hand)\n    \n    # Min heap to process cards in order\n    min_heap = list(count.keys())\n    heapq.heapify(min_heap)\n    \n    while min_heap:\n        start = min_heap[0]\n        \n        # Try to form a group starting from 'start'\n        for i in range(groupSize):\n            card = start + i\n            if count[card] == 0:\n                return False\n            count[card] -= 1\n            \n            # Remove card from heap if no more left\n            if count[card] == 0:\n                if card != min_heap[0]:\n                    return False\n                heapq.heappop(min_heap)\n    \n    return True",
+    "explanation": "This solution uses a greedy approach with O(n log n) time complexity:\n1. Check if total cards is divisible by groupSize\n2. Count frequency of each card using Counter\n3. Use min heap to process cards in ascending order\n4. For each group, try to form consecutive cards starting from smallest available\n5. If we can't form a complete group, return False\n\nThe key insight is that we must always start groups with the smallest available card to ensure optimal grouping."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": 1899,
+  "title": "Merge Triplets to Form Target Triplet",
+  "list": ["neetcode150"],
+  "category": "Greedy",
+  "difficulty": "Medium",
+  "description": "A triplet is an array of three integers. You are given a 2D integer array triplets, where triplets[i] = [ai, bi, ci] describes the ith triplet. You are also given an integer array target = [x, y, z] that describes the triplet you want to obtain.\n\nTo obtain target, you may apply the following operation any number of times (possibly zero):\n\nChoose two indices (0-indexed) i and j (i != j) and update triplets[j] to become [max(ai, aj), max(bi, bj), max(ci, cj)].\nFor example, if triplets[i] = [2, 5, 3] and triplets[j] = [1, 7, 5], then triplets[j] will be updated to [max(2, 1), max(5, 7), max(3, 5)] = [2, 7, 5].\n\nReturn true if it is possible to obtain the target triplet [x, y, z] as an element of triplets, or false otherwise.",
+  "constraints": [
+    "1 <= triplets.length <= 105",
+    "triplets[i].length == 3",
+    "0 <= ai, bi, ci, x, y, z <= 100"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "triplets": [
+          [2, 5, 3],
+          [1, 8, 4],
+          [1, 7, 5]
+        ],
+        "target": [2, 7, 5]
+      },
+      "output": true,
+      "explanation": "Perform the following operations:\n- Choose the first and third triplets, [2,5,3] and [1,7,5]. Update the third triplet to be [max(2,1), max(5,7), max(3,5)] = [2,7,5].\nTriplets now becomes [[2,5,3], [1,8,4], [2,7,5]].\nThe target triplet [2,7,5] is now an element of triplets."
+    },
+    {
+      "input": {
+        "triplets": [
+          [3, 4, 5],
+          [4, 5, 6]
+        ],
+        "target": [3, 2, 5]
+      },
+      "output": false,
+      "explanation": "It is impossible to have [3,2,5] as an element because there is no triplet with the value 2 in the second position."
+    },
+    {
+      "input": {
+        "triplets": [
+          [2, 5, 3],
+          [2, 3, 4],
+          [1, 2, 5],
+          [5, 2, 3]
+        ],
+        "target": [5, 5, 5]
+      },
+      "output": true,
+      "explanation": "Perform the following operations:\n- Choose the first and third triplets, [2,5,3] and [1,2,5]. Update the third triplet to be [max(2,1), max(5,2), max(3,5)] = [2,5,5].\n- Choose the third and fourth triplets, [2,5,5] and [5,2,3]. Update the fourth triplet to be [max(2,5), max(5,2), max(5,3)] = [5,5,5].\nTriplets now becomes [[2,5,3], [2,3,4], [1,2,5], [5,5,5]].\nThe target triplet [5,5,5] is now an element of triplets."
+    }
+  ],
+  "solution": {
+    "code": "def mergeTriplets(triplets: list[list[int]], target: list[int]) -> bool:\n    # Keep track of maximum values we can achieve for each position\n    max_vals = [0, 0, 0]\n    \n    for triplet in triplets:\n        # Only consider triplets that don't exceed target in any position\n        if (triplet[0] <= target[0] and \n            triplet[1] <= target[1] and \n            triplet[2] <= target[2]):\n            \n            # Update max values for each position\n            max_vals[0] = max(max_vals[0], triplet[0])\n            max_vals[1] = max(max_vals[1], triplet[1])\n            max_vals[2] = max(max_vals[2], triplet[2])\n    \n    # Check if we can achieve the target\n    return max_vals == target",
+    "explanation": "This solution uses a greedy approach with O(n) time complexity:\n1. Keep track of maximum values we can achieve for each position\n2. Only consider triplets that don't exceed target in any position\n3. Update max values for each position when processing valid triplets\n4. Check if we can achieve the target by comparing max_vals with target\n\nThe key insight is that we only need to consider triplets that don't exceed the target in any position, and we can greedily take the maximum values from valid triplets."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": 763,
+  "title": "Partition Labels",
+  "list": ["neetcode150"],
+  "category": "Greedy",
+  "difficulty": "Medium",
+  "description": "You are given a string s. We want to partition the string into as many parts as possible so that each letter appears in at most one part.\n\nNote that the partition is done so that after concatenating all the parts in order, the resultant string should be s.\n\nReturn a list of integers representing the size of these parts.",
+  "constraints": [
+    "1 <= s.length <= 500",
+    "s consists of lowercase English letters."
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "ababcbacadefegdehijhklij"
+      },
+      "output": [9, 7, 8],
+      "explanation": "The partition is \"ababcbaca\", \"defegde\", \"hijhklij\".\nThis is a partition so that each letter appears in at most one part.\nA partition like \"ababcbacadefegde\", \"hijhklij\" is incorrect, because it splits s into less parts."
+    },
+    {
+      "input": {
+        "s": "eccbbbbdec"
+      },
+      "output": [10],
+      "explanation": "The partition is \"eccbbbbdec\".\nThis is a partition so that each letter appears in at most one part."
+    },
+    {
+      "input": {
+        "s": "caedbdedda"
+      },
+      "output": [1, 9],
+      "explanation": "The partition is \"c\", \"aedbdedda\".\nThis is a partition so that each letter appears in at most one part."
+    }
+  ],
+  "solution": {
+    "code": "def partitionLabels(s: str) -> list[int]:\n    # Find the last occurrence of each character\n    last_occurrence = {}\n    for i, char in enumerate(s):\n        last_occurrence[char] = i\n    \n    result = []\n    start = 0\n    end = 0\n    \n    for i, char in enumerate(s):\n        # Update end to the maximum last occurrence of any character in current partition\n        end = max(end, last_occurrence[char])\n        \n        # If we've reached the end of current partition\n        if i == end:\n            result.append(end - start + 1)\n            start = i + 1\n    \n    return result",
+    "explanation": "This solution uses a greedy approach with O(n) time complexity:\n1. First pass: find the last occurrence of each character\n2. Second pass: iterate through the string\n3. For each character, update the end of current partition to include its last occurrence\n4. When we reach the end of current partition, add its size to result\n\nThe key insight is that once we include a character in a partition, we must include all its occurrences, so we extend the partition to its last occurrence."
+  }
+}
