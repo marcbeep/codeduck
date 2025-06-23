@@ -1,0 +1,47 @@
+{
+  "id": 253,
+  "title": "Meeting Rooms II",
+  "list": ["neetcode150"],
+  "category": "Intervals",
+  "difficulty": "Medium",
+  "description": "Given an array of meeting time intervals intervals where intervals[i] = [starti, endi], return the minimum number of conference rooms required.",
+  "constraints": ["1 <= intervals.length <= 104", "0 <= starti < endi <= 106"],
+  "testCases": [
+    {
+      "input": {
+        "intervals": [
+          [0, 30],
+          [5, 10],
+          [15, 20]
+        ]
+      },
+      "output": 2,
+      "explanation": "We need two rooms: one for [0, 30] and another for [5, 10] and [15, 20]."
+    },
+    {
+      "input": {
+        "intervals": [
+          [7, 10],
+          [2, 4]
+        ]
+      },
+      "output": 1,
+      "explanation": "We only need one room as the meetings don't overlap."
+    },
+    {
+      "input": {
+        "intervals": [
+          [1, 5],
+          [8, 9],
+          [8, 9]
+        ]
+      },
+      "output": 2,
+      "explanation": "We need two rooms for the overlapping meetings [8, 9]."
+    }
+  ],
+  "solution": {
+    "code": "import heapq\n\ndef minMeetingRooms(intervals: list[list[int]]) -> int:\n    # Sort intervals by start time\n    intervals.sort(key=lambda x: x[0])\n    \n    # Min heap to track end times of active meetings\n    heap = []\n    \n    for interval in intervals:\n        # If earliest ending meeting ends before current meeting starts\n        if heap and heap[0] <= interval[0]:\n            heapq.heappop(heap)\n        \n        # Add current meeting's end time to heap\n        heapq.heappush(heap, interval[1])\n    \n    return len(heap)",
+    "explanation": "This solution uses a min heap with O(n log n) time complexity:\n1. Sort intervals by start time\n2. Use a min heap to track end times of active meetings\n3. For each meeting, check if the earliest ending meeting has finished\n4. If so, reuse that room by removing it from heap\n5. Add current meeting's end time to heap\n6. Return the size of heap (number of rooms needed)\n\nThe key insight is that we only need to track the end times of active meetings, and we can reuse a room when its meeting ends before the next meeting starts."
+  }
+}

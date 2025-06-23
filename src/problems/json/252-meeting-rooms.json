@@ -1,0 +1,50 @@
+{
+  "id": 252,
+  "title": "Meeting Rooms",
+  "list": ["neetcode150"],
+  "category": "Intervals",
+  "difficulty": "Easy",
+  "description": "Given an array of meeting time intervals where intervals[i] = [starti, endi], determine if a person could attend all meetings.",
+  "constraints": [
+    "0 <= intervals.length <= 104",
+    "intervals[i].length == 2",
+    "0 <= starti < endi <= 106"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "intervals": [
+          [0, 30],
+          [5, 10],
+          [15, 20]
+        ]
+      },
+      "output": false,
+      "explanation": "Meeting [0, 30] overlaps with meeting [5, 10]."
+    },
+    {
+      "input": {
+        "intervals": [
+          [7, 10],
+          [2, 4]
+        ]
+      },
+      "output": true,
+      "explanation": "No overlapping meetings."
+    },
+    {
+      "input": {
+        "intervals": [
+          [13, 15],
+          [1, 13]
+        ]
+      },
+      "output": true,
+      "explanation": "No overlapping meetings."
+    }
+  ],
+  "solution": {
+    "code": "def canAttendMeetings(intervals: list[list[int]]) -> bool:\n    # Sort intervals by start time\n    intervals.sort(key=lambda x: x[0])\n    \n    # Check for overlaps\n    for i in range(1, len(intervals)):\n        if intervals[i][0] < intervals[i-1][1]:\n            return False\n    \n    return True",
+    "explanation": "This solution has O(n log n) time complexity:\n1. Sort all intervals by start time\n2. Check if any adjacent intervals overlap by comparing current start with previous end\n3. If any overlap is found, return False\n4. Otherwise, return True\n\nThe key insight is that after sorting, we only need to check adjacent intervals for overlaps, as any non-adjacent overlap would also create an adjacent overlap."
+  }
+}
