@@ -4,7 +4,7 @@
   "list": [
     "grind75"
   ],
-  "category": "Tree",
+  "category": "Binary Tree General",
   "difficulty": "Easy",
   "description": "Given the root of a binary tree, invert the tree, and return its root.\n\nTo invert a binary tree, swap every left node with its corresponding right node.",
   "constraints": [

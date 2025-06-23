@@ -4,7 +4,7 @@
   "list": [
     "grind75"
   ],
-  "category": "Greedy",
+  "category": "Heap",
   "difficulty": "Medium",
   "description": "You are given an array of CPU tasks, each represented by letters A to Z, and a non-negative integer n that represents the cooling time between two same tasks (the same letter cannot be executed in two consecutive time slots).\n\nYou need to return the least number of intervals the CPU will take to finish all the given tasks.",
   "constraints": [

@@ -4,7 +4,7 @@
   "list": [
     "grind75"
   ],
-  "category": "Array/String",
+  "category": "Array / String",
   "difficulty": "Easy",
   "description": "Given two binary strings a and b, return their sum as a binary string.",
   "constraints": [
