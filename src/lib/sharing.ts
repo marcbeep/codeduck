@@ -91,13 +91,9 @@ export function generateSocialShareUrls(problem: LeetCodeProblem) {
  * Generate a share text for the problem
  */
 export function generateShareText(problem: LeetCodeProblem): string {
-  return `🧩 ${problem.title} (${problem.difficulty})
-  
-${problem.category} • ${problem.topics.join(", ")}
-
-${problem.description.slice(0, 200)}${
+  return `🧩 ${problem.title} (${problem.difficulty})\n  \n${
+    problem.category
+  }\n\n${problem.description.slice(0, 200)}${
     problem.description.length > 200 ? "..." : ""
-  }
-
-Practice it here: ${generateShareUrl(problem)}`;
+  }\n\nPractice it here: ${generateShareUrl(problem)}`;
 }

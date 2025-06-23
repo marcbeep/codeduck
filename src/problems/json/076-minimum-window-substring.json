@@ -3,7 +3,6 @@
   "title": "Minimum Window Substring",
   "list": ["grind75"],
   "category": "Sliding Window",
-  "topics": ["Hash Table", "String", "Sliding Window"],
   "difficulty": "Hard",
   "description": "Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string \"\".\n\nThe testcases will be generated such that the answer is unique.\n\nA substring is a contiguous sequence of characters within the string.",
   "constraints": [

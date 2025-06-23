@@ -3,7 +3,6 @@
   "title": "Middle of the Linked List",
   "list": ["grind75"],
   "category": "Linked List",
-  "topics": ["Linked List", "Two Pointers"],
   "difficulty": "Easy",
   "description": "Given the head of a singly linked list, return the middle node of the linked list.\n\nIf there are two middle nodes, return the second middle node.",
   "constraints": [

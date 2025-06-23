@@ -154,21 +154,6 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                 </div>
               </>
             )}
-            {problem.topics.length > 0 && (
-              <>
-                <span className="text-muted-foreground/50">•</span>
-                <div className="flex flex-wrap items-center gap-1.5">
-                  {problem.topics.map((topic) => (
-                    <span
-                      key={topic}
-                      className="px-2 py-0.5 rounded-full text-xs bg-accent/50 text-accent-foreground"
-                    >
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-              </>
-            )}
           </div>
         </div>
         <Separator />

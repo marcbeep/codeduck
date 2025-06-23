@@ -43,7 +43,6 @@ export async function generateMetadata({
       "programming",
       "algorithms",
       "data structures",
-      ...problem.topics.map((topic) => topic.toLowerCase()),
       ...problem.list.map((list) => list.toLowerCase()),
     ].join(", "),
     authors: [
@@ -135,12 +134,9 @@ export default async function ProblemPage({ params }: ProblemPageProps) {
       "@id": `https://code.marc.tt/problem/${slug}`,
     },
     articleSection: problem.category,
-    keywords: [
-      problem.difficulty,
-      problem.category,
-      ...problem.topics,
-      ...problem.list,
-    ].join(", "),
+    keywords: [problem.difficulty, problem.category, ...problem.list].join(
+      ", "
+    ),
     about: {
       "@type": "Thing",
       name: "Coding Interview Preparation",

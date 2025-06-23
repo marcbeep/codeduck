@@ -3,7 +3,6 @@
   "title": "Subsets",
   "list": ["grind75"],
   "category": "Backtracking",
-  "topics": ["Array", "Backtracking", "Bit Manipulation"],
   "difficulty": "Medium",
   "description": "Given an integer array nums of unique elements, return all possible subsets (the power set).\n\nThe solution set must not contain duplicate subsets. Return the solution in any order.",
   "constraints": [

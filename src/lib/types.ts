@@ -18,6 +18,5 @@ export type LeetCodeProblem = {
   difficulty: "Easy" | "Medium" | "Hard";
   testCases: TestCase[];
   constraints: string[];
-  topics: string[];
   list: string[];
 };

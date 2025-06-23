@@ -3,7 +3,6 @@
   "title": "Merge Two Sorted Lists",
   "list": ["grind75"],
   "category": "Linked List",
-  "topics": ["Linked List", "Recursion"],
   "difficulty": "Easy",
   "description": "You are given the heads of two sorted linked lists list1 and list2.\n\nMerge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists.\n\nReturn the head of the merged linked list.",
   "constraints": [

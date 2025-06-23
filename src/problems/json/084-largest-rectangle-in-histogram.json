@@ -3,7 +3,6 @@
   "title": "Largest Rectangle in Histogram",
   "list": ["grind75"],
   "category": "Stack",
-  "topics": ["Array", "Stack", "Monotonic Stack"],
   "difficulty": "Hard",
   "description": "Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.",
   "constraints": ["1 <= heights.length <= 105", "0 <= heights[i] <= 104"],

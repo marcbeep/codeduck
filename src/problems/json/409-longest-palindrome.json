@@ -3,7 +3,6 @@
   "title": "Longest Palindrome",
   "list": ["grind75"],
   "category": "String",
-  "topics": ["String", "Hash Table", "Greedy"],
   "difficulty": "Easy",
   "description": "Given a string s which consists of lowercase or uppercase letters, return the length of the longest palindrome that can be built with those letters.\n\nLetters are case sensitive, for example, \"Aa\" is not considered a palindrome here.",
   "constraints": [

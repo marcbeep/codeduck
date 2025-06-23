@@ -3,7 +3,6 @@
   "title": "Contains Duplicate",
   "list": ["grind75"],
   "category": "Array",
-  "topics": ["Array", "Hash Table", "Sorting"],
   "difficulty": "Easy",
   "description": "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
   "constraints": ["1 <= nums.length <= 105", "-109 <= nums[i] <= 109"],

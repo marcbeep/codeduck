@@ -3,7 +3,6 @@
   "title": "Spiral Matrix",
   "list": ["grind75"],
   "category": "Matrix",
-  "topics": ["Array", "Matrix", "Simulation"],
   "difficulty": "Medium",
   "description": "Given an m x n matrix, return all elements of the matrix in spiral order.",
   "constraints": [
