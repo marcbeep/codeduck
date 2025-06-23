@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { LeetCodeProblem } from "@/lib/types";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
@@ -13,10 +13,9 @@ import {
   Link,
   Check,
 } from "lucide-react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
 import { generateShareUrl, copyToClipboard } from "@/lib/sharing";
+import { highlightPythonCodeToHtml } from "@/lib/utils";
 
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
@@ -35,6 +34,7 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
   const [showSolution, setShowSolution] = useState(false);
   const [showTestCases, setShowTestCases] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [highlightedCode, setHighlightedCode] = useState<string | null>(null);
 
   // Memoize expensive operations
   const { code, explanation } = useMemo(() => {
@@ -43,6 +43,15 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
       explanation: problem.solution?.explanation || "",
     };
   }, [problem.solution]);
+
+  // Highlight code when it changes
+  useEffect(() => {
+    if (code) {
+      highlightPythonCodeToHtml(code).then(setHighlightedCode);
+    } else {
+      setHighlightedCode(null);
+    }
+  }, [code]);
 
   const handleShare = async () => {
     const shareUrl = generateShareUrl(problem);
@@ -271,19 +280,21 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                   </div>
 
                   {code && (
-                    <div className="rounded-lg overflow-hidden">
-                      <SyntaxHighlighter
-                        language="python"
-                        style={oneLight}
-                        customStyle={{
-                          fontFamily: "var(--font-noto-sans-mono)",
-                          margin: 0,
-                          fontSize: "14px",
-                          lineHeight: "1.4",
-                        }}
-                      >
-                        {code}
-                      </SyntaxHighlighter>
+                    <div className="rounded-lg overflow-hidden bg-accent/30 p-4">
+                      {highlightedCode ? (
+                        <div
+                          className="shiki code-block text-sm font-mono whitespace-pre-wrap overflow-x-auto"
+                          style={{
+                            fontFamily:
+                              "var(--font-noto-sans-mono), 'Noto Sans Mono', ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace",
+                          }}
+                          dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                        />
+                      ) : (
+                        <pre className="text-sm font-mono whitespace-pre-wrap overflow-x-auto">
+                          <code>{code}</code>
+                        </pre>
+                      )}
                     </div>
                   )}
 
