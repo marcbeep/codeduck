@@ -2,7 +2,7 @@
   "id": 53,
   "title": "Maximum Subarray",
   "list": ["grind75"],
-  "category": "Array",
+  "category": "Kadane Algorithm",
   "topics": ["Array", "Divide and Conquer", "Dynamic Programming"],
   "difficulty": "Medium",
   "description": "Given an integer array nums, find the subarray with the largest sum, and return its sum.",

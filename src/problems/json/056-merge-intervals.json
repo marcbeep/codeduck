@@ -2,7 +2,7 @@
   "id": 56,
   "title": "Merge Intervals",
   "list": ["grind75"],
-  "category": "Array",
+  "category": "Intervals",
   "topics": ["Array", "Sorting"],
   "difficulty": "Medium",
   "description": "Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.",

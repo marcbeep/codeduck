@@ -2,7 +2,7 @@
   "id": 23,
   "title": "Merge k Sorted Lists",
   "list": ["grind75"],
-  "category": "Linked List",
+  "category": "Heap",
   "topics": [
     "Linked List",
     "Divide and Conquer",

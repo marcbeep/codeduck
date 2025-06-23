@@ -2,7 +2,7 @@
   "id": 42,
   "title": "Trapping Rain Water",
   "list": ["grind75"],
-  "category": "Array",
+  "category": "1D DP",
   "topics": [
     "Array",
     "Two Pointers",

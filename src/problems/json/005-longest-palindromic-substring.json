@@ -2,7 +2,7 @@
   "id": 5,
   "title": "Longest Palindromic Substring",
   "list": ["grind75"],
-  "category": "String",
+  "category": "1D DP",
   "topics": ["String", "Dynamic Programming"],
   "difficulty": "Medium",
   "description": "Given a string s, return the longest palindromic substring in s.",

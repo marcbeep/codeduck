@@ -2,7 +2,7 @@
   "id": 67,
   "title": "Add Binary",
   "list": ["grind75"],
-  "category": "String",
+  "category": "Array/String",
   "topics": ["String", "Math", "Bit Manipulation", "Simulation"],
   "difficulty": "Easy",
   "description": "Given two binary strings a and b, return their sum as a binary string.",

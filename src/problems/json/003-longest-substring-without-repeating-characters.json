@@ -2,7 +2,7 @@
   "id": 3,
   "title": "Longest Substring Without Repeating Characters",
   "list": ["grind75"],
-  "category": "String",
+  "category": "Sliding Window",
   "topics": ["String", "Hash Table", "Sliding Window"],
   "difficulty": "Medium",
   "description": "Given a string s, find the length of the longest substring without repeating characters.",

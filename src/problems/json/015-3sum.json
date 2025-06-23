@@ -2,7 +2,7 @@
   "id": 15,
   "title": "3Sum",
   "list": ["grind75"],
-  "category": "Array",
+  "category": "Two Pointers",
   "topics": ["Array", "Two Pointers", "Sorting"],
   "difficulty": "Medium",
   "description": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.\n\nNotice that the solution set must not contain duplicate triplets.",
