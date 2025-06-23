@@ -13,17 +13,44 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import type { Dispatch, SetStateAction } from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import type { Category } from "@/lib/types";
-import { VALID_CATEGORIES } from "@/lib/types";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 type List = string;
 
-// Use the centralized categories from types
-const ORDERED_CATEGORIES = VALID_CATEGORIES;
+// The roadmap-based category groups
+const categoryGroups: { name: string; categories: Category[] }[] = [
+  {
+    name: "Fundamentals",
+    categories: ["Arrays & Hashing", "Two Pointers", "Stack"],
+  },
+  {
+    name: "Core Patterns",
+    categories: ["Binary Search", "Sliding Window", "Linked List", "Intervals"],
+  },
+  {
+    name: "Trees & Graphs",
+    categories: [
+      "Trees",
+      "Tries",
+      "Heap / Priority Queue",
+      "Backtracking",
+      "Graphs",
+      "Advanced Graphs",
+    ],
+  },
+  {
+    name: "Dynamic Programming",
+    categories: ["1-D DP", "2-D DP"],
+  },
+  {
+    name: "Advanced",
+    categories: ["Greedy", "Bit Manipulation", "Math & Geometry"],
+  },
+];
 
 interface SidebarProps {
   difficulties: Record<Difficulty, boolean>;
@@ -37,9 +64,7 @@ interface SidebarProps {
   onCategoryChange: Dispatch<SetStateAction<Record<Category, boolean>>>;
   onListChange: Dispatch<SetStateAction<Record<List, boolean>>>;
   onMaxCardsChange: (value: number) => void;
-  onResetFilters?: () => void;
   noCard?: boolean;
-  isResetting?: boolean;
 }
 
 export function Sidebar({
@@ -54,23 +79,11 @@ export function Sidebar({
   onCategoryChange,
   onListChange,
   onMaxCardsChange,
-  onResetFilters,
   noCard = false,
-  isResetting = false,
 }: SidebarProps) {
   const [isDifficultyOpen, setIsDifficultyOpen] = useState(true);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(true);
   const [isListsOpen, setIsListsOpen] = useState(true);
-  const [resetAnimation, setResetAnimation] = useState(false);
-
-  // Trigger reset animation when isResetting changes
-  useEffect(() => {
-    if (isResetting) {
-      setResetAnimation(true);
-      const timer = setTimeout(() => setResetAnimation(false), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isResetting]);
 
   const handleDifficultyChange = (
     difficulty: Difficulty,
@@ -159,14 +172,7 @@ export function Sidebar({
   };
 
   const content = (
-    <motion.div
-      className="p-4"
-      animate={
-        resetAnimation ? { scale: [1, 1.02, 1], opacity: [1, 0.8, 1] } : {}
-      }
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      style={{ willChange: resetAnimation ? "transform, opacity" : "auto" }}
-    >
+    <div className="p-4">
       <h2 className="text-lg font-semibold mb-4">Filters</h2>
       <div className="space-y-6">
         {/* Select All and Clear All */}
@@ -346,36 +352,46 @@ export function Sidebar({
 
           <CollapsibleContent className="pl-2">
             <div
-              className="transition-opacity duration-200"
+              className="transition-opacity duration-200 pr-4"
               style={{ opacity: isCategoriesOpen ? 1 : 0 }}
             >
-              <ScrollArea className="h-[200px] pr-4">
-                <div className="space-y-2">
-                  {ORDERED_CATEGORIES.filter((category) =>
-                    availableCategories.includes(category)
-                  ).map((category) => (
-                    <div
-                      key={category}
-                      className="flex items-center space-x-2 group"
-                    >
-                      <Checkbox
-                        id={`category-${category}`}
-                        checked={categories[category]}
-                        onCheckedChange={(checked) => {
-                          handleCategoryChange(category, checked);
-                        }}
-                        className="cursor-pointer"
-                      />
-                      <Label
-                        htmlFor={`category-${category}`}
-                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
-                      >
-                        {category}
-                      </Label>
+              <div className="space-y-2">
+                {categoryGroups.map((group, groupIndex) => (
+                  <div key={group.name}>
+                    {groupIndex > 0 && <Separator className="my-3" />}
+                    <h4 className="mb-2 mt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {group.name}
+                    </h4>
+                    <div className="space-y-2">
+                      {group.categories
+                        .filter((category) =>
+                          availableCategories.includes(category)
+                        )
+                        .map((category) => (
+                          <div
+                            key={category}
+                            className="flex items-center space-x-2 group"
+                          >
+                            <Checkbox
+                              id={`category-${category}`}
+                              checked={categories[category]}
+                              onCheckedChange={(checked) => {
+                                handleCategoryChange(category, checked);
+                              }}
+                              className="cursor-pointer"
+                            />
+                            <Label
+                              htmlFor={`category-${category}`}
+                              className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                            >
+                              {category}
+                            </Label>
+                          </div>
+                        ))}
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
+                  </div>
+                ))}
+              </div>
             </div>
           </CollapsibleContent>
         </Collapsible>
@@ -410,45 +426,19 @@ export function Sidebar({
         </div>
         <Separator />
       </div>
-    </motion.div>
+    </div>
   );
 
   if (noCard) {
     return (
       <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">{content}</ScrollArea>
-        </div>
-        {onResetFilters && (
-          <div className="p-4 border-t bg-background">
-            <Button
-              variant="outline"
-              className="w-full cursor-pointer"
-              onClick={onResetFilters}
-            >
-              Reset Filters
-            </Button>
-          </div>
-        )}
+        <ScrollArea className="flex-1">{content}</ScrollArea>
       </div>
     );
   }
   return (
     <Card className="w-80 h-[calc(100vh-2rem)] mt-4 flex flex-col">
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full">{content}</ScrollArea>
-      </div>
-      {onResetFilters && (
-        <div className="p-4 border-t bg-background">
-          <Button
-            variant="outline"
-            className="w-full cursor-pointer"
-            onClick={onResetFilters}
-          >
-            Reset Filters
-          </Button>
-        </div>
-      )}
+      <ScrollArea className="flex-1">{content}</ScrollArea>
     </Card>
   );
 }

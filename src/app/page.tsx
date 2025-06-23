@@ -120,32 +120,9 @@ export default function Home() {
 
   // Add background color state
   const [backgroundClass, setBackgroundClass] = useState("");
-  const [isResettingFilters, setIsResettingFilters] = useState(false);
 
   // Add max cards state
   const [maxCards, setMaxCards] = useState(50);
-
-  // Reset all filters to default state
-  const resetFilters = () => {
-    setIsResettingFilters(true);
-    setDifficulties({
-      Easy: true,
-      Medium: true,
-      Hard: true,
-    });
-    setCategories(
-      Object.fromEntries(
-        availableCategories.map((category) => [category, true])
-      )
-    );
-    setLists(Object.fromEntries(availableLists.map((list) => [list, true])));
-    // Reset to default sorted order
-    setIsShuffled(false);
-    // maxCards will be automatically set by the useEffect when filters change
-
-    // Reset the animation state after a delay
-    setTimeout(() => setIsResettingFilters(false), 1200);
-  };
 
   // Filter problems based on current filters
   const filteredProblems = useMemo(() => {
@@ -342,8 +319,6 @@ export default function Home() {
                         onCategoryChange={setCategories}
                         onListChange={setLists}
                         onMaxCardsChange={setMaxCards}
-                        onResetFilters={resetFilters}
-                        isResetting={isResettingFilters}
                         noCard
                       />
                     </SheetContent>
@@ -522,8 +497,6 @@ export default function Home() {
                           onCategoryChange={setCategories}
                           onListChange={setLists}
                           onMaxCardsChange={setMaxCards}
-                          onResetFilters={resetFilters}
-                          isResetting={isResettingFilters}
                           noCard
                         />
                       </SheetContent>
