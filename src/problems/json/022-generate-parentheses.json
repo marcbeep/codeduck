@@ -1,0 +1,36 @@
+{
+  "id": 22,
+  "title": "Generate Parentheses",
+  "list": ["neetcode150"],
+  "category": "Stack",
+  "difficulty": "Medium",
+  "description": "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.",
+  "constraints": ["1 <= n <= 8"],
+  "testCases": [
+    {
+      "input": {
+        "n": 3
+      },
+      "output": ["((()))", "(()())", "(())()", "()(())", "()()()"],
+      "explanation": "All possible combinations of well-formed parentheses for n=3."
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "output": ["()"],
+      "explanation": "Only one possible combination for n=1."
+    },
+    {
+      "input": {
+        "n": 2
+      },
+      "output": ["(())", "()()"],
+      "explanation": "Two possible combinations for n=2."
+    }
+  ],
+  "solution": {
+    "code": "def generate_parenthesis(n: int) -> list[str]:\n    def backtrack(open_count: int, close_count: int, current: str):\n        # Base case: if we've used all parentheses\n        if open_count == n and close_count == n:\n            result.append(current)\n            return\n        \n        # Add opening parenthesis if we haven't used all\n        if open_count < n:\n            backtrack(open_count + 1, close_count, current + \"(\")\n        \n        # Add closing parenthesis if we have more open than close\n        if close_count < open_count:\n            backtrack(open_count, close_count + 1, current + \")\")\n    \n    result = []\n    backtrack(0, 0, \"\")\n    return result",
+    "explanation": "This solution uses backtracking with O(4^n/√n) time complexity:\n1. We use a recursive backtracking approach to generate all valid combinations\n2. We keep track of the number of opening and closing parentheses used\n3. At each step, we can add an opening parenthesis if we haven't used all n\n4. We can add a closing parenthesis if we have more opening than closing parentheses\n5. We continue until we've used all n pairs of parentheses\n\nKey insights:\n- We can only add a closing parenthesis if we have more opening than closing\n- This ensures we never create invalid combinations\n- The recursion naturally explores all valid paths\n- We only add to result when we've used exactly n opening and n closing parentheses\n\nExample for n=2:\n- Start: open=0, close=0, current=\"\"\n- Add (: open=1, close=0, current=\"(\"\n  - Add (: open=2, close=0, current=\"((\"\n    - Add ): open=2, close=1, current=\"(()\"\n      - Add ): open=2, close=2, current=\"(())\" -> add to result\n  - Add ): open=1, close=1, current=\"()\"\n    - Add (: open=2, close=1, current=\"()(\"\n      - Add ): open=2, close=2, current=\"()()\" -> add to result\n\nResult: [\"(())\", \"()()\"]\n\nThe time complexity is O(4^n/√n) as we generate all valid combinations. The space complexity is O(n) for the recursion stack."
+  }
+}
