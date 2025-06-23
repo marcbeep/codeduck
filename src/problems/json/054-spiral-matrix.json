@@ -1,10 +1,8 @@
 {
   "id": 54,
   "title": "Spiral Matrix",
-  "list": [
-    "grind75"
-  ],
-  "category": "Matrix",
+  "list": ["grind75"],
+  "category": "Arrays & Hashing",
   "difficulty": "Medium",
   "description": "Given an m x n matrix, return all elements of the matrix in spiral order.",
   "constraints": [
@@ -17,94 +15,33 @@
     {
       "input": {
         "matrix": [
-          [
-            1,
-            2,
-            3
-          ],
-          [
-            4,
-            5,
-            6
-          ],
-          [
-            7,
-            8,
-            9
-          ]
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9]
         ]
       },
-      "output": [
-        1,
-        2,
-        3,
-        6,
-        9,
-        8,
-        7,
-        4,
-        5
-      ],
+      "output": [1, 2, 3, 6, 9, 8, 7, 4, 5],
       "explanation": "We go right, down, left, up, then right again to complete the spiral."
     },
     {
       "input": {
         "matrix": [
-          [
-            1,
-            2,
-            3,
-            4
-          ],
-          [
-            5,
-            6,
-            7,
-            8
-          ],
-          [
-            9,
-            10,
-            11,
-            12
-          ]
+          [1, 2, 3, 4],
+          [5, 6, 7, 8],
+          [9, 10, 11, 12]
         ]
       },
-      "output": [
-        1,
-        2,
-        3,
-        4,
-        8,
-        12,
-        11,
-        10,
-        9,
-        5,
-        6,
-        7
-      ],
+      "output": [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7],
       "explanation": "We traverse the matrix in spiral order: right, down, left, up, right, down."
     },
     {
       "input": {
         "matrix": [
-          [
-            1,
-            2
-          ],
-          [
-            3,
-            4
-          ]
+          [1, 2],
+          [3, 4]
         ]
       },
-      "output": [
-        1,
-        2,
-        4,
-        3
-      ],
+      "output": [1, 2, 4, 3],
       "explanation": "Simple 2x2 matrix spiral traversal."
     }
   ],

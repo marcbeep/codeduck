@@ -1,10 +1,8 @@
 {
   "id": 322,
   "title": "Coin Change",
-  "list": [
-    "grind75"
-  ],
-  "category": "1D DP",
+  "list": ["grind75"],
+  "category": "1-D DP",
   "difficulty": "Medium",
   "description": "You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.\n\nReturn the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.\n\nYou may assume that you have an infinite number of each kind of coin.",
   "constraints": [
@@ -15,11 +13,7 @@
   "testCases": [
     {
       "input": {
-        "coins": [
-          1,
-          2,
-          5
-        ],
+        "coins": [1, 2, 5],
         "amount": 11
       },
       "output": 3,
@@ -27,9 +21,7 @@
     },
     {
       "input": {
-        "coins": [
-          2
-        ],
+        "coins": [2],
         "amount": 3
       },
       "output": -1,
@@ -37,9 +29,7 @@
     },
     {
       "input": {
-        "coins": [
-          1
-        ],
+        "coins": [1],
         "amount": 0
       },
       "output": 0,

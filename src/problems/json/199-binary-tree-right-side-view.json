@@ -1,10 +1,8 @@
 {
   "id": 199,
   "title": "Binary Tree Right Side View",
-  "list": [
-    "grind75"
-  ],
-  "category": "Binary Tree BFS",
+  "list": ["grind75"],
+  "category": "Trees",
   "difficulty": "Medium",
   "description": "Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.",
   "constraints": [
@@ -14,35 +12,16 @@
   "testCases": [
     {
       "input": {
-        "root": [
-          1,
-          2,
-          3,
-          null,
-          5,
-          null,
-          4
-        ]
+        "root": [1, 2, 3, null, 5, null, 4]
       },
-      "output": [
-        1,
-        3,
-        4
-      ],
+      "output": [1, 3, 4],
       "explanation": "When standing on the right side, you can see nodes 1, 3, and 4."
     },
     {
       "input": {
-        "root": [
-          1,
-          null,
-          3
-        ]
+        "root": [1, null, 3]
       },
-      "output": [
-        1,
-        3
-      ],
+      "output": [1, 3],
       "explanation": "When standing on the right side, you can see nodes 1 and 3."
     },
     {

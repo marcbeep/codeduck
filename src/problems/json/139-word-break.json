@@ -1,10 +1,8 @@
 {
   "id": 139,
   "title": "Word Break",
-  "list": [
-    "grind75"
-  ],
-  "category": "1D DP",
+  "list": ["grind75"],
+  "category": "1-D DP",
   "difficulty": "Medium",
   "description": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.\n\nNote that the same word in the dictionary may be reused multiple times in the segmentation.",
   "constraints": [
@@ -18,10 +16,7 @@
     {
       "input": {
         "s": "leetcode",
-        "wordDict": [
-          "leet",
-          "code"
-        ]
+        "wordDict": ["leet", "code"]
       },
       "output": true,
       "explanation": "Return true because \"leetcode\" can be segmented as \"leet code\"."
@@ -29,10 +24,7 @@
     {
       "input": {
         "s": "applepenapple",
-        "wordDict": [
-          "apple",
-          "pen"
-        ]
+        "wordDict": ["apple", "pen"]
       },
       "output": true,
       "explanation": "Return true because \"applepenapple\" can be segmented as \"apple pen apple\"."
@@ -40,13 +32,7 @@
     {
       "input": {
         "s": "catsandog",
-        "wordDict": [
-          "cats",
-          "dog",
-          "sand",
-          "and",
-          "cat"
-        ]
+        "wordDict": ["cats", "dog", "sand", "and", "cat"]
       },
       "output": false,
       "explanation": "Return false because \"catsandog\" cannot be segmented into words from the dictionary."

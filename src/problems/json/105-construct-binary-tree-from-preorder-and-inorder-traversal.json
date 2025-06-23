@@ -1,10 +1,8 @@
 {
   "id": 105,
   "title": "Construct Binary Tree from Preorder and Inorder Traversal",
-  "list": [
-    "grind75"
-  ],
-  "category": "Binary Tree General",
+  "list": ["grind75"],
+  "category": "Trees",
   "difficulty": "Medium",
   "description": "Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.",
   "constraints": [
@@ -18,61 +16,26 @@
   "testCases": [
     {
       "input": {
-        "preorder": [
-          3,
-          9,
-          20,
-          15,
-          7
-        ],
-        "inorder": [
-          9,
-          3,
-          15,
-          20,
-          7
-        ]
+        "preorder": [3, 9, 20, 15, 7],
+        "inorder": [9, 3, 15, 20, 7]
       },
-      "output": [
-        3,
-        9,
-        20,
-        null,
-        null,
-        15,
-        7
-      ],
+      "output": [3, 9, 20, null, null, 15, 7],
       "explanation": "The constructed binary tree is:\n    3\n   / \\\n  9  20\n     / \\\n    15  7"
     },
     {
       "input": {
-        "preorder": [
-          -1
-        ],
-        "inorder": [
-          -1
-        ]
+        "preorder": [-1],
+        "inorder": [-1]
       },
-      "output": [
-        -1
-      ],
+      "output": [-1],
       "explanation": "Single node tree."
     },
     {
       "input": {
-        "preorder": [
-          1,
-          2
-        ],
-        "inorder": [
-          2,
-          1
-        ]
+        "preorder": [1, 2],
+        "inorder": [2, 1]
       },
-      "output": [
-        1,
-        2
-      ],
+      "output": [1, 2],
       "explanation": "Tree with root and left child."
     }
   ],

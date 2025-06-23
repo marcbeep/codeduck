@@ -1,75 +1,75 @@
-001-two-sum.json - Hashmap
+001-two-sum.json - Arrays & Hashing
 003-longest-substring-without-repeating-characters.json - Sliding Window
 005-longest-palindromic-substring.json - Two Pointers
-008-string-to-integer-atoi.json - Array / String
+008-string-to-integer-atoi.json - Arrays & Hashing
 011-container-with-most-water.json - Two Pointers
 015-3sum.json - Two Pointers
 017-letter-combinations-of-a-phone-number.json - Backtracking
 020-valid-parentheses.json - Stack
 021-merge-two-sorted-lists.json - Linked List
-023-merge-k-sorted-lists.json - Heap
+023-merge-k-sorted-lists.json - Heap / Priority Queue
 033-search-in-rotated-sorted-array.json - Binary Search
 039-combination-sum.json - Backtracking
-042-trapping-rain-water.json - 1D DP
+042-trapping-rain-water.json - Two Pointers
 046-permutations.json - Backtracking
-053-maximum-subarray.json - 1D DP
-054-spiral-matrix.json - Matrix
+053-maximum-subarray.json - 1-D DP
+054-spiral-matrix.json - Arrays & Hashing
 056-merge-intervals.json - Intervals
 057-insert-interval.json - Intervals
-062-unique-paths.json - Multidimensional DP
+062-unique-paths.json - 2-D DP
 067-add-binary.json - Bit Manipulation
-070-climbing-stairs.json - 1D DP
+070-climbing-stairs.json - 1-D DP
 075-sort-colors.json - Two Pointers
 076-minimum-window-substring.json - Sliding Window
 078-subsets.json - Backtracking
 079-word-search.json - Backtracking
 084-largest-rectangle-in-histogram.json - Stack
-098-validate-binary-search-tree.json - Binary Search Tree
-102-binary-tree-level-order-traversal.json - Binary Tree BFS
-104-maximum-depth-of-binary-tree.json - Binary Tree General
-105-construct-binary-tree-from-preorder-and-inorder-traversal.json - Binary Tree General
-110-balanced-binary-tree.json - Binary Tree General
-121-best-time-to-buy-and-sell-stock.json - 1D DP
-1235-maximum-profit-in-job-scheduling.json - Multidimensional DP
+098-validate-binary-search-tree.json - Trees
+102-binary-tree-level-order-traversal.json - Trees
+104-maximum-depth-of-binary-tree.json - Trees
+105-construct-binary-tree-from-preorder-and-inorder-traversal.json - Trees
+110-balanced-binary-tree.json - Trees
+121-best-time-to-buy-and-sell-stock.json - Arrays & Hashing
+1235-maximum-profit-in-job-scheduling.json - 1-D DP
 125-valid-palindrome.json - Two Pointers
-127-word-ladder.json - Graph BFS
-133-clone-graph.json - Graph BFS
+127-word-ladder.json - Graphs
+133-clone-graph.json - Graphs
 139-word-break.json - 1D DP
 141-linked-list-cycle.json - Linked List
-146-lru-cache.json - Hashmap
+146-lru-cache.json - Arrays & Hashing
 150-evaluate-reverse-polish-notation.json - Stack
 155-min-stack.json - Stack
-169-majority-element.json - Hashmap
-199-binary-tree-right-side-view.json - Binary Tree BFS
-200-number-of-islands.json - Graph BFS
+169-majority-element.json - Arrays & Hashing
+199-binary-tree-right-side-view.json - Trees
+200-number-of-islands.json - Graphs
 206-reverse-linked-list.json - Linked List
-207-course-schedule.json - Graph BFS
-208-implement-trie-prefix-tree.json - Trie
-217-contains-duplicate.json - Hashmap
+207-course-schedule.json - Graphs
+208-implement-trie-prefix-tree.json - Tries
+217-contains-duplicate.json - Arrays & Hashing
 224-basic-calculator.json - Stack
-226-invert-binary-tree.json - Binary Tree General
-230-kth-smallest-element-in-a-bst.json - Binary Search Tree
+226-invert-binary-tree.json - Trees
+230-kth-smallest-element-in-a-bst.json - Trees
 232-implement-queue-using-stacks.json - Stack
-235-lowest-common-ancestor-of-a-binary-search-tree.json - Binary Search Tree
-236-lowest-common-ancestor-of-a-binary-tree.json - Binary Tree General
-238-product-of-array-except-self.json - Array / String
-242-valid-anagram.json - Hashmap
+235-lowest-common-ancestor-of-a-binary-search-tree.json - Trees
+236-lowest-common-ancestor-of-a-binary-tree.json - Trees
+238-product-of-array-except-self.json - Arrays & Hashing
+242-valid-anagram.json - Arrays & Hashing
 278-first-bad-version.json - Binary Search
-295-find-median-from-data-stream.json - Heap
-297-serialize-and-deserialize-binary-tree.json - Binary Tree General
-310-minimum-height-trees.json - Graph BFS
-322-coin-change.json - 1D DP
-383-ransom-note.json - Hashmap
-409-longest-palindrome.json - Hashmap
-416-partition-equal-subset-sum.json - Multidimensional DP
+295-find-median-from-data-stream.json - Heap / Priority Queue
+297-serialize-and-deserialize-binary-tree.json - Trees
+310-minimum-height-trees.json - Graphs
+322-coin-change.json - 1-D DP
+383-ransom-note.json - Arrays & Hashing
+409-longest-palindrome.json - Arrays & Hashing
+416-partition-equal-subset-sum.json - 1-D DP
 438-find-all-anagrams-in-a-string.json - Sliding Window
-542-01-matrix.json - Matrix
-543-diameter-of-binary-tree.json - Binary Tree General
-621-task-scheduler.json - Heap
+542-01-matrix.json - Graphs
+543-diameter-of-binary-tree.json - Trees
+621-task-scheduler.json - Heap / Priority Queue
 704-binary-search.json - Binary Search
-721-accounts-merge.json - Graph BFS
-733-flood-fill.json - Graph BFS
+721-accounts-merge.json - Graphs
+733-flood-fill.json - Graphs
 876-middle-of-the-linked-list.json - Linked List
-973-k-closest-points-to-origin.json - Heap
-981-time-based-key-value-store.json - Hashmap
-994-rotting-oranges.json - Graph BFS
+973-k-closest-points-to-origin.json - Heap / Priority Queue
+981-time-based-key-value-store.json - Arrays & Hashing
+994-rotting-oranges.json - Graphs

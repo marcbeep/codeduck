@@ -5,7 +5,7 @@
 "title": "Valid Parentheses",
 // use the default list here
 "list": ["grind75"],
-// Possible categories: Array / String, Two Pointers, Sliding Window, Matrix, Hashmap, Intervals, Stack, Linked List, Binary Tree General, Binary Tree BFS, Binary Search Tree, Graph General, Graph BFS, Trie, Backtracking, Divide & Conquer, Kadane Algorithm, Binary Search, Heap, Bit Manipulation, Math, 1D DP, Multidimensional DP
+// Possible categories: Arrays & Hashing, Two Pointers, Stack, Binary Search, Sliding Window, Linked List, Trees, Tries, Heap / Priority Queue, Backtracking, Intervals, Greedy, Advanced Graphs, Graphs, 1-D DP, 2-D DP, Bit Manipulation, Math & Geometry
 "category": "Stack",
 "difficulty": "Easy",
 "description": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.",

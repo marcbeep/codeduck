@@ -2,7 +2,7 @@
   "id": 169,
   "title": "Majority Element",
   "list": ["grind75"],
-  "category": "Hashmap",
+  "category": "Arrays & Hashing",
   "difficulty": "Easy",
   "description": "Given an array nums of size n, return the majority element.\n\nThe majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.",
   "constraints": [

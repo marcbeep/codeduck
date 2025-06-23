@@ -11,55 +11,45 @@ export type TestCase = {
 
 // Definitive list of categories from template.md
 export type Category =
-  | "Array / String"
+  | "Arrays & Hashing"
   | "Two Pointers"
-  | "Sliding Window"
-  | "Matrix"
-  | "Hashmap"
-  | "Intervals"
   | "Stack"
-  | "Linked List"
-  | "Binary Tree General"
-  | "Binary Tree BFS"
-  | "Binary Search Tree"
-  | "Graph General"
-  | "Graph BFS"
-  | "Trie"
-  | "Backtracking"
-  | "Divide & Conquer"
-  | "Kadane Algorithm"
   | "Binary Search"
-  | "Heap"
+  | "Sliding Window"
+  | "Linked List"
+  | "Trees"
+  | "Tries"
+  | "Heap / Priority Queue"
+  | "Backtracking"
+  | "Intervals"
+  | "Greedy"
+  | "Advanced Graphs"
+  | "Graphs"
+  | "1-D DP"
+  | "2-D DP"
   | "Bit Manipulation"
-  | "Math"
-  | "1D DP"
-  | "Multidimensional DP";
+  | "Math & Geometry";
 
-// Array of all valid categories for runtime validation
+// Array of all valid categories for runtime validation (in predefined order)
 export const VALID_CATEGORIES: Category[] = [
-  "Array / String",
+  "Arrays & Hashing",
   "Two Pointers",
-  "Sliding Window",
-  "Matrix",
-  "Hashmap",
-  "Intervals",
   "Stack",
-  "Linked List",
-  "Binary Tree General",
-  "Binary Tree BFS",
-  "Binary Search Tree",
-  "Graph General",
-  "Graph BFS",
-  "Trie",
-  "Backtracking",
-  "Divide & Conquer",
-  "Kadane Algorithm",
   "Binary Search",
-  "Heap",
+  "Sliding Window",
+  "Linked List",
+  "Trees",
+  "Tries",
+  "Heap / Priority Queue",
+  "Backtracking",
+  "Intervals",
+  "Greedy",
+  "Advanced Graphs",
+  "Graphs",
+  "1-D DP",
+  "2-D DP",
   "Bit Manipulation",
-  "Math",
-  "1D DP",
-  "Multidimensional DP",
+  "Math & Geometry",
 ];
 
 // Utility function to validate if a string is a valid category
