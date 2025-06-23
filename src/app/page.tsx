@@ -353,152 +353,14 @@ export default function Home() {
         <div className="flex-1 flex flex-col items-center justify-start gap-8 p-4 mt-4">
           {/* Navigation bar - always visible */}
           <div className="w-full max-w-3xl mx-auto">
+            {/* Top row - Logo and Page Count */}
             <div className="flex items-center justify-between w-full mb-4 px-2 mt-4 md:mt-8">
               {/* Left side - Brand Logo */}
-              <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
+              <div className="flex items-center">
                 <Brand size="md" showText={true} />
-
-                {/* Filter, Shuffle, and Search buttons */}
-                <div className="flex gap-1 sm:gap-2 md:gap-3">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Sheet>
-                          <SheetTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer text-xs sm:text-sm"
-                              disabled={isDailyMode}
-                            >
-                              <Filter className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                              <span className="hidden xs:inline">Filters</span>
-                              <span className="xs:hidden">Filter</span>
-                            </Button>
-                          </SheetTrigger>
-                          <SheetContent
-                            side="left"
-                            className="p-0 max-w-xs transition-all duration-300 ease-in-out"
-                          >
-                            <Sidebar
-                              difficulties={difficulties}
-                              categories={categories}
-                              lists={lists}
-                              availableCategories={availableCategories}
-                              availableLists={availableLists}
-                              maxCards={maxCards}
-                              maxCardsAvailable={totalFilteredProblems}
-                              onDifficultyChange={setDifficulties}
-                              onCategoryChange={setCategories}
-                              onListChange={setLists}
-                              onMaxCardsChange={setMaxCards}
-                              noCard
-                            />
-                          </SheetContent>
-                        </Sheet>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          {isDailyMode
-                            ? "Filters disabled in daily mode"
-                            : "Filters"}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={handleShuffle}
-                          className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
-                          disabled={
-                            problems.length === 0 || isShuffling || isDailyMode
-                          }
-                        >
-                          <motion.div
-                            animate={
-                              isShuffling ? { rotate: 360 } : { rotate: 0 }
-                            }
-                            transition={{ duration: 0.3, ease: "easeOut" }}
-                            style={{ willChange: "transform" }}
-                          >
-                            <Shuffle className="h-3 w-3 sm:h-4 sm:w-4" />
-                          </motion.div>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          {isDailyMode
-                            ? "Shuffle disabled in daily mode"
-                            : "Shuffle Deck"}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={isDailyMode ? "default" : "outline"}
-                          size="sm"
-                          onClick={
-                            isDailyMode ? exitDailyMode : handleDailyProblems
-                          }
-                          className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
-                          disabled={problems.length === 0 || isShuffling}
-                        >
-                          <motion.div
-                            animate={
-                              isShuffling ? { rotate: 360 } : { rotate: 0 }
-                            }
-                            transition={{ duration: 0.3, ease: "easeOut" }}
-                            style={{ willChange: "transform" }}
-                          >
-                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-                          </motion.div>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          {isDailyMode ? "Exit Daily Mode" : "Daily Problems"}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setSearchOpen(true)}
-                          className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
-                          disabled={
-                            displayedProblems.length === 0 || isDailyMode
-                          }
-                        >
-                          <Search className="h-3 w-3 sm:h-4 sm:w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          {isDailyMode
-                            ? "Search disabled in daily mode"
-                            : "Search Problems"}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
               </div>
 
-              {/* Center - Card counter or status */}
+              {/* Right side - Page Count */}
               <div className="text-sm text-muted-foreground text-center font-medium">
                 {displayedProblems.length > 0
                   ? `${index + 1} / ${displayedProblems.length}${
@@ -507,6 +369,146 @@ export default function Home() {
                         : ""
                     }${isDailyMode ? " • Daily" : ""}`
                   : `${problems.length} problems available`}
+              </div>
+            </div>
+
+            {/* Second row - Action Buttons and Navigation */}
+            <div className="flex items-center justify-between w-full mb-4 px-2">
+              {/* Left side - Filter, Shuffle, Daily, and Search buttons */}
+              <div className="flex gap-1 sm:gap-2 md:gap-3">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Sheet>
+                        <SheetTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer text-xs sm:text-sm"
+                            disabled={isDailyMode}
+                          >
+                            <Filter className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                            <span className="hidden xs:inline">Filters</span>
+                            <span className="xs:hidden">Filter</span>
+                          </Button>
+                        </SheetTrigger>
+                        <SheetContent
+                          side="left"
+                          className="p-0 max-w-xs transition-all duration-300 ease-in-out"
+                        >
+                          <Sidebar
+                            difficulties={difficulties}
+                            categories={categories}
+                            lists={lists}
+                            availableCategories={availableCategories}
+                            availableLists={availableLists}
+                            maxCards={maxCards}
+                            maxCardsAvailable={totalFilteredProblems}
+                            onDifficultyChange={setDifficulties}
+                            onCategoryChange={setCategories}
+                            onListChange={setLists}
+                            onMaxCardsChange={setMaxCards}
+                            noCard
+                          />
+                        </SheetContent>
+                      </Sheet>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        {isDailyMode
+                          ? "Filters disabled in daily mode"
+                          : "Filters"}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleShuffle}
+                        className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
+                        disabled={
+                          problems.length === 0 || isShuffling || isDailyMode
+                        }
+                      >
+                        <motion.div
+                          animate={
+                            isShuffling ? { rotate: 360 } : { rotate: 0 }
+                          }
+                          transition={{ duration: 0.3, ease: "easeOut" }}
+                          style={{ willChange: "transform" }}
+                        >
+                          <Shuffle className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </motion.div>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        {isDailyMode
+                          ? "Shuffle disabled in daily mode"
+                          : "Shuffle Deck"}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={isDailyMode ? "default" : "outline"}
+                        size="sm"
+                        onClick={
+                          isDailyMode ? exitDailyMode : handleDailyProblems
+                        }
+                        className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
+                        disabled={problems.length === 0 || isShuffling}
+                      >
+                        <motion.div
+                          animate={
+                            isShuffling ? { rotate: 360 } : { rotate: 0 }
+                          }
+                          transition={{ duration: 0.3, ease: "easeOut" }}
+                          style={{ willChange: "transform" }}
+                        >
+                          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </motion.div>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        {isDailyMode ? "Exit Daily Mode" : "Daily Problems"}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSearchOpen(true)}
+                        className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
+                        disabled={displayedProblems.length === 0 || isDailyMode}
+                      >
+                        <Search className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        {isDailyMode
+                          ? "Search disabled in daily mode"
+                          : "Search Problems"}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
 
               {/* Right side - Navigation buttons */}
