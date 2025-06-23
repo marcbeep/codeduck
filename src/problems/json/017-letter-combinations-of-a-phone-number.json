@@ -1,9 +1,7 @@
 {
   "id": 17,
   "title": "Letter Combinations of a Phone Number",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75", "neetcode150"],
   "category": "Backtracking",
   "difficulty": "Medium",
   "description": "Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.\n\nA mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.\n\n2 -> abc\n3 -> def\n4 -> ghi\n5 -> jkl\n6 -> mno\n7 -> pqrs\n8 -> tuv\n9 -> wxyz",
@@ -16,17 +14,7 @@
       "input": {
         "digits": "23"
       },
-      "output": [
-        "ad",
-        "ae",
-        "af",
-        "bd",
-        "be",
-        "bf",
-        "cd",
-        "ce",
-        "cf"
-      ],
+      "output": ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"],
       "explanation": "2 maps to 'abc' and 3 maps to 'def', so we get all combinations: ad, ae, af, bd, be, bf, cd, ce, cf."
     },
     {
@@ -40,11 +28,7 @@
       "input": {
         "digits": "2"
       },
-      "output": [
-        "a",
-        "b",
-        "c"
-      ],
+      "output": ["a", "b", "c"],
       "explanation": "2 maps to 'abc', so we get a, b, c."
     }
   ],

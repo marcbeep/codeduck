@@ -1,9 +1,7 @@
 {
   "id": 78,
   "title": "Subsets",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75", "neetcode150"],
   "category": "Backtracking",
   "difficulty": "Medium",
   "description": "Given an integer array nums of unique elements, return all possible subsets (the power set).\n\nThe solution set must not contain duplicate subsets. Return the solution in any order.",
@@ -15,77 +13,23 @@
   "testCases": [
     {
       "input": {
-        "nums": [
-          1,
-          2,
-          3
-        ]
+        "nums": [1, 2, 3]
       },
-      "output": [
-        [],
-        [
-          1
-        ],
-        [
-          2
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          3
-        ],
-        [
-          1,
-          3
-        ],
-        [
-          2,
-          3
-        ],
-        [
-          1,
-          2,
-          3
-        ]
-      ],
+      "output": [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]],
       "explanation": "All possible subsets of [1, 2, 3] are shown."
     },
     {
       "input": {
-        "nums": [
-          0
-        ]
+        "nums": [0]
       },
-      "output": [
-        [],
-        [
-          0
-        ]
-      ],
+      "output": [[], [0]],
       "explanation": "The subsets of a single element are the empty set and the element itself."
     },
     {
       "input": {
-        "nums": [
-          1,
-          2
-        ]
+        "nums": [1, 2]
       },
-      "output": [
-        [],
-        [
-          1
-        ],
-        [
-          2
-        ],
-        [
-          1,
-          2
-        ]
-      ],
+      "output": [[], [1], [2], [1, 2]],
       "explanation": "All possible subsets of [1, 2]."
     }
   ],

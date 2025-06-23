@@ -1,0 +1,48 @@
+{
+  "id": 40,
+  "title": "Combination Sum II",
+  "list": ["neetcode150"],
+  "category": "Backtracking",
+  "difficulty": "Medium",
+  "description": "Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.\n\nEach number in candidates may only be used once in the combination.\n\nNote: The solution set must not contain duplicate combinations.",
+  "constraints": [
+    "1 <= candidates.length <= 100",
+    "1 <= candidates[i] <= 50",
+    "1 <= target <= 30"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "candidates": [10, 1, 2, 7, 6, 1, 5],
+        "target": 8
+      },
+      "output": [
+        [1, 1, 6],
+        [1, 2, 5],
+        [1, 7],
+        [2, 6]
+      ],
+      "explanation": "Multiple combinations sum to 8: [1,1,6], [1,2,5], [1,7], and [2,6]."
+    },
+    {
+      "input": {
+        "candidates": [2, 5, 2, 1, 2],
+        "target": 5
+      },
+      "output": [[1, 2, 2], [5]],
+      "explanation": "Two unique combinations sum to 5: [1,2,2] and [5]."
+    },
+    {
+      "input": {
+        "candidates": [2, 3, 5],
+        "target": 8
+      },
+      "output": [[3, 5]],
+      "explanation": "Only one combination sums to 8: [3,5]."
+    }
+  ],
+  "solution": {
+    "code": "def combinationSum2(candidates: list[int], target: int) -> list[list[int]]:\n    def backtrack(start: int, target: int, path: list[int]):\n        if target == 0:\n            result.append(path[:])\n            return\n        \n        if target < 0:\n            return\n        \n        for i in range(start, len(candidates)):\n            # Skip duplicates to avoid duplicate combinations\n            if i > start and candidates[i] == candidates[i-1]:\n                continue\n            \n            path.append(candidates[i])\n            # Use i+1 since we can't reuse the same element\n            backtrack(i + 1, target - candidates[i], path)\n            path.pop()\n    \n    result = []\n    candidates.sort()  # Sort to handle duplicates\n    backtrack(0, target, [])\n    return result",
+    "explanation": "This solution uses backtracking with duplicate handling:\n1. We sort the candidates first to group duplicates together\n2. We use a recursive backtracking approach similar to Combination Sum I\n3. Key difference: we can't reuse the same element, so we increment the start index\n4. To avoid duplicate combinations, we skip duplicates at the same level\n5. We only skip duplicates when i > start (not the first occurrence)\n\nExample: candidates = [10,1,2,7,6,1,5], target = 8\n- After sorting: [1,1,2,5,6,7,10]\n- Start with 1: [1] -> target 7\n  - Try 1: [1,1] -> target 6\n  - Try 2: [1,1,2] -> target 4\n  - Try 5: [1,1,5] -> target 1\n  - Try 6: [1,1,6] -> target 0 (found)\n  - Skip second 1 (duplicate)\n  - Try 2: [1,2] -> target 5\n  - Continue exploring...\n\nThe time complexity is O(2^n) in the worst case. The space complexity is O(n) for the recursion stack."
+  }
+}

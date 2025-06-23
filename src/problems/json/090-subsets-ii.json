@@ -1,0 +1,46 @@
+{
+  "id": 90,
+  "title": "Subsets II",
+  "list": ["neetcode150"],
+  "category": "Backtracking",
+  "difficulty": "Medium",
+  "description": "Given an integer array nums that may contain duplicates, return all possible subsets (the power set).\n\nThe solution set must not contain duplicate subsets. Return the solution in any order.",
+  "constraints": ["1 <= nums.length <= 10", "-10 <= nums[i] <= 10"],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 2, 2]
+      },
+      "output": [[], [1], [1, 2], [1, 2, 2], [2], [2, 2]],
+      "explanation": "All possible subsets of [1,2,2] without duplicates."
+    },
+    {
+      "input": {
+        "nums": [0]
+      },
+      "output": [[], [0]],
+      "explanation": "The subsets of a single element are the empty set and the element itself."
+    },
+    {
+      "input": {
+        "nums": [1, 1, 2, 2]
+      },
+      "output": [
+        [],
+        [1],
+        [1, 1],
+        [1, 1, 2],
+        [1, 1, 2, 2],
+        [1, 2],
+        [1, 2, 2],
+        [2],
+        [2, 2]
+      ],
+      "explanation": "All possible subsets of [1,1,2,2] without duplicates."
+    }
+  ],
+  "solution": {
+    "code": "def subsetsWithDup(nums: list[int]) -> list[list[int]]:\n    def backtrack(start: int, current: list[int]):\n        # Add current subset to result\n        result.append(current[:])\n        \n        # Try adding each element from start onwards\n        for i in range(start, len(nums)):\n            # Skip duplicates to avoid duplicate subsets\n            if i > start and nums[i] == nums[i-1]:\n                continue\n            \n            current.append(nums[i])\n            backtrack(i + 1, current)\n            current.pop()  # Backtrack\n    \n    result = []\n    nums.sort()  # Sort to handle duplicates\n    backtrack(0, [])\n    return result",
+    "explanation": "This solution uses backtracking with duplicate handling:\n1. We sort the nums array first to group duplicates together\n2. We use a recursive function similar to Subsets I\n3. Key difference: we skip duplicates at the same level to avoid duplicate subsets\n4. We only skip duplicates when i > start (not the first occurrence)\n5. This ensures we get all unique subsets\n\nExample: nums = [1,2,2]\n- After sorting: [1,2,2]\n- Start with []\n- Add 1: [1]\n  - Add 2: [1,2]\n    - Add 2: [1,2,2]\n    - Skip second 2 (duplicate)\n  - Skip second 2 (duplicate)\n- Add 2: [2]\n  - Add 2: [2,2]\n  - Skip second 2 (duplicate)\n- Result: [[], [1], [1,2], [1,2,2], [2], [2,2]]\n\nThe time complexity is O(2^n) as there are 2^n possible subsets. The space complexity is O(n) for the recursion stack."
+  }
+}
