@@ -1,0 +1,54 @@
+{
+  "id": 211,
+  "title": "Design Add And Search Words Data Structure",
+  "list": ["neetcode150"],
+  "category": "Tries",
+  "difficulty": "Medium",
+  "description": "Design a data structure that supports adding new words and finding if a string matches any previously added string.\n\nImplement the WordDictionary class:\n- WordDictionary() Initializes the object.\n- void addWord(word) Adds word to the data structure, it can be matched later.\n- bool search(word) Returns true if there is any string in the data structure that matches word or false otherwise. word may contain dots '.' where dots can be matched with any letter.",
+  "constraints": [
+    "1 <= word.length <= 25",
+    "word in addWord consists of lowercase English letters",
+    "word in search consists of '.' or lowercase English letters",
+    "There will be at most 104 calls in total to addWord and search"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": [
+          "WordDictionary",
+          "addWord",
+          "addWord",
+          "addWord",
+          "search",
+          "search",
+          "search",
+          "search"
+        ],
+        "values": [
+          [],
+          ["bad"],
+          ["dad"],
+          ["mad"],
+          ["pad"],
+          ["bad"],
+          [".ad"],
+          ["b.."]
+        ]
+      },
+      "output": [null, null, null, null, false, true, true, true],
+      "explanation": "WordDictionary wordDictionary = new WordDictionary();\nwordDictionary.addWord(\"bad\");\nwordDictionary.addWord(\"dad\");\nwordDictionary.addWord(\"mad\");\nwordDictionary.search(\"pad\"); // return False\nwordDictionary.search(\"bad\"); // return True\nwordDictionary.search(\".ad\"); // return True\nwordDictionary.search(\"b..\"); // return True"
+    },
+    {
+      "input": {
+        "operations": ["WordDictionary", "addWord", "search"],
+        "values": [[], ["a"], ["."]]
+      },
+      "output": [null, null, true],
+      "explanation": "WordDictionary wordDictionary = new WordDictionary();\nwordDictionary.addWord(\"a\");\nwordDictionary.search(\".\"); // return True"
+    }
+  ],
+  "solution": {
+    "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass WordDictionary:\n    def __init__(self):\n        self.root = TrieNode()\n    \n    def addWord(self, word: str) -> None:\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                node.children[char] = TrieNode()\n            node = node.children[char]\n        node.is_end = True\n    \n    def search(self, word: str) -> bool:\n        def dfs(j, root):\n            cur = root\n            \n            for i in range(j, len(word)):\n                c = word[i]\n                \n                if c == \".\":\n                    # Try all possible children\n                    for child in cur.children.values():\n                        if dfs(i + 1, child):\n                            return True\n                    return False\n                else:\n                    if c not in cur.children:\n                        return False\n                    cur = cur.children[c]\n            \n            return cur.is_end\n        \n        return dfs(0, self.root)\n\n# Alternative approach using iterative DFS\ndef searchIterative(self, word: str) -> bool:\n    stack = [(self.root, 0)]\n    \n    while stack:\n        node, index = stack.pop()\n        \n        if index == len(word):\n            if node.is_end:\n                return True\n            continue\n        \n        char = word[index]\n        \n        if char == \".\":\n            # Try all children\n            for child in node.children.values():\n                stack.append((child, index + 1))\n        else:\n            # Try specific character\n            if char in node.children:\n                stack.append((node.children[char], index + 1))\n    \n    return False\n\n# Alternative approach with BFS\ndef searchBFS(self, word: str) -> bool:\n    queue = [(self.root, 0)]\n    \n    while queue:\n        node, index = queue.pop(0)\n        \n        if index == len(word):\n            if node.is_end:\n                return True\n            continue\n        \n        char = word[index]\n        \n        if char == \".\":\n            # Try all children\n            for child in node.children.values():\n                queue.append((child, index + 1))\n        else:\n            # Try specific character\n            if char in node.children:\n                queue.append((node.children[char], index + 1))\n    \n    return False",
+    "explanation": "Three approaches are shown:\n\n1. Recursive DFS approach (recommended):\n   - Use a Trie data structure to store words\n   - For search with dots, use DFS to try all possible paths\n   - When encountering a dot, try all children of the current node\n   - Time complexity: O(26^m) where m is the length of the word (worst case)\n   - Space complexity: O(n) where n is the total number of characters in all words\n\n2. Iterative DFS approach:\n   - Use a stack to simulate recursion\n   - Process nodes in depth-first order\n   - Same logic as recursive approach but iterative\n   - Time complexity: O(26^m)\n   - Space complexity: O(n)\n\n3. BFS approach:\n   - Use a queue for breadth-first traversal\n   - Process nodes level by level\n   - Same logic but different traversal order\n   - Time complexity: O(26^m)\n   - Space complexity: O(n)\n\nKey insight: When encountering a dot, we need to try all possible characters (26 in English alphabet).\n\nExample with word \".ad\":\n- Start at root\n- First character is '.': try all children (a, b, c, ...)\n- If we find 'a', continue with 'd'\n- If we find 'd' and it's end of word, return True\n\nApplications: Autocomplete with wildcards, pattern matching, and more.\n\nThe recursive DFS approach is the most intuitive and commonly used solution for this problem."
+  }
+}

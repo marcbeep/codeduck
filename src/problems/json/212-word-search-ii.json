@@ -1,0 +1,55 @@
+{
+  "id": 212,
+  "title": "Word Search II",
+  "list": ["neetcode150"],
+  "category": "Tries",
+  "difficulty": "Hard",
+  "description": "Given an m x n board of characters and a list of strings words, return all words on the board.\n\nEach word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.",
+  "constraints": [
+    "m == board.length",
+    "n == board[i].length",
+    "1 <= m, n <= 12",
+    "1 <= words.length <= 3 * 104",
+    "1 <= words[i].length <= 10",
+    "board[i][j] is a lowercase English letter",
+    "words[i] consists of lowercase English letters"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "board": [
+          ["o", "a", "a", "n"],
+          ["e", "t", "a", "e"],
+          ["i", "h", "k", "r"],
+          ["i", "f", "l", "v"]
+        ],
+        "words": ["oath", "pea", "eat", "rain"]
+      },
+      "output": ["eat", "oath"],
+      "explanation": "We can find 'eat' and 'oath' on the board."
+    },
+    {
+      "input": {
+        "board": [
+          ["a", "b"],
+          ["c", "d"]
+        ],
+        "words": ["abcb"]
+      },
+      "output": [],
+      "explanation": "No word can be found on the board."
+    },
+    {
+      "input": {
+        "board": [["a", "a"]],
+        "words": ["aaa"]
+      },
+      "output": [],
+      "explanation": "Cannot reuse the same cell multiple times."
+    }
+  ],
+  "solution": {
+    "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n        self.word = \"\"\n\nclass Solution:\n    def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:\n        # Build Trie from words\n        root = TrieNode()\n        for word in words:\n            node = root\n            for char in word:\n                if char not in node.children:\n                    node.children[char] = TrieNode()\n                node = node.children[char]\n            node.is_end = True\n            node.word = word\n        \n        # DFS on board\n        result = set()\n        rows, cols = len(board), len(board[0])\n        \n        def dfs(r, c, node):\n            if (r < 0 or r >= rows or c < 0 or c >= cols or \n                board[r][c] == '#' or board[r][c] not in node.children):\n                return\n            \n            char = board[r][c]\n            curr_node = node.children[char]\n            \n            # Check if we found a word\n            if curr_node.is_end:\n                result.add(curr_node.word)\n                curr_node.is_end = False  # Avoid duplicates\n            \n            # Mark as visited\n            board[r][c] = '#'\n            \n            # Explore all directions\n            dfs(r + 1, c, curr_node)\n            dfs(r - 1, c, curr_node)\n            dfs(r, c + 1, curr_node)\n            dfs(r, c - 1, curr_node)\n            \n            # Backtrack\n            board[r][c] = char\n        \n        # Start DFS from each cell\n        for r in range(rows):\n            for c in range(cols):\n                dfs(r, c, root)\n        \n        return list(result)\n\n# Alternative approach with optimization\ndef findWordsOptimized(board, words):\n    # Build Trie\n    root = TrieNode()\n    for word in words:\n        node = root\n        for char in word:\n            if char not in node.children:\n                node.children[char] = TrieNode()\n            node = node.children[char]\n        node.is_end = True\n        node.word = word\n    \n    result = set()\n    rows, cols = len(board), len(board[0])\n    \n    def dfs(r, c, node):\n        if (r < 0 or r >= rows or c < 0 or c >= cols or \n            board[r][c] == '#' or board[r][c] not in node.children):\n            return\n        \n        char = board[r][c]\n        curr_node = node.children[char]\n        \n        if curr_node.is_end:\n            result.add(curr_node.word)\n            curr_node.is_end = False\n        \n        # Optimization: remove leaf nodes to avoid revisiting\n        if not curr_node.children:\n            del node.children[char]\n            return\n        \n        board[r][c] = '#'\n        \n        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:\n            dfs(r + dr, c + dc, curr_node)\n        \n        board[r][c] = char\n    \n    for r in range(rows):\n        for c in range(cols):\n            dfs(r, c, root)\n    \n    return list(result)\n\n# Alternative approach using set for words\ndef findWordsSet(board, words):\n    # Convert words to set for O(1) lookup\n    word_set = set(words)\n    result = set()\n    rows, cols = len(board), len(board[0])\n    \n    def dfs(r, c, path, visited):\n        if (r < 0 or r >= rows or c < 0 or c >= cols or \n            (r, c) in visited):\n            return\n        \n        path += board[r][c]\n        visited.add((r, c))\n        \n        # Check if current path is a word\n        if path in word_set:\n            result.add(path)\n        \n        # Continue DFS if path is a prefix of any word\n        if any(word.startswith(path) for word in word_set):\n            for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:\n                dfs(r + dr, c + dc, path, visited)\n        \n        visited.remove((r, c))\n    \n    for r in range(rows):\n        for c in range(cols):\n            dfs(r, c, \"\", set())\n    \n    return list(result)",
+    "explanation": "Three approaches are shown:\n\n1. Trie + DFS approach (recommended):\n   - Build a Trie from all words for efficient prefix checking\n   - Use DFS to explore the board\n   - For each cell, check if it leads to a valid word in the Trie\n   - Mark visited cells and backtrack\n   - Time complexity: O(m * n * 4^L) where L is the maximum word length\n   - Space complexity: O(k * L) where k is the number of words\n\n2. Optimized Trie approach:\n   - Same as first approach but with optimization\n   - Remove leaf nodes after finding words to avoid revisiting\n   - Reduces redundant searches\n   - Time complexity: O(m * n * 4^L)\n   - Space complexity: O(k * L)\n\n3. Set-based approach:\n   - Use a set to store words for O(1) lookup\n   - Check if current path is a prefix of any word\n   - Less efficient for large word lists\n   - Time complexity: O(m * n * 4^L * k)\n   - Space complexity: O(k)\n\nKey insight: Use a Trie to efficiently check if a path on the board can lead to a valid word.\n\nExample with board=[['o','a','a','n'],['e','t','a','e'],['i','h','k','r'],['i','f','l','v']] and words=['oath','pea','eat','rain']:\n- Start from 'o': check if 'o' is in Trie\n- Continue to 'a': check if 'oa' is a prefix\n- Continue to 't': check if 'oat' is a prefix\n- Continue to 'h': found 'oath'\n- Result: ['eat', 'oath']\n\nThe Trie + DFS approach is the most efficient and commonly used solution for this problem."
+  }
+}
