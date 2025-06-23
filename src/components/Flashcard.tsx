@@ -276,6 +276,7 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                         language="python"
                         style={oneLight}
                         customStyle={{
+                          fontFamily: "var(--font-noto-sans-mono)",
                           margin: 0,
                           fontSize: "14px",
                           lineHeight: "1.4",
