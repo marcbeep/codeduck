@@ -4,7 +4,7 @@ import Flashcard from "@/components/Flashcard";
 import { Sidebar } from "@/components/Sidebar";
 import { Brand } from "@/components/Brand";
 import { getProblems } from "@/lib/actions";
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
@@ -60,6 +60,8 @@ export default function Home() {
   );
   const [isShuffling, setIsShuffling] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  // Add state to track whether we should use shuffled order
+  const [isShuffled, setIsShuffled] = useState(false);
 
   // Move filter state to parent
   const [difficulties, setDifficulties] = useState<Record<Difficulty, boolean>>(
@@ -137,6 +139,8 @@ export default function Home() {
       )
     );
     setLists(Object.fromEntries(availableLists.map((list) => [list, true])));
+    // Reset to default sorted order
+    setIsShuffled(false);
     // maxCards will be automatically set by the useEffect when filters change
 
     // Reset the animation state after a delay
@@ -194,45 +198,28 @@ export default function Home() {
       }
       setShuffledProblems(shuffled);
       setIndex(0);
+      setIsShuffled(true);
       setIsShuffling(false);
     },
     []
   );
 
-  // Debounced shuffle function
-  const debouncedShuffleRef = useRef<NodeJS.Timeout | null>(null);
-  const debouncedShuffle = useCallback(
-    (problemsToShuffle: LeetCodeProblem[]) => {
-      // Clear any existing timeout
-      if (debouncedShuffleRef.current) {
-        clearTimeout(debouncedShuffleRef.current);
-      }
-
-      // Set new timeout
-      debouncedShuffleRef.current = setTimeout(() => {
-        shuffleProblems(problemsToShuffle);
-      }, 300); // Wait 300ms after last filter change
-    },
-    [shuffleProblems]
-  );
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (debouncedShuffleRef.current) {
-        clearTimeout(debouncedShuffleRef.current);
-      }
-    };
-  }, []);
-
-  // Handle initial load and filter changes (now debounced)
+  // Handle initial load and filter changes - use default order unless explicitly shuffled
   useEffect(() => {
     if (filteredProblems.length > 0 && !isLoading) {
-      debouncedShuffle(filteredProblems);
+      if (isShuffled) {
+        // If user has shuffled, maintain the shuffled order but update with new filtered problems
+        shuffleProblems(filteredProblems);
+      } else {
+        // Use default sorted order
+        setShuffledProblems(filteredProblems);
+        setIndex(0);
+      }
     }
-  }, [filteredProblems, isLoading, debouncedShuffle]);
+  }, [filteredProblems, isLoading, isShuffled, shuffleProblems]);
 
   const handleShuffle = () => {
+    setIsShuffled(true);
     shuffleProblems(filteredProblems);
   };
 
