@@ -1,0 +1,59 @@
+{
+  "id": 130,
+  "title": "Surrounded Regions",
+  "list": ["neetcode150"],
+  "category": "Graphs",
+  "difficulty": "Medium",
+  "description": "Given an m x n matrix board containing 'X' and 'O', capture all regions that are 4-directionally surrounded by 'X'.\n\nA region is captured by flipping all 'O's into 'X's in that surrounded region.",
+  "constraints": [
+    "m == board.length",
+    "n == board[i].length",
+    "1 <= m, n <= 200",
+    "board[i][j] is 'X' or 'O'"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "board": [
+          ["X", "X", "X", "X"],
+          ["X", "O", "O", "X"],
+          ["X", "X", "O", "X"],
+          ["X", "O", "X", "X"]
+        ]
+      },
+      "output": [
+        ["X", "X", "X", "X"],
+        ["X", "X", "X", "X"],
+        ["X", "X", "X", "X"],
+        ["X", "O", "X", "X"]
+      ],
+      "explanation": "Notice that an 'O' should not be flipped if it is on the border, or if it is adjacent to an 'O' on the border."
+    },
+    {
+      "input": {
+        "board": [["X"]]
+      },
+      "output": [["X"]],
+      "explanation": "Single cell with 'X'."
+    },
+    {
+      "input": {
+        "board": [
+          ["O", "O", "O"],
+          ["O", "O", "O"],
+          ["O", "O", "O"]
+        ]
+      },
+      "output": [
+        ["O", "O", "O"],
+        ["O", "O", "O"],
+        ["O", "O", "O"]
+      ],
+      "explanation": "All 'O's are on the border, so none are captured."
+    }
+  ],
+  "solution": {
+    "code": "def solve(board: list[list[str]]) -> None:\n    if not board or not board[0]:\n        return\n    \n    m, n = len(board), len(board[0])\n    \n    def dfs(i: int, j: int):\n        if (i < 0 or i >= m or j < 0 or j >= n or \n            board[i][j] != 'O'):\n            return\n        \n        # Mark as safe (not surrounded)\n        board[i][j] = 'T'\n        \n        # Explore all four directions\n        dfs(i+1, j)\n        dfs(i-1, j)\n        dfs(i, j+1)\n        dfs(i, j-1)\n    \n    # Mark all 'O's connected to border as safe\n    for i in range(m):\n        dfs(i, 0)      # Left border\n        dfs(i, n-1)    # Right border\n    for j in range(n):\n        dfs(0, j)      # Top border\n        dfs(m-1, j)    # Bottom border\n    \n    # Flip remaining 'O's to 'X' and restore 'T's to 'O'\n    for i in range(m):\n        for j in range(n):\n            if board[i][j] == 'O':\n                board[i][j] = 'X'\n            elif board[i][j] == 'T':\n                board[i][j] = 'O'",
+    "explanation": "This solution uses DFS with O(m*n) time complexity:\n1. We start DFS from all 'O's on the border and mark them as safe ('T')\n2. We explore all four directions from each border 'O'\n3. After DFS, all 'O's that are not marked as 'T' are surrounded\n4. We flip all remaining 'O's to 'X' and restore 'T's to 'O'\n\nThe time complexity is O(m*n) as we visit each cell at most once. The space complexity is O(m*n) for the recursion stack.\n\nThe key insight is that we reverse the problem - instead of finding surrounded regions, we find regions that are NOT surrounded (connected to border)."
+  }
+}

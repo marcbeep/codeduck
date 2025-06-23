@@ -1,0 +1,55 @@
+{
+  "id": 323,
+  "title": "Number of Connected Components In An Undirected Graph",
+  "list": ["neetcode150"],
+  "category": "Graphs",
+  "difficulty": "Medium",
+  "description": "You have a graph of n nodes. You are given an integer n and an array edges where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the graph.\n\nReturn the number of connected components in the graph.",
+  "constraints": [
+    "1 <= n <= 2000",
+    "1 <= edges.length <= 5000",
+    "edges[i].length == 2",
+    "0 <= ai, bi < n",
+    "ai != bi",
+    "There are no repeated edges"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [0, 1],
+          [1, 2],
+          [3, 4]
+        ]
+      },
+      "output": 2,
+      "explanation": "There are two connected components: [0, 1, 2] and [3, 4]."
+    },
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [0, 1],
+          [1, 2],
+          [2, 3],
+          [3, 4]
+        ]
+      },
+      "output": 1,
+      "explanation": "There is one connected component: [0, 1, 2, 3, 4]."
+    },
+    {
+      "input": {
+        "n": 3,
+        "edges": []
+      },
+      "output": 3,
+      "explanation": "There are three connected components: [0], [1], [2]."
+    }
+  ],
+  "solution": {
+    "code": "from collections import defaultdict\n\ndef countComponents(n: int, edges: list[list[int]]) -> int:\n    # Build adjacency list\n    graph = defaultdict(list)\n    for u, v in edges:\n        graph[u].append(v)\n        graph[v].append(u)\n    \n    # DFS to mark connected components\n    visited = set()\n    \n    def dfs(node: int):\n        if node in visited:\n            return\n        \n        visited.add(node)\n        \n        for neighbor in graph[node]:\n            dfs(neighbor)\n    \n    # Count connected components\n    components = 0\n    for node in range(n):\n        if node not in visited:\n            dfs(node)\n            components += 1\n    \n    return components",
+    "explanation": "This solution uses DFS with O(V + E) time complexity:\n1. Build an adjacency list representation of the graph\n2. Use a visited set to track which nodes have been explored\n3. For each unvisited node, start DFS to explore its connected component\n4. Increment component count for each new DFS call\n5. Return the total number of components\n\nThe time complexity is O(V + E) where V is the number of nodes and E is the number of edges. The space complexity is O(V + E) for the graph representation.\n\nThe key insight is that each DFS call explores exactly one connected component, so the number of DFS calls equals the number of components."
+  }
+}

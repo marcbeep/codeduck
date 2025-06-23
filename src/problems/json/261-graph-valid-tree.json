@@ -1,0 +1,60 @@
+{
+  "id": 261,
+  "title": "Graph Valid Tree",
+  "list": ["neetcode150"],
+  "category": "Graphs",
+  "difficulty": "Medium",
+  "description": "Given n nodes labeled from 0 to n-1 and a list of undirected edges (each edge is a pair of nodes), write a function to check whether these edges make up a valid tree.",
+  "constraints": [
+    "1 <= n <= 2000",
+    "0 <= edges.length <= 5000",
+    "edges[i].length == 2",
+    "0 <= ai, bi < n",
+    "ai != bi",
+    "All the pairs (ai, bi) are distinct"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [0, 1],
+          [0, 2],
+          [0, 3],
+          [1, 4]
+        ]
+      },
+      "output": true,
+      "explanation": "The given edges form a valid tree."
+    },
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [0, 1],
+          [1, 2],
+          [2, 3],
+          [1, 3],
+          [1, 4]
+        ]
+      },
+      "output": false,
+      "explanation": "The given edges form a graph with a cycle, so it's not a valid tree."
+    },
+    {
+      "input": {
+        "n": 4,
+        "edges": [
+          [0, 1],
+          [2, 3]
+        ]
+      },
+      "output": false,
+      "explanation": "The graph is not connected, so it's not a valid tree."
+    }
+  ],
+  "solution": {
+    "code": "from collections import defaultdict\n\ndef validTree(n: int, edges: list[list[int]]) -> bool:\n    if len(edges) != n - 1:\n        return False\n    \n    # Build adjacency list\n    graph = defaultdict(list)\n    for u, v in edges:\n        graph[u].append(v)\n        graph[v].append(u)\n    \n    # DFS to check connectivity and detect cycles\n    visited = set()\n    \n    def dfs(node: int, parent: int) -> bool:\n        if node in visited:\n            return False  # Cycle detected\n        \n        visited.add(node)\n        \n        for neighbor in graph[node]:\n            if neighbor != parent:  # Don't go back to parent\n                if not dfs(neighbor, node):\n                    return False\n        \n        return True\n    \n    # Start DFS from node 0\n    if not dfs(0, -1):\n        return False\n    \n    # Check if all nodes are visited (connected)\n    return len(visited) == n",
+    "explanation": "This solution uses DFS with O(V + E) time complexity:\n1. First check if the number of edges equals n-1 (necessary condition for tree)\n2. Build an adjacency list representation of the graph\n3. Use DFS to check connectivity and detect cycles\n4. During DFS, we track visited nodes and avoid going back to parent\n5. If we visit a node twice, we have a cycle\n6. Finally check if all nodes are visited (connected)\n\nThe time complexity is O(V + E) where V is the number of nodes and E is the number of edges. The space complexity is O(V + E) for the graph representation.\n\nThe key insight is that a valid tree must be connected and have no cycles, with exactly n-1 edges."
+  }
+}

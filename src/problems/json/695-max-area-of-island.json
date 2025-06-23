@@ -1,0 +1,55 @@
+{
+  "id": 695,
+  "title": "Max Area of Island",
+  "list": ["neetcode150"],
+  "category": "Graphs",
+  "difficulty": "Medium",
+  "description": "You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.\n\nThe area of an island is the number of cells with a value 1 in the island.\n\nReturn the maximum area of an island in grid. If there is no island, return 0.",
+  "constraints": [
+    "m == grid.length",
+    "n == grid[i].length",
+    "1 <= m, n <= 50",
+    "grid[i][j] is either 0 or 1"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+          [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0],
+          [0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
+        ]
+      },
+      "output": 6,
+      "explanation": "The answer is not 11, because the island must be connected 4-directionally."
+    },
+    {
+      "input": {
+        "grid": [[0, 0, 0, 0, 0, 0, 0, 0]]
+      },
+      "output": 0,
+      "explanation": "No islands in the grid."
+    },
+    {
+      "input": {
+        "grid": [
+          [1, 1, 0, 0, 0],
+          [1, 1, 0, 0, 0],
+          [0, 0, 0, 1, 1],
+          [0, 0, 0, 1, 1]
+        ]
+      },
+      "output": 4,
+      "explanation": "The largest island has area 4."
+    }
+  ],
+  "solution": {
+    "code": "def maxAreaOfIsland(grid: list[list[int]]) -> int:\n    if not grid or not grid[0]:\n        return 0\n    \n    m, n = len(grid), len(grid[0])\n    max_area = 0\n    \n    def dfs(i: int, j: int) -> int:\n        # Base case: out of bounds or water\n        if i < 0 or i >= m or j < 0 or j >= n or grid[i][j] == 0:\n            return 0\n        \n        # Mark current cell as visited\n        grid[i][j] = 0\n        \n        # Explore all four directions and sum up area\n        area = 1  # Current cell\n        area += dfs(i+1, j)  # down\n        area += dfs(i-1, j)  # up\n        area += dfs(i, j+1)  # right\n        area += dfs(i, j-1)  # left\n        \n        return area\n    \n    # Iterate through the grid\n    for i in range(m):\n        for j in range(n):\n            if grid[i][j] == 1:\n                max_area = max(max_area, dfs(i, j))\n    \n    return max_area",
+    "explanation": "This solution uses DFS with O(m*n) time complexity:\n1. We iterate through each cell in the grid\n2. When we find a '1' (land), we use DFS to calculate the area of that island\n3. During DFS, we mark visited cells as '0' to avoid revisiting\n4. We explore all four directions and sum up the area of connected land cells\n5. We keep track of the maximum area found\n\nThe time complexity is O(m*n) as we visit each cell at most once. The space complexity is O(m*n) in the worst case due to the recursion stack.\n\nThe key insight is that we need to mark visited cells to avoid counting the same island multiple times."
+  }
+}
