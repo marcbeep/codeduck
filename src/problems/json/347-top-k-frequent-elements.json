@@ -1,0 +1,44 @@
+{
+  "id": 347,
+  "title": "Top K Frequent Elements",
+  "list": ["neetcode150"],
+  "category": "Arrays & Hashing",
+  "difficulty": "Medium",
+  "description": "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.",
+  "constraints": [
+    "1 <= nums.length <= 105",
+    "-104 <= nums[i] <= 104",
+    "k is in the range [1, the number of unique elements in the array]",
+    "It is guaranteed that the answer is unique"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 1, 1, 2, 2, 3],
+        "k": 2
+      },
+      "output": [1, 2],
+      "explanation": "1 appears 3 times, 2 appears 2 times, 3 appears 1 time. Top 2 most frequent elements are [1, 2]."
+    },
+    {
+      "input": {
+        "nums": [1],
+        "k": 1
+      },
+      "output": [1],
+      "explanation": "Single element array."
+    },
+    {
+      "input": {
+        "nums": [1, 2, 3, 4, 5],
+        "k": 3
+      },
+      "output": [1, 2, 3],
+      "explanation": "All elements appear once, so any 3 elements can be returned."
+    }
+  ],
+  "solution": {
+    "code": "def top_k_frequent(nums: list[int], k: int) -> list[int]:\n    from collections import Counter\n    import heapq\n    \n    # Count frequency of each element\n    count = Counter(nums)\n    \n    # Use min heap to get top k frequent elements\n    # Store (-frequency, element) to make it a max heap\n    heap = []\n    for num, freq in count.items():\n        heapq.heappush(heap, (-freq, num))\n    \n    # Extract top k elements\n    result = []\n    for _ in range(k):\n        result.append(heapq.heappop(heap)[1])\n    \n    return result\n\n# Alternative approach using bucket sort\ndef top_k_frequent_bucket(nums: list[int], k: int) -> list[int]:\n    from collections import Counter\n    \n    # Count frequency of each element\n    count = Counter(nums)\n    \n    # Create buckets: bucket[i] contains elements with frequency i\n    max_freq = max(count.values())\n    buckets = [[] for _ in range(max_freq + 1)]\n    \n    for num, freq in count.items():\n        buckets[freq].append(num)\n    \n    # Extract top k elements from buckets\n    result = []\n    for freq in range(max_freq, 0, -1):\n        result.extend(buckets[freq])\n        if len(result) >= k:\n            break\n    \n    return result[:k]",
+    "explanation": "Two approaches are shown:\n\n1. Heap approach:\n   - Count frequency of each element using Counter\n   - Use a min heap to get top k frequent elements\n   - Store (-frequency, element) to make it effectively a max heap\n   - Time complexity: O(n log n) in worst case\n   - Space complexity: O(n)\n\n2. Bucket sort approach:\n   - Count frequency of each element\n   - Create buckets where bucket[i] contains elements with frequency i\n   - Extract elements from highest frequency buckets first\n   - Time complexity: O(n)\n   - Space complexity: O(n)\n\nThe bucket sort approach is more efficient for this problem, especially when k is large relative to the number of unique elements."
+  }
+}
