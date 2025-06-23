@@ -150,4 +150,47 @@
       "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
       monospace !important;
   }
+
+  /* Performance optimizations for animations */
+  * {
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Optimize transforms */
+  [data-state="open"],
+  [data-state="closed"],
+  .motion-preset-slide-down,
+  .motion-preset-slide-up,
+  .motion-preset-fade,
+  button:hover,
+  button:active {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Optimize scrolling */
+  * {
+    scroll-behavior: smooth;
+    overflow-anchor: none;
+  }
+
+  /* GPU acceleration for common elements */
+  .card,
+  button,
+  [role="button"] {
+    transform: translateZ(0);
+  }
 }

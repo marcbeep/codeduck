@@ -145,86 +145,83 @@ export function Sidebar({
     });
   };
 
+  // Global select all and clear all functions
+  const selectAllFilters = () => {
+    selectAllDifficulties();
+    selectAllCategories();
+    selectAllLists();
+  };
+
+  const clearAllFilters = () => {
+    clearDifficulties();
+    clearCategories();
+    clearLists();
+  };
+
   const content = (
     <motion.div
       className="p-4"
       animate={
         resetAnimation ? { scale: [1, 1.02, 1], opacity: [1, 0.8, 1] } : {}
       }
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      style={{ willChange: resetAnimation ? "transform, opacity" : "auto" }}
     >
       <h2 className="text-lg font-semibold mb-4">Filters</h2>
-      <div className="space-y-4">
-        <Collapsible
-          open={isListsOpen}
-          onOpenChange={setIsListsOpen}
-          className="space-y-2"
-        >
-          <div className="flex items-center justify-between w-full px-2 py-1.5">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-medium">Lists</h3>
-              <button
-                type="button"
-                onClick={selectAllLists}
-                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
-                tabIndex={0}
-              >
-                Select All
-              </button>
-              <button
-                type="button"
-                onClick={clearLists}
-                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
-                tabIndex={0}
-              >
-                Clear
-              </button>
-            </div>
-            <CollapsibleTrigger asChild>
-              <button
-                type="button"
-                className="ml-2 p-1 rounded hover:bg-accent/50 transition-colors"
-              >
-                <motion.div
-                  animate={{ rotate: isListsOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </motion.div>
-              </button>
-            </CollapsibleTrigger>
-          </div>
-          <CollapsibleContent className="pl-2">
-            <motion.div
-              initial={false}
-              animate={{ opacity: isListsOpen ? 1 : 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="space-y-2"
+      <div className="space-y-6">
+        {/* Select All and Clear All */}
+        <div className="flex items-center justify-between">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={selectAllFilters}
+            className="text-xs text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded cursor-pointer focus:outline-none"
+          >
+            Select All
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearAllFilters}
+            className="text-xs text-muted-foreground hover:text-destructive transition-colors px-2 py-1 rounded cursor-pointer focus:outline-none"
+          >
+            Clear All
+          </Button>
+        </div>
+
+        {/* Lists */}
+        <Collapsible open={isListsOpen} onOpenChange={setIsListsOpen}>
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              className="flex w-full justify-between items-center p-2 hover:bg-accent/50 transition-colors cursor-pointer"
             >
-              {availableLists.map((list, index) => (
-                <motion.div
-                  key={list}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.2 }}
-                  className="flex items-center space-x-2 group"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={lists[list] ? { scale: [1, 1.2, 1] } : {}}
-                    transition={{ duration: 0.2 }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Checkbox
-                      id={`list-${list}`}
-                      checked={lists[list]}
-                      onCheckedChange={(checked) => {
-                        handleListChange(list, checked);
-                      }}
-                      className="cursor-pointer"
-                    />
-                  </motion.div>
+              <span className="font-medium">Lists</span>
+              <motion.div
+                animate={{ rotate: isListsOpen ? 180 : 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+                style={{ willChange: "transform" }}
+              >
+                <ChevronDown className="h-4 w-4" />
+              </motion.div>
+            </Button>
+          </CollapsibleTrigger>
+
+          <CollapsibleContent className="pl-2">
+            <div
+              className="space-y-2 transition-opacity duration-200"
+              style={{ opacity: isListsOpen ? 1 : 0 }}
+            >
+              {availableLists.map((list) => (
+                <div key={list} className="flex items-center space-x-2 group">
+                  <Checkbox
+                    id={`list-${list}`}
+                    checked={lists[list]}
+                    onCheckedChange={(checked) => {
+                      handleListChange(list, checked);
+                    }}
+                    className="cursor-pointer"
+                  />
                   <Label
                     htmlFor={`list-${list}`}
                     className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
@@ -239,189 +236,150 @@ export function Sidebar({
                       ? "LeetCode 150"
                       : list}
                   </Label>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </CollapsibleContent>
         </Collapsible>
+
         <Separator />
-        <Collapsible
-          open={isDifficultyOpen}
-          onOpenChange={setIsDifficultyOpen}
-          className="space-y-2"
-        >
-          <div className="flex items-center justify-between w-full px-2 py-1.5">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-medium">Difficulty</h3>
-              <button
-                type="button"
-                onClick={selectAllDifficulties}
-                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
-                tabIndex={0}
-              >
-                Select All
-              </button>
-              <button
-                type="button"
-                onClick={clearDifficulties}
-                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
-                tabIndex={0}
-              >
-                Clear
-              </button>
-            </div>
+
+        {/* Difficulty */}
+        <Collapsible open={isDifficultyOpen} onOpenChange={setIsDifficultyOpen}>
+          <div className="flex items-center justify-between">
             <CollapsibleTrigger asChild>
-              <button
-                type="button"
-                className="ml-2 p-1 rounded hover:bg-accent/50 transition-colors"
+              <Button
+                variant="ghost"
+                className="flex justify-between items-center p-2 hover:bg-accent/50 transition-colors flex-1 cursor-pointer"
               >
+                <span className="font-medium">Difficulty</span>
                 <motion.div
                   animate={{ rotate: isDifficultyOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  style={{ willChange: "transform" }}
                 >
                   <ChevronDown className="h-4 w-4" />
                 </motion.div>
-              </button>
+              </Button>
             </CollapsibleTrigger>
-          </div>
-          <CollapsibleContent className="pl-2">
-            <motion.div
-              initial={false}
-              animate={{ opacity: isDifficultyOpen ? 1 : 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="space-y-2"
-            >
-              {(Object.keys(difficulties) as Difficulty[]).map(
-                (difficulty, index) => (
-                  <motion.div
-                    key={difficulty}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05, duration: 0.2 }}
-                    className="flex items-center space-x-2 group"
-                  >
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      animate={
-                        difficulties[difficulty] ? { scale: [1, 1.2, 1] } : {}
-                      }
-                      transition={{ duration: 0.2 }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Checkbox
-                        id={`difficulty-${difficulty}`}
-                        checked={difficulties[difficulty]}
-                        onCheckedChange={(checked) => {
-                          handleDifficultyChange(difficulty, checked);
-                        }}
-                        className="cursor-pointer"
-                      />
-                    </motion.div>
-                    <Label
-                      htmlFor={`difficulty-${difficulty}`}
-                      className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
-                    >
-                      {difficulty}
-                    </Label>
-                  </motion.div>
-                )
-              )}
-            </motion.div>
-          </CollapsibleContent>
-        </Collapsible>
-        <Separator />
-        <Collapsible
-          open={isCategoriesOpen}
-          onOpenChange={setIsCategoriesOpen}
-          className="space-y-2"
-        >
-          <div className="flex items-center justify-between w-full px-2 py-1.5">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-medium">Categories</h3>
+            <div className="flex gap-1">
               <button
-                type="button"
-                onClick={selectAllCategories}
-                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
-                tabIndex={0}
+                onClick={clearDifficulties}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
               >
-                Select All
+                clear
               </button>
               <button
-                type="button"
-                onClick={clearCategories}
-                className="ml-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
-                tabIndex={0}
+                onClick={selectAllDifficulties}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
               >
-                Clear
+                all
               </button>
             </div>
+          </div>
+
+          <CollapsibleContent className="pl-2">
+            <div
+              className="space-y-2 transition-opacity duration-200"
+              style={{ opacity: isDifficultyOpen ? 1 : 0 }}
+            >
+              {(Object.keys(difficulties) as Difficulty[]).map((difficulty) => (
+                <div
+                  key={difficulty}
+                  className="flex items-center space-x-2 group"
+                >
+                  <Checkbox
+                    id={`difficulty-${difficulty}`}
+                    checked={difficulties[difficulty]}
+                    onCheckedChange={(checked) => {
+                      handleDifficultyChange(difficulty, checked);
+                    }}
+                    className="cursor-pointer"
+                  />
+                  <Label
+                    htmlFor={`difficulty-${difficulty}`}
+                    className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
+                  >
+                    {difficulty}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Separator />
+
+        {/* Categories */}
+        <Collapsible open={isCategoriesOpen} onOpenChange={setIsCategoriesOpen}>
+          <div className="flex items-center justify-between">
             <CollapsibleTrigger asChild>
-              <button
-                type="button"
-                className="ml-2 p-1 rounded hover:bg-accent/50 transition-colors"
+              <Button
+                variant="ghost"
+                className="flex justify-between items-center p-2 hover:bg-accent/50 transition-colors flex-1 cursor-pointer"
               >
+                <span className="font-medium">Categories</span>
                 <motion.div
                   animate={{ rotate: isCategoriesOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  style={{ willChange: "transform" }}
                 >
                   <ChevronDown className="h-4 w-4" />
                 </motion.div>
-              </button>
+              </Button>
             </CollapsibleTrigger>
+            <div className="flex gap-1">
+              <button
+                onClick={clearCategories}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+              >
+                clear
+              </button>
+              <button
+                onClick={selectAllCategories}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+              >
+                all
+              </button>
+            </div>
           </div>
+
           <CollapsibleContent className="pl-2">
-            <motion.div
-              initial={false}
-              animate={{ opacity: isCategoriesOpen ? 1 : 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
+            <div
+              className="transition-opacity duration-200"
+              style={{ opacity: isCategoriesOpen ? 1 : 0 }}
             >
               <ScrollArea className="h-[200px] pr-4">
                 <div className="space-y-2">
                   {ORDERED_CATEGORIES.filter((category) =>
                     availableCategories.includes(category)
-                  ).map((category, index) => (
-                    <motion.div
+                  ).map((category) => (
+                    <div
                       key={category}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.02, duration: 0.2 }}
                       className="flex items-center space-x-2 group"
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        animate={
-                          categories[category] ? { scale: [1, 1.2, 1] } : {}
-                        }
-                        transition={{ duration: 0.2 }}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Checkbox
-                          id={`category-${category}`}
-                          checked={categories[category]}
-                          onCheckedChange={(checked) => {
-                            handleCategoryChange(category, checked);
-                          }}
-                          className="cursor-pointer"
-                        />
-                      </motion.div>
+                      <Checkbox
+                        id={`category-${category}`}
+                        checked={categories[category]}
+                        onCheckedChange={(checked) => {
+                          handleCategoryChange(category, checked);
+                        }}
+                        className="cursor-pointer"
+                      />
                       <Label
                         htmlFor={`category-${category}`}
                         className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
                       >
-                        <span className="text-muted-foreground mr-2">
-                          {ORDERED_CATEGORIES.indexOf(category) + 1}.
-                        </span>
                         {category}
                       </Label>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </ScrollArea>
-            </motion.div>
+            </div>
           </CollapsibleContent>
         </Collapsible>
+
         <Separator />
 
         {/* Max Cards Slider */}
@@ -439,7 +397,7 @@ export function Sidebar({
               min={1}
               max={Math.max(1, maxCardsAvailable)}
               step={1}
-              className="w-full"
+              className="w-full cursor-pointer"
             />
           </div>
           <div className="text-xs text-muted-foreground px-2">

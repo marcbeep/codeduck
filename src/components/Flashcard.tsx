@@ -1,14 +1,8 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import type { LeetCodeProblem } from "@/lib/types";
 import { Button } from "./ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
 import { Separator } from "./ui/separator";
 import {
   Code2,
@@ -16,7 +10,6 @@ import {
   EyeOff,
   ExternalLink,
   TestTube2,
-  Tag,
   Link,
   Check,
 } from "lucide-react";
@@ -43,8 +36,13 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
   const [showTestCases, setShowTestCases] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const code = problem.solution?.code || "";
-  const explanation = problem.solution?.explanation || "";
+  // Memoize expensive operations
+  const { code, explanation } = useMemo(() => {
+    return {
+      code: problem.solution?.code || "",
+      explanation: problem.solution?.explanation || "",
+    };
+  }, [problem.solution]);
 
   const handleShare = async () => {
     const shareUrl = generateShareUrl(problem);
@@ -57,88 +55,67 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
   };
 
   return (
-    <Card className="w-full transition-all duration-300 hover:shadow-lg hover:scale-[1.01]">
-      <CardHeader className="space-y-4">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <CardTitle className="text-xl font-bold">
+    <Card
+      className="w-full transition-shadow duration-300 hover:shadow-lg"
+      style={{ willChange: "transform" }}
+    >
+      <CardHeader>
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start gap-3 mb-2">
+              <CardTitle className="text-lg sm:text-xl font-bold leading-tight break-words">
                 {problem.title}
               </CardTitle>
+              <div className="flex items-center gap-1 shrink-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleShare}
+                  className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                  disabled={copied}
+                >
+                  {copied ? (
+                    <Check className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <Link className="h-4 w-4" />
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    window.open(
+                      `https://leetcode.com/problems/${problem.title
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")
+                        .replace(/[^a-z0-9-]/g, "")}/`,
+                      "_blank"
+                    )
+                  }
+                  className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
               <span
-                className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(
+                className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(
                   problem.difficulty
                 )}`}
               >
                 {problem.difficulty}
               </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShare();
-                      }}
-                      className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
-                    >
-                      {copied ? (
-                        <Check className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <Link className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{copied ? "Copied!" : "Copy Problem Link"}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(
-                          `https://leetcode.com/problems/${problem.title
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")}`,
-                          "_blank"
-                        );
-                      }}
-                      className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Open on LeetCode</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Tag className="h-3.5 w-3.5" />
-              <span>{problem.category}</span>
-            </div>
-            {problem.list && problem.list.length > 0 && (
-              <>
-                <span className="text-muted-foreground/50">•</span>
-                <div className="flex flex-wrap items-center gap-1.5">
+              <span className="px-2 py-1 rounded-full text-xs bg-secondary text-secondary-foreground">
+                {problem.category}
+              </span>
+              {problem.list && problem.list.length > 0 && (
+                <>
                   {problem.list.map((list) => (
                     <span
                       key={list}
-                      className="px-2 py-0.5 rounded-full text-xs border border-border text-muted-foreground font-medium"
+                      className="px-2 py-1 rounded-full text-xs border border-border text-muted-foreground font-medium"
                     >
                       {list === "blind75"
                         ? "Blind 75"
@@ -151,22 +128,17 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                         : list}
                     </span>
                   ))}
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
         </div>
         <Separator />
       </CardHeader>
       <CardContent className="space-y-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-4 whitespace-pre-line text-sm text-muted-foreground leading-relaxed"
-        >
+        <div className="mb-4 whitespace-pre-line text-sm text-muted-foreground leading-relaxed">
           {problem.description}
-        </motion.div>
+        </div>
 
         {/* Constraints */}
         {problem.constraints && problem.constraints.length > 0 && (
@@ -189,30 +161,32 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
             variant="outline"
             size="sm"
             onClick={() => setShowTestCases((s) => !s)}
-            className="w-full hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] active:scale-98 transition-all duration-200 group cursor-pointer"
+            className="w-full hover:bg-accent hover:text-accent-foreground transition-colors duration-200 group cursor-pointer"
           >
             {showTestCases ? (
               <>
-                <EyeOff className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                <EyeOff className="mr-2 h-4 w-4" />
                 Hide Test Cases
               </>
             ) : (
               <>
-                <TestTube2 className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                <TestTube2 className="mr-2 h-4 w-4" />
                 Show Test Cases
               </>
             )}
           </Button>
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {showTestCases && (
-              <div key="test-cases">
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="space-y-2 overflow-hidden"
-                >
+              <motion.div
+                key="test-cases"
+                initial={{ opacity: 0, maxHeight: 0 }}
+                animate={{ opacity: 1, maxHeight: 1000 }}
+                exit={{ opacity: 0, maxHeight: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="overflow-hidden"
+                style={{ willChange: "opacity, max-height" }}
+              >
+                <div className="space-y-2 pt-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <TestTube2 className="h-4 w-4" />
                     <span>Test Cases</span>
@@ -228,17 +202,8 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                           ? JSON.stringify(testCase.output)
                           : String(testCase.output);
                       return (
-                        <motion.div
-                          key={
-                            index +
-                            "-" +
-                            JSON.stringify(testCase.input) +
-                            "-" +
-                            JSON.stringify(testCase.output)
-                          }
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1, duration: 0.3 }}
+                        <div
+                          key={`test-${index}`}
                           className="bg-accent/30 p-3 rounded-lg text-sm space-y-2"
                         >
                           <div className="font-medium">
@@ -262,42 +227,44 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                               {testCase.explanation}
                             </div>
                           )}
-                        </motion.div>
+                        </div>
                       );
                     })}
                   </div>
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowSolution((s) => !s)}
-            className="w-full hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] active:scale-98 transition-all duration-200 group cursor-pointer"
+            className="w-full hover:bg-accent hover:text-accent-foreground transition-colors duration-200 group cursor-pointer"
           >
             {showSolution ? (
               <>
-                <EyeOff className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                <EyeOff className="mr-2 h-4 w-4" />
                 Hide Solution
               </>
             ) : (
               <>
-                <Eye className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                <Eye className="mr-2 h-4 w-4" />
                 Show Solution
               </>
             )}
           </Button>
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {showSolution && (
-              <div key="solution">
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="space-y-2 overflow-hidden"
-                >
+              <motion.div
+                key="solution"
+                initial={{ opacity: 0, maxHeight: 0 }}
+                animate={{ opacity: 1, maxHeight: 1000 }}
+                exit={{ opacity: 0, maxHeight: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="overflow-hidden"
+                style={{ willChange: "opacity, max-height" }}
+              >
+                <div className="space-y-2 pt-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <Code2 className="h-4 w-4" />
                     <span>Solution</span>
@@ -327,8 +294,8 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                       </div>
                     </div>
                   )}
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>

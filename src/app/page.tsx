@@ -369,7 +369,7 @@ export default function Home() {
                           variant="outline"
                           size="sm"
                           onClick={handleShuffle}
-                          className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                          className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
                           disabled={
                             filteredProblems.length === 0 || isShuffling
                           }
@@ -378,7 +378,8 @@ export default function Home() {
                             animate={
                               isShuffling ? { rotate: 360 } : { rotate: 0 }
                             }
-                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            style={{ willChange: "transform" }}
                           >
                             <Shuffle className="h-3 w-3 sm:h-4 sm:w-4" />
                           </motion.div>
@@ -397,7 +398,7 @@ export default function Home() {
                           variant="outline"
                           size="sm"
                           onClick={() => setSearchOpen(true)}
-                          className="hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                          className="hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer"
                           disabled={shuffledProblems.length === 0}
                         >
                           <Search className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -431,7 +432,7 @@ export default function Home() {
                         variant="secondary"
                         size="icon"
                         onClick={prev}
-                        className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-150 cursor-pointer"
+                        className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-transform duration-150 cursor-pointer"
                         disabled={shuffledProblems.length === 0}
                       >
                         <ChevronLeft className="h-4 w-4" />
@@ -450,7 +451,7 @@ export default function Home() {
                         variant="secondary"
                         size="icon"
                         onClick={next}
-                        className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-150 cursor-pointer"
+                        className="hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-transform duration-150 cursor-pointer"
                         disabled={shuffledProblems.length === 0}
                       >
                         <ChevronRight className="h-4 w-4" />
@@ -480,15 +481,24 @@ export default function Home() {
             {filteredProblems.length > 0 &&
             shuffledProblems.length > 0 &&
             shuffledProblems[index] ? (
-              <div key={index} className="w-full max-w-3xl mx-auto">
+              <motion.div
+                key={index}
+                className="w-full max-w-3xl mx-auto"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                style={{ willChange: "opacity" }}
+              >
                 <Flashcard problem={shuffledProblems[index]} />
-              </div>
+              </motion.div>
             ) : (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.15 }}
                 className="w-full max-w-3xl mx-auto"
+                style={{ willChange: "opacity" }}
               >
                 <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-8 text-center">
                   <div className="space-y-4">
