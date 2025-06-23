@@ -4,7 +4,7 @@ import Flashcard from "@/components/Flashcard";
 import { Sidebar } from "@/components/Sidebar";
 import { Brand } from "@/components/Brand";
 import { getProblems } from "@/lib/actions";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
@@ -199,12 +199,38 @@ export default function Home() {
     []
   );
 
-  // Handle initial load and filter changes
+  // Debounced shuffle function
+  const debouncedShuffleRef = useRef<NodeJS.Timeout | null>(null);
+  const debouncedShuffle = useCallback(
+    (problemsToShuffle: LeetCodeProblem[]) => {
+      // Clear any existing timeout
+      if (debouncedShuffleRef.current) {
+        clearTimeout(debouncedShuffleRef.current);
+      }
+
+      // Set new timeout
+      debouncedShuffleRef.current = setTimeout(() => {
+        shuffleProblems(problemsToShuffle);
+      }, 300); // Wait 300ms after last filter change
+    },
+    [shuffleProblems]
+  );
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debouncedShuffleRef.current) {
+        clearTimeout(debouncedShuffleRef.current);
+      }
+    };
+  }, []);
+
+  // Handle initial load and filter changes (now debounced)
   useEffect(() => {
     if (filteredProblems.length > 0 && !isLoading) {
-      shuffleProblems(filteredProblems);
+      debouncedShuffle(filteredProblems);
     }
-  }, [filteredProblems, isLoading, shuffleProblems]);
+  }, [filteredProblems, isLoading, debouncedShuffle]);
 
   const handleShuffle = () => {
     shuffleProblems(filteredProblems);
