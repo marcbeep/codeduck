@@ -8,7 +8,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
-import type { LeetCodeProblem } from "@/lib/types";
+import type { LeetCodeProblem, Category } from "@/lib/types";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import {
   Filter,
@@ -32,6 +32,7 @@ import {
   CommandGroup,
   CommandItem,
 } from "@/components/ui/command";
+import { isValidCategory } from "@/lib/types";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 
@@ -72,9 +73,11 @@ export default function Home() {
 
   // Get available categories
   const availableCategories = useMemo(() => {
-    const uniqueCategories = new Set<string>();
+    const uniqueCategories = new Set<Category>();
     problems.forEach((problem) => {
-      uniqueCategories.add(problem.category);
+      if (isValidCategory(problem.category)) {
+        uniqueCategories.add(problem.category);
+      }
     });
     return Array.from(uniqueCategories).sort();
   }, [problems]);

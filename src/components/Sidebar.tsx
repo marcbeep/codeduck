@@ -16,37 +16,14 @@ import type { Dispatch, SetStateAction } from "react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import type { Category } from "@/lib/types";
+import { VALID_CATEGORIES } from "@/lib/types";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
-type Category = string;
 type List = string;
 
-// Ordered categories from template.md
-const ORDERED_CATEGORIES = [
-  "Array / String",
-  "Two Pointers",
-  "Sliding Window",
-  "Matrix",
-  "Hashmap",
-  "Intervals",
-  "Stack",
-  "Linked List",
-  "Binary Tree General",
-  "Binary Tree BFS",
-  "Binary Search Tree",
-  "Graph General",
-  "Graph BFS",
-  "Trie",
-  "Backtracking",
-  "Divide & Conquer",
-  "Kadane Algorithm",
-  "Binary Search",
-  "Heap",
-  "Bit Manipulation",
-  "Math",
-  "1D DP",
-  "Multidimensional DP",
-];
+// Use the centralized categories from types
+const ORDERED_CATEGORIES = VALID_CATEGORIES;
 
 interface SidebarProps {
   difficulties: Record<Difficulty, boolean>;
@@ -152,16 +129,18 @@ export function Sidebar({
     }));
   };
   const clearCategories = () => {
-    onCategoryChange((prev: Record<string, boolean>) => {
+    onCategoryChange((prev: Record<Category, boolean>) => {
       const cleared = { ...prev };
-      Object.keys(cleared).forEach((key) => (cleared[key] = false));
+      Object.keys(cleared).forEach((key) => (cleared[key as Category] = false));
       return cleared;
     });
   };
   const selectAllCategories = () => {
-    onCategoryChange((prev: Record<string, boolean>) => {
+    onCategoryChange((prev: Record<Category, boolean>) => {
       const selected = { ...prev };
-      Object.keys(selected).forEach((key) => (selected[key] = true));
+      Object.keys(selected).forEach(
+        (key) => (selected[key as Category] = true)
+      );
       return selected;
     });
   };

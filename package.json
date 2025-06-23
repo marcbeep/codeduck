@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate-problem-imports": "node scripts/generate-problem-imports.js",
+    "validate-categories": "node scripts/validate-categories.js",
     "prebuild": "npm run generate-problem-imports",
     "predev": "npm run generate-problem-imports",
     "prepare": "husky",
@@ -60,6 +61,7 @@
   },
   "lint-staged": {
     "src/problems/json/*.json": [
+      "npm run validate-categories",
       "npm run generate-problem-imports",
       "git add src/lib/generated-problem-imports.ts"
     ]
