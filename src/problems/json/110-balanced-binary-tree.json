@@ -1,7 +1,7 @@
 {
   "id": 110,
   "title": "Balanced Binary Tree",
-  "list": ["grind75"],
+  "list": ["grind75", "neetcode150"],
   "category": "Trees",
   "difficulty": "Easy",
   "description": "Given a binary tree, determine if it is height-balanced.\n\nA height-balanced binary tree is a binary tree in which the depth of the two subtrees of every node never differs by more than one.",

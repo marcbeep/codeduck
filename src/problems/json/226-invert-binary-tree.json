@@ -1,7 +1,7 @@
 {
   "id": 226,
   "title": "Invert Binary Tree",
-  "list": ["grind75"],
+  "list": ["grind75", "neetcode150"],
   "category": "Trees",
   "difficulty": "Easy",
   "description": "Given the root of a binary tree, invert the tree, and return its root.\n\nTo invert a binary tree, swap every left node with its corresponding right node.",

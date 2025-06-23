@@ -1,7 +1,7 @@
 {
   "id": 543,
   "title": "Diameter of Binary Tree",
-  "list": ["grind75"],
+  "list": ["grind75", "neetcode150"],
   "category": "Trees",
   "difficulty": "Easy",
   "description": "Given the root of a binary tree, return the length of the diameter of the tree.\n\nThe diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.\n\nThe length of path between two nodes is represented by the number of edges between them.",
