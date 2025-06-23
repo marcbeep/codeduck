@@ -21,6 +21,33 @@ type Difficulty = "Easy" | "Medium" | "Hard";
 type Category = string;
 type List = string;
 
+// Ordered categories from template.md
+const ORDERED_CATEGORIES = [
+  "Array / String",
+  "Two Pointers",
+  "Sliding Window",
+  "Matrix",
+  "Hashmap",
+  "Intervals",
+  "Stack",
+  "Linked List",
+  "Binary Tree General",
+  "Binary Tree BFS",
+  "Binary Search Tree",
+  "Graph General",
+  "Graph BFS",
+  "Trie",
+  "Backtracking",
+  "Divide & Conquer",
+  "Kadane Algorithm",
+  "Binary Search",
+  "Heap",
+  "Bit Manipulation",
+  "Math",
+  "1D DP",
+  "Multidimensional DP",
+];
+
 interface SidebarProps {
   difficulties: Record<Difficulty, boolean>;
   categories: Record<Category, boolean>;
@@ -372,7 +399,9 @@ export function Sidebar({
             >
               <ScrollArea className="h-[200px] pr-4">
                 <div className="space-y-2">
-                  {availableCategories.map((category, index) => (
+                  {ORDERED_CATEGORIES.filter((category) =>
+                    availableCategories.includes(category)
+                  ).map((category, index) => (
                     <motion.div
                       key={category}
                       initial={{ opacity: 0, x: -10 }}
@@ -402,6 +431,9 @@ export function Sidebar({
                         htmlFor={`category-${category}`}
                         className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer group-hover:text-accent-foreground transition-colors flex-1 select-none"
                       >
+                        <span className="text-muted-foreground mr-2">
+                          {ORDERED_CATEGORIES.indexOf(category) + 1}.
+                        </span>
                         {category}
                       </Label>
                     </motion.div>
