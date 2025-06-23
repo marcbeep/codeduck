@@ -1,0 +1,73 @@
+{
+  "id": 138,
+  "title": "Copy List With Random Pointer",
+  "list": ["neetcode150"],
+  "category": "Linked List",
+  "difficulty": "Medium",
+  "description": "A linked list of length n is given such that each node contains an additional random pointer, which could point to any node in the list, or null.\n\nConstruct a deep copy of the list. The deep copy should consist of exactly n brand new nodes, where each new node has its value set to the value of its corresponding original node. Both the next and random pointer of the new nodes should point to new nodes in the copied list such that the pointers in the original list and copied list represent the same list state. None of the pointers in the new list should point to nodes in the original list.\n\nFor example, if there are two nodes X and Y in the original list, where X.random --> Y, then for the corresponding two nodes x and y in the copied list, x.random --> y.\n\nReturn the head of the copied linked list.\n\nThe linked list is represented in the input/output as a list of n nodes. Each node is represented as a pair of [val, random_index] where:\n- val: an integer representing Node.val\n- random_index: the index of the node (range from 0 to n-1) that the random pointer points to, or null if it does not point to any node.\n\nYour code will only be given the head of the original linked list.",
+  "constraints": [
+    "0 <= n <= 1000",
+    "-104 <= Node.val <= 104",
+    "Node.random is null or pointing to a node in the linked list"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "head": [
+          [7, null],
+          [13, 0],
+          [11, 4],
+          [10, 2],
+          [1, 0]
+        ]
+      },
+      "output": [
+        [7, null],
+        [13, 0],
+        [11, 4],
+        [10, 2],
+        [1, 0]
+      ],
+      "explanation": "The copied list maintains the same structure and random pointers as the original."
+    },
+    {
+      "input": {
+        "head": [
+          [1, 1],
+          [2, 1]
+        ]
+      },
+      "output": [
+        [1, 1],
+        [2, 1]
+      ],
+      "explanation": "Both nodes point to each other in both original and copied lists."
+    },
+    {
+      "input": {
+        "head": [
+          [3, null],
+          [3, 0],
+          [3, null]
+        ]
+      },
+      "output": [
+        [3, null],
+        [3, 0],
+        [3, null]
+      ],
+      "explanation": "The copied list maintains the same random pointer structure."
+    },
+    {
+      "input": {
+        "head": []
+      },
+      "output": [],
+      "explanation": "Empty list returns empty list."
+    }
+  ],
+  "solution": {
+    "code": "# Definition for a Node.\n# class Node:\n#     def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):\n#         self.val = int(x)\n#         self.next = next\n#         self.random = random\n\ndef copyRandomList(head):\n    if not head:\n        return None\n    \n    # Step 1: Create interweaved list (original -> copy -> original -> copy...)\n    current = head\n    while current:\n        # Create copy node\n        copy = Node(current.val)\n        copy.next = current.next\n        current.next = copy\n        current = copy.next\n    \n    # Step 2: Set random pointers for copy nodes\n    current = head\n    while current:\n        if current.random:\n            current.next.random = current.random.next\n        current = current.next.next\n    \n    # Step 3: Separate original and copy lists\n    dummy = Node(0)\n    copy_current = dummy\n    current = head\n    \n    while current:\n        # Extract copy node\n        copy_current.next = current.next\n        copy_current = copy_current.next\n        \n        # Restore original list\n        current.next = current.next.next\n        current = current.next\n    \n    return dummy.next\n\n# Alternative approach using hash map\ndef copyRandomListHashMap(head):\n    if not head:\n        return None\n    \n    # Create hash map to store original -> copy mapping\n    node_map = {}\n    \n    # First pass: create all copy nodes\n    current = head\n    while current:\n        node_map[current] = Node(current.val)\n        current = current.next\n    \n    # Second pass: set next and random pointers\n    current = head\n    while current:\n        copy = node_map[current]\n        \n        # Set next pointer\n        if current.next:\n            copy.next = node_map[current.next]\n        \n        # Set random pointer\n        if current.random:\n            copy.random = node_map[current.random]\n        \n        current = current.next\n    \n    return node_map[head]\n\n# Alternative approach using recursive DFS\ndef copyRandomListRecursive(head):\n    def dfs(node, visited):\n        if not node:\n            return None\n        \n        if node in visited:\n            return visited[node]\n        \n        # Create copy node\n        copy = Node(node.val)\n        visited[node] = copy\n        \n        # Recursively copy next and random pointers\n        copy.next = dfs(node.next, visited)\n        copy.random = dfs(node.random, visited)\n        \n        return copy\n    \n    return dfs(head, {})",
+    "explanation": "Three approaches are shown:\n\n1. Interweaving approach (recommended):\n   - Step 1: Create copy nodes and interweave them with original nodes\n   - Step 2: Set random pointers for copy nodes using the interweaved structure\n   - Step 3: Separate the original and copy lists\n   - Time complexity: O(n)\n   - Space complexity: O(1) extra space (not counting the copy list)\n\n2. Hash map approach:\n   - Use a hash map to store original -> copy node mapping\n   - Two passes: first to create all copy nodes, second to set pointers\n   - Time complexity: O(n)\n   - Space complexity: O(n) for the hash map\n\n3. Recursive DFS approach:\n   - Use recursion with a visited map to handle cycles\n   - Recursively copy next and random pointers\n   - Time complexity: O(n)\n   - Space complexity: O(n) for recursion stack and visited map\n\nKey insight: The interweaving approach is most efficient as it uses constant extra space.\n\nExample with [[7,null], [13,0], [11,4], [10,2], [1,0]]:\n- Step 1: 7→7'→13→13'→11→11'→10→10'→1→1'\n- Step 2: Set random pointers for copy nodes\n- Step 3: Separate into original and copy lists\n\nThe interweaving approach is the standard solution for this problem."
+  }
+}

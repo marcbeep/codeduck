@@ -1,9 +1,7 @@
 {
   "id": 21,
   "title": "Merge Two Sorted Lists",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75", "neetcode150"],
   "category": "Linked List",
   "difficulty": "Easy",
   "description": "You are given the heads of two sorted linked lists list1 and list2.\n\nMerge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists.\n\nReturn the head of the merged linked list.",
@@ -15,25 +13,10 @@
   "testCases": [
     {
       "input": {
-        "list1": [
-          1,
-          2,
-          4
-        ],
-        "list2": [
-          1,
-          3,
-          4
-        ]
+        "list1": [1, 2, 4],
+        "list2": [1, 3, 4]
       },
-      "output": [
-        1,
-        1,
-        2,
-        3,
-        4,
-        4
-      ],
+      "output": [1, 1, 2, 3, 4, 4],
       "explanation": "We merge the lists by comparing nodes and linking them in sorted order."
     },
     {
@@ -47,13 +30,9 @@
     {
       "input": {
         "list1": [],
-        "list2": [
-          0
-        ]
+        "list2": [0]
       },
-      "output": [
-        0
-      ],
+      "output": [0],
       "explanation": "One list is empty, so we return the non-empty list."
     }
   ],

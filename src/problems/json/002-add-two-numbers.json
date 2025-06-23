@@ -1,0 +1,51 @@
+{
+  "id": 2,
+  "title": "Add Two Numbers",
+  "list": ["neetcode150"],
+  "category": "Linked List",
+  "difficulty": "Medium",
+  "description": "You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.\n\nYou may assume the two numbers do not contain any leading zero, except the number 0 itself.",
+  "constraints": [
+    "The number of nodes in each linked list is in the range [1, 100]",
+    "0 <= Node.val <= 9",
+    "It is guaranteed that the list represents a number that does not have leading zeros"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "l1": [2, 4, 3],
+        "l2": [5, 6, 4]
+      },
+      "output": [7, 0, 8],
+      "explanation": "342 + 465 = 807, represented as [7,0,8] in reverse order."
+    },
+    {
+      "input": {
+        "l1": [0],
+        "l2": [0]
+      },
+      "output": [0],
+      "explanation": "0 + 0 = 0."
+    },
+    {
+      "input": {
+        "l1": [9, 9, 9, 9, 9, 9, 9],
+        "l2": [9, 9, 9, 9]
+      },
+      "output": [8, 9, 9, 9, 0, 0, 0, 1],
+      "explanation": "9999999 + 9999 = 10009998, represented as [8,9,9,9,0,0,0,1] in reverse order."
+    },
+    {
+      "input": {
+        "l1": [1],
+        "l2": [9, 9]
+      },
+      "output": [0, 0, 1],
+      "explanation": "1 + 99 = 100, represented as [0,0,1] in reverse order."
+    }
+  ],
+  "solution": {
+    "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\ndef addTwoNumbers(l1, l2):\n    # Create dummy head for result\n    dummy = ListNode(0)\n    current = dummy\n    carry = 0\n    \n    # Process both lists while they have nodes or there's a carry\n    while l1 or l2 or carry:\n        # Get values from both lists (0 if list is exhausted)\n        val1 = l1.val if l1 else 0\n        val2 = l2.val if l2 else 0\n        \n        # Calculate sum and new carry\n        total = val1 + val2 + carry\n        carry = total // 10\n        digit = total % 10\n        \n        # Create new node with current digit\n        current.next = ListNode(digit)\n        current = current.next\n        \n        # Move to next nodes in both lists\n        if l1:\n            l1 = l1.next\n        if l2:\n            l2 = l2.next\n    \n    return dummy.next\n\n# Alternative approach using recursion\ndef addTwoNumbersRecursive(l1, l2, carry=0):\n    # Base case: both lists are empty and no carry\n    if not l1 and not l2 and carry == 0:\n        return None\n    \n    # Get values from both lists\n    val1 = l1.val if l1 else 0\n    val2 = l2.val if l2 else 0\n    \n    # Calculate sum and new carry\n    total = val1 + val2 + carry\n    new_carry = total // 10\n    digit = total % 10\n    \n    # Create current node\n    current = ListNode(digit)\n    \n    # Recursively process next nodes\n    next1 = l1.next if l1 else None\n    next2 = l2.next if l2 else None\n    current.next = addTwoNumbersRecursive(next1, next2, new_carry)\n    \n    return current\n\n# Alternative approach with explicit carry handling\ndef addTwoNumbersExplicit(l1, l2):\n    dummy = ListNode(0)\n    current = dummy\n    carry = 0\n    \n    while l1 or l2:\n        # Get values\n        val1 = l1.val if l1 else 0\n        val2 = l2.val if l2 else 0\n        \n        # Add with carry\n        sum_val = val1 + val2 + carry\n        \n        # Handle carry\n        if sum_val >= 10:\n            carry = 1\n            sum_val -= 10\n        else:\n            carry = 0\n        \n        # Create new node\n        current.next = ListNode(sum_val)\n        current = current.next\n        \n        # Move to next nodes\n        if l1:\n            l1 = l1.next\n        if l2:\n            l2 = l2.next\n    \n    # Handle final carry\n    if carry > 0:\n        current.next = ListNode(carry)\n    \n    return dummy.next",
+    "explanation": "Three approaches are shown:\n\n1. Iterative approach (recommended):\n   - Use a dummy head to simplify result construction\n   - Process both lists simultaneously while handling carry\n   - Continue until both lists are exhausted and no carry remains\n   - Time complexity: O(max(n, m)) where n and m are list lengths\n   - Space complexity: O(max(n, m)) for the result list\n\n2. Recursive approach:\n   - Use recursion to process nodes and carry\n   - Base case: both lists empty and no carry\n   - Recursively process next nodes with new carry\n   - Time complexity: O(max(n, m))\n   - Space complexity: O(max(n, m)) for recursion stack\n\n3. Explicit carry handling:\n   - Similar to iterative but with explicit carry checks\n   - Handle carry separately from digit calculation\n   - Check for final carry at the end\n   - Time complexity: O(max(n, m))\n   - Space complexity: O(max(n, m))\n\nKey insight: Process digits from least significant to most significant, maintaining carry throughout.\n\nExample with [2,4,3] + [5,6,4]:\n- 2+5=7, carry=0 → [7]\n- 4+6=10, carry=1 → [7,0]\n- 3+4+1=8, carry=0 → [7,0,8]\n- Result: [7,0,8] representing 807\n\nThe iterative approach is the standard solution for this problem."
+  }
+}

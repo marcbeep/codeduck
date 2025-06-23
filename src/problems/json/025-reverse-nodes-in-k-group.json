@@ -1,0 +1,51 @@
+{
+  "id": 25,
+  "title": "Reverse Nodes In K Group",
+  "list": ["neetcode150"],
+  "category": "Linked List",
+  "difficulty": "Hard",
+  "description": "Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.\n\nk is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes, in the end, should remain as it is.\n\nYou may not alter the values in the list's nodes, only nodes themselves may be changed.",
+  "constraints": [
+    "The number of nodes in the list is n",
+    "1 <= k <= n <= 5000",
+    "0 <= Node.val <= 1000"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "head": [1, 2, 3, 4, 5],
+        "k": 2
+      },
+      "output": [2, 1, 4, 3, 5],
+      "explanation": "Reverse first 2 nodes: [1,2] → [2,1], then next 2 nodes: [3,4] → [4,3], leave [5] as is."
+    },
+    {
+      "input": {
+        "head": [1, 2, 3, 4, 5],
+        "k": 3
+      },
+      "output": [3, 2, 1, 4, 5],
+      "explanation": "Reverse first 3 nodes: [1,2,3] → [3,2,1], leave [4,5] as is."
+    },
+    {
+      "input": {
+        "head": [1, 2, 3, 4, 5],
+        "k": 1
+      },
+      "output": [1, 2, 3, 4, 5],
+      "explanation": "k=1 means no reversal, list remains unchanged."
+    },
+    {
+      "input": {
+        "head": [1],
+        "k": 1
+      },
+      "output": [1],
+      "explanation": "Single node list remains unchanged."
+    }
+  ],
+  "solution": {
+    "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\ndef reverseKGroup(head, k):\n    # Helper function to reverse a sublist\n    def reverseSublist(start, end):\n        prev = None\n        current = start\n        \n        while current != end:\n            next_node = current.next\n            current.next = prev\n            prev = current\n            current = next_node\n        \n        return prev\n    \n    # Helper function to check if we have k nodes\n    def hasKNodes(node, k):\n        count = 0\n        current = node\n        while current and count < k:\n            current = current.next\n            count += 1\n        return count == k\n    \n    if not head or k == 1:\n        return head\n    \n    dummy = ListNode(0)\n    dummy.next = head\n    prev_group_end = dummy\n    \n    while hasKNodes(prev_group_end.next, k):\n        # Find the start and end of current group\n        group_start = prev_group_end.next\n        group_end = group_start\n        \n        # Move group_end k steps forward\n        for _ in range(k - 1):\n            group_end = group_end.next\n        \n        # Store the next node after the group\n        next_group_start = group_end.next\n        \n        # Reverse the current group\n        reversed_start = reverseSublist(group_start, group_end.next)\n        \n        # Connect the reversed group\n        prev_group_end.next = reversed_start\n        group_start.next = next_group_start\n        \n        # Move to next group\n        prev_group_end = group_start\n    \n    return dummy.next\n\n# Alternative approach using recursion\ndef reverseKGroupRecursive(head, k):\n    # Check if we have k nodes\n    count = 0\n    current = head\n    while current and count < k:\n        current = current.next\n        count += 1\n    \n    # If we don't have k nodes, return head as is\n    if count < k:\n        return head\n    \n    # Reverse the first k nodes\n    prev = None\n    current = head\n    for _ in range(k):\n        next_node = current.next\n        current.next = prev\n        prev = current\n        current = next_node\n    \n    # Recursively reverse the rest\n    head.next = reverseKGroupRecursive(current, k)\n    \n    return prev\n\n# Alternative approach with explicit group handling\ndef reverseKGroupExplicit(head, k):\n    if not head or k == 1:\n        return head\n    \n    # Count total nodes\n    total_nodes = 0\n    current = head\n    while current:\n        total_nodes += 1\n        current = current.next\n    \n    # Calculate number of complete groups\n    complete_groups = total_nodes // k\n    \n    if complete_groups == 0:\n        return head\n    \n    dummy = ListNode(0)\n    dummy.next = head\n    prev = dummy\n    \n    for group in range(complete_groups):\n        # Reverse current group\n        start = prev.next\n        current = start\n        \n        for _ in range(k - 1):\n            next_node = current.next\n            current.next = next_node.next\n            next_node.next = start\n            start = next_node\n        \n        prev.next = start\n        prev = current\n    \n    return dummy.next",
+    "explanation": "Three approaches are shown:\n\n1. Iterative approach with helper functions (recommended):\n   - Use helper functions to check if we have k nodes and reverse sublists\n   - Process groups one by one, reversing each complete group\n   - Connect reversed groups properly\n   - Time complexity: O(n) where n is the number of nodes\n   - Space complexity: O(1)\n\n2. Recursive approach:\n   - Check if we have k nodes at the beginning\n   - Reverse the first k nodes\n   - Recursively reverse the rest\n   - Time complexity: O(n)\n   - Space complexity: O(n/k) for recursion stack\n\n3. Explicit group handling:\n   - Count total nodes and calculate complete groups\n   - Reverse each complete group explicitly\n   - Handle remaining nodes as is\n   - Time complexity: O(n)\n   - Space complexity: O(1)\n\nKey insight: Process the list in groups of k, reversing each complete group while leaving incomplete groups unchanged.\n\nExample with [1,2,3,4,5] and k=2:\n- Group 1: [1,2] → [2,1]\n- Group 2: [3,4] → [4,3]\n- Group 3: [5] (incomplete, leave as is)\n- Result: [2,1,4,3,5]\n\nThe iterative approach is the standard solution for this problem."
+  }
+}
