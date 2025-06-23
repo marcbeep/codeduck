@@ -186,7 +186,7 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                 className="overflow-hidden"
                 style={{ willChange: "opacity, max-height" }}
               >
-                <div className="space-y-2 pt-2">
+                <div className="space-y-2 pt-2 max-h-[800px] overflow-y-auto">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <TestTube2 className="h-4 w-4" />
                     <span>Test Cases</span>
@@ -264,7 +264,7 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                 className="overflow-hidden"
                 style={{ willChange: "opacity, max-height" }}
               >
-                <div className="space-y-2 pt-2">
+                <div className="space-y-2 pt-2 max-h-[800px] overflow-y-auto">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <Code2 className="h-4 w-4" />
                     <span>Solution</span>
