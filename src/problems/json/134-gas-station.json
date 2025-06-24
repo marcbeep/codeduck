@@ -38,6 +38,6 @@
   ],
   "solution": {
     "code": "def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    if sum(gas) < sum(cost):\n        return -1\n    \n    total = 0\n    start = 0\n    \n    for i in range(len(gas)):\n        total += gas[i] - cost[i]\n        \n        # If total becomes negative, reset start position\n        if total < 0:\n            total = 0\n            start = i + 1\n    \n    return start",
-    "explanation": "This solution uses a greedy approach with O(n) time complexity:\n1. First check if total gas >= total cost (necessary condition)\n2. Keep track of running total (gas - cost) from current start position\n3. If total becomes negative, reset start to next position and total to 0\n4. Return the start position when we complete the loop\n\nThe key insight is that if we can't reach station i from our current start, we can't reach it from any earlier start either, so we reset to i+1."
+    "explanation": "Greedy approach with O(n) time complexity:\n1. Check if total gas >= total cost (necessary condition)\n2. Track running total (gas - cost) from current start\n3. If total < 0, reset start to next position and total to 0\n4. Return start position\n\nKey insight: If we can't reach station i from current start, we can't reach it from any earlier start either."
   }
 }
