@@ -1,0 +1,40 @@
+{
+  "id": 66,
+  "title": "Plus One",
+  "list": ["neetcode150"],
+  "category": "Math & Geometry",
+  "difficulty": "Easy",
+  "description": "You are given a large integer represented as an integer array digits, where each digits[i] is the ith digit of the integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer does not contain any leading 0's.\n\nIncrement the large integer by one and return the resulting array of digits.",
+  "constraints": [
+    "1 <= digits.length <= 100",
+    "0 <= digits[i] <= 9",
+    "digits does not contain any leading 0's"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "digits": [1, 2, 3]
+      },
+      "output": [1, 2, 4],
+      "explanation": "The array represents the integer 123. Incrementing by one gives 123 + 1 = 124. Thus, the result should be [1,2,4]."
+    },
+    {
+      "input": {
+        "digits": [4, 3, 2, 1]
+      },
+      "output": [4, 3, 2, 2],
+      "explanation": "The array represents the integer 4321. Incrementing by one gives 4321 + 1 = 4322. Thus, the result should be [4,3,2,2]."
+    },
+    {
+      "input": {
+        "digits": [9]
+      },
+      "output": [1, 0],
+      "explanation": "The array represents the integer 9. Incrementing by one gives 9 + 1 = 10. Thus, the result should be [1,0]."
+    }
+  ],
+  "solution": {
+    "code": "def plusOne(digits: list[int]) -> list[int]:\n    n = len(digits)\n    \n    # Start from the last digit\n    for i in range(n - 1, -1, -1):\n        if digits[i] < 9:\n            digits[i] += 1\n            return digits\n        else:\n            digits[i] = 0\n    \n    # If we reach here, all digits were 9\n    return [1] + digits",
+    "explanation": "This solution handles the increment operation digit by digit:\n1. Start from the rightmost digit\n2. If the digit is less than 9, increment it and return\n3. If the digit is 9, set it to 0 and continue to the next digit\n4. If all digits were 9, add a new digit 1 at the beginning\n\nTime complexity: O(n) - we may need to traverse the entire array.\nSpace complexity: O(1) - we modify the array in-place, except for the case where we need to add a new digit."
+  }
+}

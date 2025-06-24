@@ -1,0 +1,45 @@
+{
+  "id": 2013,
+  "title": "Detect Squares",
+  "list": ["neetcode150"],
+  "category": "Math & Geometry",
+  "difficulty": "Medium",
+  "description": "You are given a stream of points on the X-Y plane. Design an algorithm that:\n\n1. Adds new points from the stream into a data structure. Duplicate points are allowed and should be treated as different points.\n2. Given a query point, counts the number of ways to choose three points from the data structure such that the three points and the query point form an axis-aligned square with positive area.\n\nAn axis-aligned square is a square whose edges are all aligned with the x-axis and y-axis.\n\nImplement the DetectSquares class:\n- DetectSquares() Initializes the object with an empty data structure.\n- void add(int[] point) Adds a new point point = [x, y] to the data structure.\n- int count(int[] point) Counts the number of ways to form axis-aligned squares with point point = [x, y] as one of the vertices of the squares.",
+  "constraints": [
+    "point.length == 2",
+    "0 <= x, y <= 1000",
+    "At most 3000 calls in total will be made to add and count."
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": [
+          "DetectSquares",
+          "add",
+          "add",
+          "add",
+          "count",
+          "count",
+          "add",
+          "count"
+        ],
+        "values": [
+          [],
+          [[3, 10]],
+          [[11, 2]],
+          [[3, 2]],
+          [[11, 10]],
+          [[14, 8]],
+          [[11, 2]],
+          [[11, 10]]
+        ]
+      },
+      "output": [null, null, null, null, 1, 0, null, 2],
+      "explanation": "After adding points (3,10), (11,2), (3,2), we can form one square with query point (11,10). After adding another (11,2), we can form two squares."
+    }
+  ],
+  "solution": {
+    "code": "from collections import defaultdict\n\nclass DetectSquares:\n    def __init__(self):\n        self.points = defaultdict(int)\n        self.x_coords = defaultdict(set)\n    \n    def add(self, point: list[int]) -> None:\n        x, y = point\n        self.points[(x, y)] += 1\n        self.x_coords[x].add(y)\n    \n    def count(self, point: list[int]) -> int:\n        x, y = point\n        count = 0\n        \n        # For each y-coordinate at the same x as query point\n        for y1 in self.x_coords[x]:\n            if y1 == y:\n                continue\n            \n            # Calculate the side length of the square\n            side_length = abs(y1 - y)\n            \n            # Check for squares with side length 'side_length'\n            # We need to find points at (x + side_length, y) and (x + side_length, y1)\n            count += self.points[(x + side_length, y)] * self.points[(x + side_length, y1)] * self.points[(x, y1)]\n            \n            # Also check for squares on the left side\n            count += self.points[(x - side_length, y)] * self.points[(x - side_length, y1)] * self.points[(x, y1)]\n        \n        return count",
+    "explanation": "This solution uses hash maps to efficiently track points:\n1. Use a defaultdict to count occurrences of each point\n2. Use a defaultdict to track y-coordinates for each x-coordinate\n3. For each query point, iterate through all y-coordinates at the same x\n4. For each y-coordinate, calculate the side length and check for squares on both sides\n5. Multiply the counts of the three required points to get the number of ways\n\nTime complexity: O(k) for count operation where k is the number of unique y-coordinates at the query x.\nSpace complexity: O(n) where n is the number of points added."
+  }
+}

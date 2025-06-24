@@ -1,0 +1,36 @@
+{
+  "id": 202,
+  "title": "Happy Number",
+  "list": ["neetcode150"],
+  "category": "Math & Geometry",
+  "difficulty": "Easy",
+  "description": "Write an algorithm to determine if a number n is happy.\n\nA happy number is a number defined by the following process:\n1. Starting with any positive integer, replace the number by the sum of the squares of its digits.\n2. Repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1.\n3. Those numbers for which this process ends in 1 are happy.\n\nReturn true if n is a happy number, and false if not.",
+  "constraints": ["1 <= n <= 231 - 1"],
+  "testCases": [
+    {
+      "input": {
+        "n": 19
+      },
+      "output": true,
+      "explanation": "1² + 9² = 82, 8² + 2² = 68, 6² + 8² = 100, 1² + 0² + 0² = 1"
+    },
+    {
+      "input": {
+        "n": 2
+      },
+      "output": false,
+      "explanation": "2² = 4, 4² = 16, 1² + 6² = 37, 3² + 7² = 58, 5² + 8² = 89, 8² + 9² = 145, 1² + 4² + 5² = 42, 4² + 2² = 20, 2² + 0² = 4 (cycle repeats)"
+    },
+    {
+      "input": {
+        "n": 7
+      },
+      "output": true,
+      "explanation": "7² = 49, 4² + 9² = 97, 9² + 7² = 130, 1² + 3² + 0² = 10, 1² + 0² = 1"
+    }
+  ],
+  "solution": {
+    "code": "def isHappy(n: int) -> bool:\n    def get_next(n):\n        total_sum = 0\n        while n > 0:\n            n, digit = divmod(n, 10)\n            total_sum += digit ** 2\n        return total_sum\n    \n    seen = set()\n    while n != 1 and n not in seen:\n        seen.add(n)\n        n = get_next(n)\n    \n    return n == 1",
+    "explanation": "This solution uses a hash set to detect cycles:\n1. Calculate the sum of squares of digits for the current number\n2. If we reach 1, the number is happy\n3. If we encounter a number we've seen before, we're in a cycle and the number is not happy\n4. Use a set to track visited numbers\n\nTime complexity: O(log n) - the number of digits in n determines the number of iterations.\nSpace complexity: O(log n) - we store at most log n numbers in the set."
+  }
+}

@@ -1,8 +1,8 @@
 {
   "id": 54,
   "title": "Spiral Matrix",
-  "list": ["grind75"],
-  "category": "Arrays & Hashing",
+  "list": ["grind75", "neetcode150"],
+  "category": "Math & Geometry",
   "difficulty": "Medium",
   "description": "Given an m x n matrix, return all elements of the matrix in spiral order.",
   "constraints": [
