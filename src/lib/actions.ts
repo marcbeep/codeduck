@@ -1,5 +1,3 @@
-"use server";
-
 import type { LeetCodeProblem } from "@/lib/types";
 import { VALID_CATEGORIES } from "@/lib/types";
 import { allProblems } from "./generated-problem-imports";
