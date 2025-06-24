@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "generate-problem-imports": "node scripts/generate-problem-imports.js",
+    "generate-sitemap": "node scripts/generate-sitemap.js",
     "validate-categories": "node scripts/validate-categories.js",
-    "prebuild": "npm run generate-problem-imports",
+    "prebuild": "npm run generate-problem-imports && npm run generate-sitemap",
     "predev": "npm run generate-problem-imports",
     "prepare": "husky",
     "test": "echo \"No tests specified\" && exit 0"

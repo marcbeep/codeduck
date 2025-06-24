@@ -13,6 +13,7 @@ const notoSansMono = Noto_Sans_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://code.marc.tt"),
   title: "CodeDuck - Programming Interview Flashcards",
   description:
     "Practice coding interview problems with interactive flashcards. Study algorithms, data structures, and problem-solving techniques with programming interview questions.",
