@@ -1,15 +1,11 @@
 {
   "id": 278,
   "title": "First Bad Version",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75"],
   "category": "Binary Search",
   "difficulty": "Easy",
   "description": "You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest version of your product fails the quality check. Since each version is developed based on the previous version, all the versions after a bad version are also bad.\n\nSuppose you have n versions [1, 2, ..., n] and you want to find out the first bad one, which causes all the following ones to be bad.\n\nYou are given an API bool isBadVersion(version) which returns whether version is bad. Implement a function to find the first bad version. You should minimize the number of calls to the API.",
-  "constraints": [
-    "1 <= bad <= n <= 231 - 1"
-  ],
+  "constraints": ["1 <= bad <= n <= 231 - 1"],
   "testCases": [
     {
       "input": {
@@ -45,7 +41,7 @@
     }
   ],
   "solution": {
-    "code": "# The isBadVersion API is already defined for you.\n# def isBadVersion(version: int) -> bool:\n\ndef first_bad_version(n: int) -> int:\n    left, right = 1, n\n    \n    while left < right:\n        # Use left + (right - left) // 2 to avoid overflow\n        mid = left + (right - left) // 2\n        \n        if isBadVersion(mid):\n            # If mid is bad, the first bad version is at mid or before\n            right = mid\n        else:\n            # If mid is good, the first bad version is after mid\n            left = mid + 1\n    \n    # At this point, left == right and it's the first bad version\n    return left\n\n# Alternative approach with different loop condition\ndef first_bad_version_alternative(n: int) -> int:\n    left, right = 1, n\n    result = n  # Initialize with worst case\n    \n    while left <= right:\n        mid = left + (right - left) // 2\n        \n        if isBadVersion(mid):\n            # Update result and search left half\n            result = mid\n            right = mid - 1\n        else:\n            # Search right half\n            left = mid + 1\n    \n    return result\n\n# Recursive approach\ndef first_bad_version_recursive(n: int) -> int:\n    def binary_search(left: int, right: int) -> int:\n        if left >= right:\n            return left\n        \n        mid = left + (right - left) // 2\n        \n        if isBadVersion(mid):\n            return binary_search(left, mid)\n        else:\n            return binary_search(mid + 1, right)\n    \n    return binary_search(1, n)",
-    "explanation": "Three approaches are shown:\n\n1. Standard binary search approach (recommended):\n   - Use binary search to find the first bad version\n   - If mid is bad, search left half (including mid)\n   - If mid is good, search right half (excluding mid)\n   - Continue until left == right\n   - Time complexity: O(log n)\n   - Space complexity: O(1)\n\n2. Alternative approach with result tracking:\n   - Similar logic but keeps track of the result\n   - Uses left <= right condition\n   - Updates result when a bad version is found\n   - Time complexity: O(log n)\n   - Space complexity: O(1)\n\n3. Recursive approach:\n   - Same logic but implemented recursively\n   - Base case: when left >= right\n   - Time complexity: O(log n)\n   - Space complexity: O(log n) due to recursion stack\n\nThe first approach is the most efficient and commonly used solution for this type of problem."
+    "code": "# The isBadVersion API is already defined for you.\n# def isBadVersion(version: int) -> bool:\n\ndef first_bad_version(n: int) -> int:\n    left, right = 1, n\n    \n    while left < right:\n        # Use left + (right - left) // 2 to avoid overflow\n        mid = left + (right - left) // 2\n        \n        if isBadVersion(mid):\n            # If mid is bad, the first bad version is at mid or before\n            right = mid\n        else:\n            # If mid is good, the first bad version is after mid\n            left = mid + 1\n    \n    # At this point, left == right and it's the first bad version\n    return left",
+    "explanation": "Use binary search to find the first bad version:\n- If mid is bad, search left half (including mid)\n- If mid is good, search right half (excluding mid)\n- Continue until left == right\n- Time complexity: O(log n), Space complexity: O(1)"
   }
 }
