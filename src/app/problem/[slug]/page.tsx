@@ -149,7 +149,7 @@ export default async function ProblemPage({ params }: ProblemPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <SharedProblemView problem={problem} />
+      <SharedProblemView problem={problem} allProblems={problems} />
     </div>
   );
 }

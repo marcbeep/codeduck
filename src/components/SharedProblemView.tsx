@@ -20,6 +20,8 @@ import {
   ArrowLeft,
   Link as LinkIcon,
   Check,
+  Home,
+  Network,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -40,13 +42,69 @@ const getDifficultyColor = (difficulty: string) => {
   }
 };
 
-export function SharedProblemView({ problem }: { problem: LeetCodeProblem }) {
+// Function to find related problems
+const findRelatedProblems = (
+  currentProblem: LeetCodeProblem,
+  allProblems: LeetCodeProblem[]
+) => {
+  const related = allProblems
+    .filter((p) => p.id !== currentProblem.id) // Exclude current problem
+    .filter(
+      (p) =>
+        // Same category (highest priority)
+        p.category === currentProblem.category ||
+        // Same difficulty
+        p.difficulty === currentProblem.difficulty ||
+        // Same list (Blind 75, etc.)
+        p.list.some((list) => currentProblem.list.includes(list))
+    )
+    .sort((a, b) => {
+      // Prioritize same category + difficulty
+      if (
+        a.category === currentProblem.category &&
+        b.category !== currentProblem.category
+      )
+        return -1;
+      if (
+        b.category === currentProblem.category &&
+        a.category !== currentProblem.category
+      )
+        return 1;
+
+      // Then prioritize same difficulty
+      if (
+        a.difficulty === currentProblem.difficulty &&
+        b.difficulty !== currentProblem.difficulty
+      )
+        return -1;
+      if (
+        b.difficulty === currentProblem.difficulty &&
+        a.difficulty !== currentProblem.difficulty
+      )
+        return 1;
+
+      return 0;
+    })
+    .slice(0, 3); // Get top 3 related problems
+
+  return related;
+};
+
+export function SharedProblemView({
+  problem,
+  allProblems = [],
+}: {
+  problem: LeetCodeProblem;
+  allProblems?: LeetCodeProblem[];
+}) {
   const [showSolution, setShowSolution] = useState(false);
   const [showTestCases, setShowTestCases] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showRelated, setShowRelated] = useState(false);
 
   const code = problem.solution?.code || "";
   const explanation = problem.solution?.explanation || "";
+  const relatedProblems = findRelatedProblems(problem, allProblems);
 
   const handleShare = async () => {
     const shareUrl = generateShareUrl(problem);
@@ -62,16 +120,30 @@ export function SharedProblemView({ problem }: { problem: LeetCodeProblem }) {
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header with back button and sharing */}
       <div className="flex items-center justify-between">
-        <Link href="/">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="hover:bg-accent cursor-pointer"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Practice More Problems
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hover:bg-accent cursor-pointer"
+            >
+              <Home className="h-4 w-4 mr-2" />
+              Home
+            </Button>
+          </Link>
+
+          {relatedProblems.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowRelated(!showRelated)}
+              className="hover:bg-accent cursor-pointer"
+            >
+              <Network className="h-4 w-4 mr-2" />
+              Related Problems
+            </Button>
+          )}
+        </div>
 
         <div className="flex items-center gap-2">
           <Button
@@ -94,6 +166,62 @@ export function SharedProblemView({ problem }: { problem: LeetCodeProblem }) {
           </Button>
         </div>
       </div>
+
+      {/* Related Problems Section */}
+      <AnimatePresence mode="wait">
+        {showRelated && relatedProblems.length > 0 && (
+          <motion.div
+            key="related-problems"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="space-y-3 overflow-hidden"
+          >
+            <div className="bg-accent/30 p-4 rounded-lg">
+              <h3 className="font-semibold mb-3 text-sm">Related Problems:</h3>
+              <div className="grid gap-2">
+                {relatedProblems.map((relatedProblem) => {
+                  const slug = `${relatedProblem.id
+                    .toString()
+                    .padStart(3, "0")}-${relatedProblem.title
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`;
+
+                  return (
+                    <Link
+                      key={relatedProblem.id}
+                      href={`/problem/${slug}`}
+                      className="block p-3 rounded-lg bg-background hover:bg-accent/50 transition-colors border"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="font-medium text-sm">
+                            {relatedProblem.title}
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(
+                                relatedProblem.difficulty
+                              )}`}
+                            >
+                              {relatedProblem.difficulty}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {relatedProblem.category}
+                            </span>
+                          </div>
+                        </div>
+                        <ArrowLeft className="h-4 w-4 text-muted-foreground rotate-180" />
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Main problem card */}
       <Card className="w-full shadow-lg">
