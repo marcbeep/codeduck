@@ -1,9 +1,7 @@
 {
   "id": 232,
   "title": "Implement Queue using Stacks",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75"],
   "category": "Stack",
   "difficulty": "Easy",
   "description": "Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).\n\nImplement the MyQueue class:\n- void push(int x) Pushes element x to the back of the queue.\n- int pop() Removes the element from the front of the queue and returns it.\n- int peek() Returns the element at the front of the queue.\n- boolean empty() Returns true if the queue is empty, false otherwise.\n\nNotes:\n- You must use only standard operations of a stack, which means only push to top, peek/pop from top, size, and is empty operations are valid.\n- Depending on your language, stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations.",
@@ -15,95 +13,31 @@
   "testCases": [
     {
       "input": {
-        "operations": [
-          "MyQueue",
-          "push",
-          "push",
-          "peek",
-          "pop",
-          "empty"
-        ],
-        "values": [
-          [],
-          [
-            1
-          ],
-          [
-            2
-          ],
-          [],
-          [],
-          []
-        ]
+        "operations": ["MyQueue", "push", "push", "peek", "pop", "empty"],
+        "values": [[], [1], [2], [], [], []]
       },
-      "output": [
-        null,
-        null,
-        null,
-        1,
-        1,
-        false
-      ],
+      "output": [null, null, null, 1, 1, false],
       "explanation": "MyQueue myQueue = new MyQueue();\nmyQueue.push(1); // queue is: [1]\nmyQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)\nmyQueue.peek(); // return 1\nmyQueue.pop(); // return 1, queue is [2]\nmyQueue.empty(); // return false"
     },
     {
       "input": {
-        "operations": [
-          "MyQueue",
-          "push",
-          "push",
-          "push",
-          "pop",
-          "pop",
-          "peek"
-        ],
-        "values": [
-          [],
-          [
-            1
-          ],
-          [
-            2
-          ],
-          [
-            3
-          ],
-          [],
-          [],
-          []
-        ]
+        "operations": ["MyQueue", "push", "push", "push", "pop", "pop", "peek"],
+        "values": [[], [1], [2], [3], [], [], []]
       },
-      "output": [
-        null,
-        null,
-        null,
-        null,
-        1,
-        2,
-        3
-      ],
+      "output": [null, null, null, null, 1, 2, 3],
       "explanation": "Demonstrates FIFO behavior: first in (1) is first out."
     },
     {
       "input": {
-        "operations": [
-          "MyQueue",
-          "empty"
-        ],
-        "values": [
-          [],
-          []
-        ]
+        "operations": ["MyQueue", "empty"],
+        "values": [[], []]
       },
-      "output": [
-        null,
-        true
-      ],
+      "output": [null, true],
       "explanation": "New queue is empty."
     }
   ],
   "solution": {
-    "code": "class MyQueue:\n    def __init__(self):\n        self.stack_in = []\n        self.stack_out = []\n    \n    def push(self, x: int) -> None:\n        # Push element to the input stack\n        self.stack_in.append(x)\n    \n    def pop(self) -> int:\n        # If output stack is empty, transfer all elements from input stack\n        if not self.stack_out:\n            while self.stack_in:\n                self.stack_out.append(self.stack_in.pop())\n        \n        # Pop from output stack (which contains elements in correct order)\n        return self.stack_out.pop()\n    \n    def peek(self) -> int:\n        # If output stack is empty, transfer all elements from input stack\n        if not self.stack_out:\n            while self.stack_in:\n                self.stack_out.append(self.stack_in.pop())\n        \n        # Peek from output stack\n        return self.stack_out[-1]\n    \n    def empty(self) -> bool:\n        # Queue is empty if both stacks are empty\n        return not self.stack_in and not self.stack_out\n\n# Alternative approach with amortized O(1) operations\nclass MyQueueOptimized:\n    def __init__(self):\n        self.stack_in = []\n        self.stack_out = []\n    \n    def push(self, x: int) -> None:\n        self.stack_in.append(x)\n    \n    def pop(self) -> int:\n        self._transfer_if_needed()\n        return self.stack_out.pop()\n    \n    def peek(self) -> int:\n        self._transfer_if_needed()\n        return self.stack_out[-1]\n    \n    def empty(self) -> bool:\n        return not self.stack_in and not self.stack_out\n    \n    def _transfer_if_needed(self):\n        # Only transfer if output stack is empty\n        if not self.stack_out:\n            while self.stack_in:\n                self.stack_out.append(self.stack_in.pop())\n\n# Simple approach using single stack (less efficient)\nclass MyQueueSimple:\n    def __init__(self):\n        self.stack = []\n    \n    def push(self, x: int) -> None:\n        # Create a temporary stack to reverse the order\n        temp_stack = []\n        \n        # Move all elements to temp stack (reverses order)\n        while self.stack:\n            temp_stack.append(self.stack.pop())\n        \n        # Add new element to original stack\n        self.stack.append(x)\n        \n        # Move all elements back from temp stack\n        while temp_stack:\n            self.stack.append(temp_stack.pop())\n    \n    def pop(self) -> int:\n        return self.stack.pop()\n    \n    def peek(self) -> int:\n        return self.stack[-1]\n    \n    def empty(self) -> bool:\n        return not self.stack",
-    "explanation": "Three approaches are shown:\n\n1. Two-stack approach (recommended):\n   - Use two stacks: stack_in for push operations, stack_out for pop/peek\n   - When pop/peek is called and stack_out is empty, transfer all elements from stack_in\n   - This maintains FIFO order: elements pushed first come out first\n   - Amortized time complexity: O(1) for all operations\n   - Space complexity: O(n) where n is the number of elements\n\n2. Optimized two-stack approach:\n   - Same logic as above but with helper method for cleaner code\n   - Only transfers elements when necessary (when stack_out is empty)\n   - Amortized time complexity: O(1)\n   - Space complexity: O(n)\n\n3. Single stack approach (less efficient):\n   - Uses only one stack but reverses the entire stack on each push\n   - Time complexity: O(n) for push, O(1) for pop/peek\n   - Space complexity: O(n)\n   - Not recommended due to poor push performance\n\nThe two-stack approach is the standard solution and provides the best amortized performance."
+    "code": "class MyQueue:\n    def __init__(self):\n        self.stack_in = []\n        self.stack_out = []\n    \n    def push(self, x: int) -> None:\n        # Push element to the input stack\n        self.stack_in.append(x)\n    \n    def pop(self) -> int:\n        # If output stack is empty, transfer all elements from input stack\n        if not self.stack_out:\n            while self.stack_in:\n                self.stack_out.append(self.stack_in.pop())\n        \n        # Pop from output stack (which contains elements in correct order)\n        return self.stack_out.pop()\n    \n    def peek(self) -> int:\n        # If output stack is empty, transfer all elements from input stack\n        if not self.stack_out:\n            while self.stack_in:\n                self.stack_out.append(self.stack_in.pop())\n        \n        # Peek from output stack\n        return self.stack_out[-1]\n    \n    def empty(self) -> bool:\n        # Queue is empty if both stacks are empty\n        return not self.stack_in and not self.stack_out",
+    "explanation": "This solution uses two stacks:\n1. Use two stacks: stack_in for push operations, stack_out for pop/peek\n2. When pop/peek is called and stack_out is empty, transfer all elements from stack_in\n3. This maintains FIFO order: elements pushed first come out first\n4. Amortized time complexity: O(1) for all operations\n5. Space complexity: O(n) where n is the number of elements\n\nKey insight: Transferring elements from stack_in to stack_out reverses their order, creating the FIFO behavior needed for a queue."
   }
 }
