@@ -1,9 +1,7 @@
 {
   "id": 876,
   "title": "Middle of the Linked List",
-  "list": [
-    "grind75"
-  ],
+  "list": ["grind75"],
   "category": "Linked List",
   "difficulty": "Easy",
   "description": "Given the head of a singly linked list, return the middle node of the linked list.\n\nIf there are two middle nodes, return the second middle node.",
@@ -14,65 +12,35 @@
   "testCases": [
     {
       "input": {
-        "head": [
-          1,
-          2,
-          3,
-          4,
-          5
-        ]
+        "head": [1, 2, 3, 4, 5]
       },
-      "output": [
-        3,
-        4,
-        5
-      ],
+      "output": [3, 4, 5],
       "explanation": "The middle node of the list is node 3."
     },
     {
       "input": {
-        "head": [
-          1,
-          2,
-          3,
-          4,
-          5,
-          6
-        ]
+        "head": [1, 2, 3, 4, 5, 6]
       },
-      "output": [
-        4,
-        5,
-        6
-      ],
+      "output": [4, 5, 6],
       "explanation": "Since the list has two middle nodes with values 3 and 4, we return the second one."
     },
     {
       "input": {
-        "head": [
-          1
-        ]
+        "head": [1]
       },
-      "output": [
-        1
-      ],
+      "output": [1],
       "explanation": "Single node is the middle node."
     },
     {
       "input": {
-        "head": [
-          1,
-          2
-        ]
+        "head": [1, 2]
       },
-      "output": [
-        2
-      ],
+      "output": [2],
       "explanation": "Since there are two middle nodes, return the second one."
     }
   ],
   "solution": {
-    "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\ndef middle_node(head):\n    # Two pointer approach (Fast and Slow)\n    slow = head\n    fast = head\n    \n    # Move fast pointer twice as fast as slow pointer\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    \n    return slow\n\n# Alternative approach using length calculation\ndef middle_node_length(head):\n    # First pass: count the number of nodes\n    length = 0\n    current = head\n    while current:\n        length += 1\n        current = current.next\n    \n    # Second pass: find the middle node\n    middle_index = length // 2\n    current = head\n    for _ in range(middle_index):\n        current = current.next\n    \n    return current\n\n# Alternative approach using list\ndef middle_node_list(head):\n    # Convert linked list to list\n    nodes = []\n    current = head\n    while current:\n        nodes.append(current)\n        current = current.next\n    \n    # Return the middle node\n    return nodes[len(nodes) // 2]\n\n# Alternative approach using counter\ndef middle_node_counter(head):\n    # Count nodes and find middle\n    count = 0\n    current = head\n    \n    # Count total nodes\n    while current:\n        count += 1\n        current = current.next\n    \n    # Find middle node\n    middle = count // 2\n    current = head\n    for _ in range(middle):\n        current = current.next\n    \n    return current\n\n# Alternative approach using two passes with different speeds\ndef middle_node_two_speeds(head):\n    # First pass: find length\n    length = 0\n    current = head\n    while current:\n        length += 1\n        current = current.next\n    \n    # Second pass: move to middle\n    current = head\n    steps = length // 2\n    for _ in range(steps):\n        current = current.next\n    \n    return current",
-    "explanation": "Five approaches are shown:\n\n1. Two pointer approach (recommended):\n   - Use slow and fast pointers\n   - Fast pointer moves twice as fast as slow pointer\n   - When fast reaches end, slow is at middle\n   - Time complexity: O(n/2) = O(n)\n   - Space complexity: O(1)\n\n2. Length calculation approach:\n   - First pass: count total nodes\n   - Second pass: move to middle node\n   - Simple and straightforward\n   - Time complexity: O(n)\n   - Space complexity: O(1)\n\n3. List approach:\n   - Convert linked list to list\n   - Return middle element of list\n   - Easy to understand but uses extra space\n   - Time complexity: O(n)\n   - Space complexity: O(n)\n\n4. Counter approach:\n   - Similar to length calculation\n   - Uses a counter variable\n   - Two passes through the list\n   - Time complexity: O(n)\n   - Space complexity: O(1)\n\n5. Two speeds approach:\n   - Explicitly shows the two-pass nature\n   - First pass for length, second for positioning\n   - Clear separation of concerns\n   - Time complexity: O(n)\n   - Space complexity: O(1)\n\nThe two pointer approach is the most efficient and elegant solution, as it requires only one pass through the list and uses constant space."
+    "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\ndef middle_node(head):\n    # Two pointer approach (Fast and Slow)\n    slow = head\n    fast = head\n    \n    # Move fast pointer twice as fast as slow pointer\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    \n    return slow",
+    "explanation": "Use slow and fast pointers. Fast pointer moves twice as fast as slow pointer. When fast reaches end, slow is at middle.\n\nTime complexity: O(n/2) = O(n)\nSpace complexity: O(1)\n\nThe two pointer approach is the most efficient and elegant solution, as it requires only one pass through the list and uses constant space."
   }
 }
