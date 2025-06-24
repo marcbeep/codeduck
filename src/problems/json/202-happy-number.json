@@ -31,6 +31,6 @@
   ],
   "solution": {
     "code": "def isHappy(n: int) -> bool:\n    def get_next(n):\n        total_sum = 0\n        while n > 0:\n            n, digit = divmod(n, 10)\n            total_sum += digit ** 2\n        return total_sum\n    \n    seen = set()\n    while n != 1 and n not in seen:\n        seen.add(n)\n        n = get_next(n)\n    \n    return n == 1",
-    "explanation": "This solution uses a hash set to detect cycles:\n1. Calculate the sum of squares of digits for the current number\n2. If we reach 1, the number is happy\n3. If we encounter a number we've seen before, we're in a cycle and the number is not happy\n4. Use a set to track visited numbers\n\nTime complexity: O(log n) - the number of digits in n determines the number of iterations.\nSpace complexity: O(log n) - we store at most log n numbers in the set."
+    "explanation": "Use set to detect cycles. Calculate sum of digit squares, return true if reaches 1, false if cycles. Time O(log n), space O(log n)."
   }
 }
