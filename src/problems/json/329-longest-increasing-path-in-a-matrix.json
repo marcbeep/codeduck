@@ -1,0 +1,49 @@
+{
+  "id": 329,
+  "title": "Longest Increasing Path in a Matrix",
+  "list": ["neetcode150"],
+  "category": "2-D DP",
+  "difficulty": "Hard",
+  "description": "Given an m x n integers matrix, return the length of the longest increasing path in matrix.\n\nFrom each cell, you can either move in four directions: left, right, up, or down. You may not move diagonally or move outside the boundary (i.e., wrap-around is not allowed).",
+  "constraints": [
+    "m == matrix.length",
+    "n == matrix[i].length",
+    "1 <= m, n <= 200",
+    "0 <= matrix[i][j] <= 231 - 1"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "matrix": [
+          [9, 9, 4],
+          [6, 6, 8],
+          [2, 1, 1]
+        ]
+      },
+      "output": 4,
+      "explanation": "The longest increasing path is [1, 2, 6, 9]."
+    },
+    {
+      "input": {
+        "matrix": [
+          [3, 4, 5],
+          [3, 2, 6],
+          [2, 2, 1]
+        ]
+      },
+      "output": 4,
+      "explanation": "The longest increasing path is [3, 4, 5, 6]."
+    },
+    {
+      "input": {
+        "matrix": [[1]]
+      },
+      "output": 1,
+      "explanation": "Single cell has path length 1."
+    }
+  ],
+  "solution": {
+    "code": "def longestIncreasingPath(matrix: list[list[int]]) -> int:\n    if not matrix or not matrix[0]:\n        return 0\n    \n    m, n = len(matrix), len(matrix[0])\n    # dp[i][j] = length of longest increasing path starting at (i,j)\n    dp = [[0] * n for _ in range(m)]\n    \n    def dfs(i: int, j: int) -> int:\n        if dp[i][j] != 0:\n            return dp[i][j]\n        \n        # Try all 4 directions\n        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n        max_path = 1\n        \n        for di, dj in directions:\n            ni, nj = i + di, j + dj\n            if (0 <= ni < m and 0 <= nj < n and \n                matrix[ni][nj] > matrix[i][j]):\n                max_path = max(max_path, 1 + dfs(ni, nj))\n        \n        dp[i][j] = max_path\n        return max_path\n    \n    # Try starting from each cell\n    result = 0\n    for i in range(m):\n        for j in range(n):\n            result = max(result, dfs(i, j))\n    \n    return result",
+    "explanation": "This solution uses DFS with memoization (DP):\n1. dp[i][j] = length of longest increasing path starting at (i,j)\n2. For each cell, try all 4 directions\n3. If neighbor has larger value, recursively find its path length\n4. Take maximum of all valid directions + 1\n5. Memoize results to avoid recomputation\n\nTime complexity: O(m*n), Space complexity: O(m*n)"
+  }
+}

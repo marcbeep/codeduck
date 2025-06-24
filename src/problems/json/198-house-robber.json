@@ -1,0 +1,29 @@
+{
+  "id": 198,
+  "title": "House Robber",
+  "list": ["neetcode150"],
+  "category": "1-D DP",
+  "difficulty": "Medium",
+  "description": "You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.\n\nGiven an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.",
+  "constraints": ["1 <= nums.length <= 100", "0 <= nums[i] <= 400"],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 2, 3, 1]
+      },
+      "output": 4,
+      "explanation": "Rob house 1 (money = 1) and then rob house 3 (money = 3). Total amount you can rob = 1 + 3 = 4."
+    },
+    {
+      "input": {
+        "nums": [2, 7, 9, 3, 1]
+      },
+      "output": 12,
+      "explanation": "Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1). Total amount you can rob = 2 + 9 + 1 = 12."
+    }
+  ],
+  "solution": {
+    "code": "def rob(nums: list[int]) -> int:\n    n = len(nums)\n    \n    # Base cases\n    if n == 0:\n        return 0\n    if n == 1:\n        return nums[0]\n    if n == 2:\n        return max(nums[0], nums[1])\n    \n    # Use dynamic programming with constant space\n    prev2, prev1 = nums[0], max(nums[0], nums[1])\n    \n    for i in range(2, n):\n        current = max(prev1, prev2 + nums[i])\n        prev2, prev1 = prev1, current\n    \n    return prev1",
+    "explanation": "This solution uses dynamic programming with constant space:\n1. For each house i, we have two choices: rob it or skip it\n2. If we rob house i, we cannot rob house i-1, so we add nums[i] to the maximum amount from house i-2\n3. If we skip house i, we take the maximum amount from house i-1\n4. We use two variables to store the previous two maximum amounts\n5. The final answer is the maximum amount we can rob from the last house\n\nThe time complexity is O(n) as we iterate through the array once. The space complexity is O(1) as we only use two variables.\n\nKey insight: At each house, we choose between robbing it (and taking the max from i-2) or skipping it (and taking the max from i-1)."
+  }
+}

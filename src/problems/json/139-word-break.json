@@ -1,7 +1,7 @@
 {
   "id": 139,
   "title": "Word Break",
-  "list": ["grind75"],
+  "list": ["grind75", "neetcode150"],
   "category": "1-D DP",
   "difficulty": "Medium",
   "description": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.\n\nNote that the same word in the dictionary may be reused multiple times in the segmentation.",

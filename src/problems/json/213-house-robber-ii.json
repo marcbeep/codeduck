@@ -1,0 +1,29 @@
+{
+  "id": 213,
+  "title": "House Robber II",
+  "list": ["neetcode150"],
+  "category": "1-D DP",
+  "difficulty": "Medium",
+  "description": "You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.\n\nGiven an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.",
+  "constraints": ["1 <= nums.length <= 100", "0 <= nums[i] <= 1000"],
+  "testCases": [
+    {
+      "input": {
+        "nums": [2, 3, 2]
+      },
+      "output": 3,
+      "explanation": "You cannot rob house 1 (money = 2) and then rob house 3 (money = 2), because they are adjacent houses."
+    },
+    {
+      "input": {
+        "nums": [1, 2, 3, 1]
+      },
+      "output": 4,
+      "explanation": "Rob house 1 (money = 1) and then rob house 3 (money = 3). Total amount you can rob = 1 + 3 = 4."
+    }
+  ],
+  "solution": {
+    "code": "def rob(nums: list[int]) -> int:\n    n = len(nums)\n    \n    # Base cases\n    if n == 0:\n        return 0\n    if n == 1:\n        return nums[0]\n    if n == 2:\n        return max(nums[0], nums[1])\n    \n    # Helper function for linear house robbery\n    def rob_linear(nums: list[int]) -> int:\n        prev2, prev1 = nums[0], max(nums[0], nums[1])\n        for i in range(2, len(nums)):\n            current = max(prev1, prev2 + nums[i])\n            prev2, prev1 = prev1, current\n        return prev1\n    \n    # Since houses are in a circle, we can't rob both first and last house\n    # So we take the maximum of: rob houses 0 to n-2 OR rob houses 1 to n-1\n    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))",
+    "explanation": "This solution extends the House Robber I problem to handle circular arrangement:\n1. Since houses are arranged in a circle, we cannot rob both the first and last house\n2. We solve this by taking the maximum of two scenarios:\n   - Rob houses from index 0 to n-2 (exclude last house)\n   - Rob houses from index 1 to n-1 (exclude first house)\n3. We use the same linear robbery logic from House Robber I for each scenario\n4. The final answer is the maximum of these two scenarios\n\nThe time complexity is O(n) as we solve two linear robbery problems. The space complexity is O(1) as we use constant space for each linear solution.\n\nKey insight: The circular constraint means we must exclude either the first or last house, so we solve two linear problems and take the maximum."
+  }
+}

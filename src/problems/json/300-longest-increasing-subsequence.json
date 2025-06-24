@@ -1,0 +1,36 @@
+{
+  "id": 300,
+  "title": "Longest Increasing Subsequence",
+  "list": ["neetcode150"],
+  "category": "1-D DP",
+  "difficulty": "Medium",
+  "description": "Given an integer array nums, return the length of the longest strictly increasing subsequence.",
+  "constraints": ["1 <= nums.length <= 2500", "-104 <= nums[i] <= 104"],
+  "testCases": [
+    {
+      "input": {
+        "nums": [10, 9, 2, 5, 3, 7, 101, 18]
+      },
+      "output": 4,
+      "explanation": "The longest increasing subsequence is [2, 3, 7, 101], therefore the length is 4."
+    },
+    {
+      "input": {
+        "nums": [0, 1, 0, 3, 2, 3]
+      },
+      "output": 4,
+      "explanation": "The longest increasing subsequence is [0, 1, 2, 3], therefore the length is 4."
+    },
+    {
+      "input": {
+        "nums": [7, 7, 7, 7, 7, 7, 7]
+      },
+      "output": 1,
+      "explanation": "The longest increasing subsequence is [7], therefore the length is 1."
+    }
+  ],
+  "solution": {
+    "code": "def lengthOfLIS(nums: list[int]) -> int:\n    if not nums:\n        return 0\n    \n    n = len(nums)\n    # dp[i] represents the length of LIS ending at index i\n    dp = [1] * n\n    \n    for i in range(1, n):\n        # Check all previous elements\n        for j in range(i):\n            if nums[i] > nums[j]:\n                dp[i] = max(dp[i], dp[j] + 1)\n    \n    return max(dp)",
+    "explanation": "This solution uses dynamic programming:\n1. We create a DP array where dp[i] represents the length of the longest increasing subsequence ending at index i\n2. We initialize all dp[i] = 1 (each element is a subsequence of length 1)\n3. For each element at index i, we check all previous elements j < i\n4. If nums[i] > nums[j], we can extend the subsequence ending at j by including nums[i]\n5. We update dp[i] with the maximum length possible\n6. The final answer is the maximum value in the dp array\n\nThe time complexity is O(n²) as we check all previous elements for each element. The space complexity is O(n) for the dp array.\n\nKey insight: For each position, we look at all previous positions and extend the longest increasing subsequence that can end with the current element."
+  }
+}

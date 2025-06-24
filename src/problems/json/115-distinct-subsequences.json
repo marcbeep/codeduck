@@ -1,0 +1,42 @@
+{
+  "id": 115,
+  "title": "Distinct Subsequences",
+  "list": ["neetcode150"],
+  "category": "2-D DP",
+  "difficulty": "Hard",
+  "description": "Given two strings s and t, return the number of distinct subsequences of s which equals t.\n\nA string's subsequence is a new string formed from the original string by deleting some (can be none) of the characters without disturbing the remaining characters' relative positions. (i.e., \"ACE\" is a subsequence of \"ABCDE\" while \"AEC\" is not).\n\nThe test cases are generated so that the answer fits on a 32-bit signed integer.",
+  "constraints": [
+    "1 <= s.length, t.length <= 1000",
+    "s and t consist of English letters."
+  ],
+  "testCases": [
+    {
+      "input": {
+        "s": "rabbbit",
+        "t": "rabbit"
+      },
+      "output": 3,
+      "explanation": "As shown below, there are 3 ways you can generate \"rabbit\" from s.\n\"rabbbit\" -> \"rabbit\"\n\"rabbbit\" -> \"rabbit\"\n\"rabbbit\" -> \"rabbit\""
+    },
+    {
+      "input": {
+        "s": "babgbag",
+        "t": "bag"
+      },
+      "output": 5,
+      "explanation": "As shown below, there are 5 ways you can generate \"bag\" from s.\n\"babgbag\" -> \"bag\"\n\"babgbag\" -> \"bag\"\n\"babgbag\" -> \"bag\"\n\"babgbag\" -> \"bag\"\n\"babgbag\" -> \"bag\""
+    },
+    {
+      "input": {
+        "s": "abc",
+        "t": "abc"
+      },
+      "output": 1,
+      "explanation": "Only one way to generate \"abc\" from \"abc\"."
+    }
+  ],
+  "solution": {
+    "code": "def numDistinct(s: str, t: str) -> int:\n    m, n = len(s), len(t)\n    # dp[i][j] = number of ways to form t[0:j] from s[0:i]\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n    \n    # Base case: empty string can be formed in 1 way\n    for i in range(m + 1):\n        dp[i][0] = 1\n    \n    # Fill DP table\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if s[i-1] == t[j-1]:\n                # Can use current character or skip it\n                dp[i][j] = dp[i-1][j-1] + dp[i-1][j]\n            else:\n                # Must skip current character\n                dp[i][j] = dp[i-1][j]\n    \n    return dp[m][n]",
+    "explanation": "This solution uses 2-D DP:\n1. dp[i][j] = number of ways to form t[0:j] from s[0:i]\n2. Base case: dp[i][0] = 1 (empty string can be formed in 1 way)\n3. For each position (i,j):\n   - If s[i-1] == t[j-1]: dp[i][j] = dp[i-1][j-1] + dp[i-1][j]\n   - Else: dp[i][j] = dp[i-1][j]\n4. Answer is dp[m][n]\n\nTime complexity: O(m*n), Space complexity: O(m*n)"
+  }
+}
