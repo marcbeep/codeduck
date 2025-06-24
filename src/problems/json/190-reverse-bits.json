@@ -1,0 +1,25 @@
+{
+  "id": 190,
+  "title": "Reverse Bits",
+  "list": ["neetcode150"],
+  "category": "Bit Manipulation",
+  "difficulty": "Easy",
+  "description": "Reverse bits of a given 32 bits unsigned integer.",
+  "constraints": ["The input must be a binary string of length 32."],
+  "testCases": [
+    {
+      "input": { "n": 43261596 },
+      "output": 964176192,
+      "explanation": "Input: 00000010100101000001111010011100 Output: 00111001011110000010100101000000"
+    },
+    {
+      "input": { "n": 4294967293 },
+      "output": 3221225471,
+      "explanation": "Input: 11111111111111111111111111111101 Output: 10111111111111111111111111111111"
+    }
+  ],
+  "solution": {
+    "code": "def reverseBits(n: int) -> int:\n    result = 0\n    for _ in range(32):\n        result = (result << 1) | (n & 1)\n        n >>= 1\n    return result",
+    "explanation": "We shift result left and add the last bit of n for 32 times. Time complexity is O(1) since the integer is fixed size."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": 7,
+  "title": "Reverse Integer",
+  "list": ["neetcode150"],
+  "category": "Bit Manipulation",
+  "difficulty": "Medium",
+  "description": "Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range, return 0.",
+  "constraints": ["-2^31 <= x <= 2^31 - 1"],
+  "testCases": [
+    {
+      "input": { "x": 123 },
+      "output": 321,
+      "explanation": "Reverse of 123 is 321."
+    },
+    {
+      "input": { "x": -123 },
+      "output": -321,
+      "explanation": "Reverse of -123 is -321."
+    },
+    {
+      "input": { "x": 120 },
+      "output": 21,
+      "explanation": "Reverse of 120 is 21."
+    },
+    { "input": { "x": 0 }, "output": 0, "explanation": "Reverse of 0 is 0." }
+  ],
+  "solution": {
+    "code": "def reverse(x: int) -> int:\n    res = 0\n    sign = -1 if x < 0 else 1\n    x = abs(x)\n    while x != 0:\n        res = res * 10 + x % 10\n        x //= 10\n    res *= sign\n    if res < -2**31 or res > 2**31 - 1:\n        return 0\n    return res",
+    "explanation": "We extract digits and build the reversed number. Check for overflow. Time complexity is O(log(x))."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": 136,
+  "title": "Single Number",
+  "list": ["neetcode150"],
+  "category": "Bit Manipulation",
+  "difficulty": "Easy",
+  "description": "Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.",
+  "constraints": [
+    "1 <= nums.length <= 3 * 10^4",
+    "-3 * 10^4 <= nums[i] <= 3 * 10^4",
+    "Each element in the array appears twice except for one element which appears only once."
+  ],
+  "testCases": [
+    {
+      "input": { "nums": [2, 2, 1] },
+      "output": 1,
+      "explanation": "1 appears only once."
+    },
+    {
+      "input": { "nums": [4, 1, 2, 1, 2] },
+      "output": 4,
+      "explanation": "4 appears only once."
+    },
+    {
+      "input": { "nums": [1] },
+      "output": 1,
+      "explanation": "Only one element in the array."
+    }
+  ],
+  "solution": {
+    "code": "def singleNumber(nums: list[int]) -> int:\n    result = 0\n    for num in nums:\n        result ^= num\n    return result",
+    "explanation": "We use XOR to cancel out numbers appearing twice. The result will be the single number. Time complexity is O(n), space is O(1)."
+  }
+}
