@@ -256,7 +256,12 @@ export default function Home() {
       }
     });
 
-    // Keep the problems in the default category order (no shuffling)
+    // Sort the problems by difficulty: Easy first, then Medium, then Hard
+    const difficultyOrder = { Easy: 0, Medium: 1, Hard: 2 };
+    daily.sort(
+      (a, b) => difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty]
+    );
+
     setDailyProblems(daily);
     setIsDailyMode(true);
     setIsShuffled(false);
