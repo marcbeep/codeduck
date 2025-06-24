@@ -1,0 +1,46 @@
+{
+  "id": 332,
+  "title": "Reconstruct Itinerary",
+  "list": ["neetcode150"],
+  "category": "Advanced Graphs",
+  "difficulty": "Hard",
+  "description": "You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and arrival airports of one flight. Reconstruct the itinerary in order and return it.\n\nAll of the tickets belong to a man who departs from \"JFK\", thus the itinerary must begin with \"JFK\". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string.\n\nFor example, the itinerary [\"JFK\", \"LGA\"] has a smaller lexical order than [\"JFK\", \"LGB\"].\n\nYou may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.",
+  "constraints": [
+    "1 <= tickets.length <= 300",
+    "tickets[i].length == 2",
+    "1 <= fromi.length, toi.length <= 3",
+    "fromi and toi consist of uppercase English letters",
+    "fromi != toi"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "tickets": [
+          ["MUC", "LHR"],
+          ["JFK", "MUC"],
+          ["SFO", "SJC"],
+          ["LHR", "SFO"]
+        ]
+      },
+      "output": ["JFK", "MUC", "LHR", "SFO", "SJC"],
+      "explanation": "Starting from JFK, we visit MUC, then LHR, then SFO, and finally SJC."
+    },
+    {
+      "input": {
+        "tickets": [
+          ["JFK", "SFO"],
+          ["JFK", "ATL"],
+          ["SFO", "ATL"],
+          ["ATL", "JFK"],
+          ["ATL", "SFO"]
+        ]
+      },
+      "output": ["JFK", "ATL", "JFK", "SFO", "ATL", "SFO"],
+      "explanation": "Starting from JFK, we visit ATL, then back to JFK, then SFO, then ATL, and finally SFO."
+    }
+  ],
+  "solution": {
+    "code": "from collections import defaultdict\nimport heapq\n\ndef findItinerary(tickets: list[list[str]]) -> list[str]:\n # Build adjacency list with priority queue for lexical order\n graph = defaultdict(list)\n for from_airport, to_airport in tickets:\n heapq.heappush(graph[from_airport], to_airport)\n \n # Hierholzer's algorithm for Eulerian path\n result = []\n \n def dfs(airport):\n # Process all outgoing edges\n while graph[airport]:\n next_airport = heapq.heappop(graph[airport])\n dfs(next_airport)\n result.append(airport)\n \n dfs(\"JFK\")\n return result[::-1]",
+    "explanation": "This solution uses Hierholzer's algorithm to find an Eulerian path:\n1. Build an adjacency list using a priority queue to maintain lexical order\n2. Use DFS to traverse the graph, always choosing the lexicographically smallest next airport\n3. Add airports to the result in reverse order (post-order traversal)\n4. Reverse the result to get the correct itinerary order\n\nTime complexity: O(E log E) where E is the number of tickets\nSpace complexity: O(E)"
+  }
+}

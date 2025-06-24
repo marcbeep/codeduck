@@ -1,0 +1,44 @@
+{
+  "id": 778,
+  "title": "Swim In Rising Water",
+  "list": ["neetcode150"],
+  "category": "Advanced Graphs",
+  "difficulty": "Hard",
+  "description": "You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j).\n\nThe rain starts to fall. At time t, the depth of the water everywhere is t. You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most t. You can swim infinite distance in zero time. Of course, you must stay within the boundaries of the grid during your swim.\n\nReturn the least time until you can reach the bottom right square (n - 1, n - 1) if you start at the top left square (0, 0).",
+  "constraints": [
+    "n == grid.length",
+    "n == grid[i].length",
+    "1 <= n <= 50",
+    "0 <= grid[i][j] < n²",
+    "Each value grid[i][j] is unique."
+  ],
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [0, 2],
+          [1, 3]
+        ]
+      },
+      "output": 3,
+      "explanation": "At time 0, you are in grid location (0, 0). You cannot go anywhere else because 4-directionally adjacent neighbors have a higher elevation than t = 0. You cannot reach point (1, 1) until time 3."
+    },
+    {
+      "input": {
+        "grid": [
+          [0, 1, 2, 3, 4],
+          [24, 23, 22, 21, 5],
+          [12, 13, 14, 15, 16],
+          [11, 17, 18, 19, 20],
+          [10, 9, 8, 7, 6]
+        ]
+      },
+      "output": 16,
+      "explanation": "The final route is marked. We need to wait until time 16 so that (0, 0) and (4, 4) are connected."
+    }
+  ],
+  "solution": {
+    "code": "def swimInWater(grid: list[list[int]]) -> int:\n n = len(grid)\n \n def can_reach_target(t):\n # DFS to check if we can reach target with time t\n visited = set()\n \n def dfs(i, j):\n if i == n - 1 and j == n - 1:\n return True\n if i < 0 or i >= n or j < 0 or j >= n:\n return False\n if grid[i][j] > t or (i, j) in visited:\n return False\n \n visited.add((i, j))\n \n # Try all 4 directions\n directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n for di, dj in directions:\n if dfs(i + di, j + dj):\n return True\n return False\n \n return dfs(0, 0)\n \n # Binary search for the minimum time\n left, right = grid[0][0], n * n - 1\n \n while left < right:\n mid = (left + right) // 2\n if can_reach_target(mid):\n right = mid\n else:\n left = mid + 1\n \n return left",
+    "explanation": "This solution uses binary search with DFS:\n1. Binary search on the time value to find the minimum time needed\n2. For each time value, use DFS to check if we can reach the target\n3. DFS explores all 4-directionally adjacent cells that have elevation ≤ current time\n4. Return the minimum time when path exists\n\nTime complexity: O(n² log(n²)) where n is the grid size\nSpace complexity: O(n²)"
+  }
+}
