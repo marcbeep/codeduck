@@ -18,14 +18,11 @@ import {
   TestTube2,
   Tag,
   ArrowLeft,
-  Link as LinkIcon,
-  Check,
   Home,
   Network,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { generateShareUrl, copyToClipboard } from "@/lib/sharing";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -99,22 +96,11 @@ export function SharedProblemView({
 }) {
   const [showSolution, setShowSolution] = useState(false);
   const [showTestCases, setShowTestCases] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [showRelated, setShowRelated] = useState(false);
 
   const code = problem.solution?.code || "";
   const explanation = problem.solution?.explanation || "";
   const relatedProblems = findRelatedProblems(problem, allProblems);
-
-  const handleShare = async () => {
-    const shareUrl = generateShareUrl(problem);
-    const success = await copyToClipboard(shareUrl);
-
-    if (success) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -123,7 +109,7 @@ export function SharedProblemView({
         <div className="flex items-center gap-2">
           <Link href="/">
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               className="hover:bg-accent cursor-pointer"
             >
@@ -143,27 +129,6 @@ export function SharedProblemView({
               Related Problems
             </Button>
           )}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleShare}
-            className="hover:bg-accent transition-all duration-200 cursor-pointer"
-          >
-            {copied ? (
-              <>
-                <Check className="h-4 w-4 mr-2 text-green-600" />
-                Copied!
-              </>
-            ) : (
-              <>
-                <LinkIcon className="h-4 w-4 mr-2" />
-                Copy Link
-              </>
-            )}
-          </Button>
         </div>
       </div>
 
