@@ -34,7 +34,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { isValidCategory } from "@/lib/types";
-import { MinimalFooter } from "@/components/MinimalFooter";
+import { Footer } from "@/components/Footer";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 
@@ -679,7 +679,7 @@ export default function Home() {
           </CommandDialog>
         </div>
       </div>
-      <MinimalFooter />
+      <Footer />
     </>
   );
 }

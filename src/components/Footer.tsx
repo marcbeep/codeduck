@@ -1,4 +1,5 @@
 import React from "react";
+import { Globe, Github, Linkedin } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -26,30 +27,30 @@ export const Footer: React.FC = () => {
             Software engineer from Trinidad & Tobago, based in the UK. I build
             things people love.
           </p>
-          <div className="flex flex-col gap-1 text-primary">
+          <div className="flex gap-3 text-primary">
             <a
               href="https://marc.tt"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
+              className="hover:text-primary/80 transition-colors"
             >
-              Personal Website
+              <Globe className="w-5 h-5" />
             </a>
             <a
               href="https://github.com/marcbeep"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
+              className="hover:text-primary/80 transition-colors"
             >
-              GitHub
+              <Github className="w-5 h-5" />
             </a>
             <a
               href="https://www.linkedin.com/in/marcbeepath/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline"
+              className="hover:text-primary/80 transition-colors"
             >
-              LinkedIn
+              <Linkedin className="w-5 h-5" />
             </a>
           </div>
         </div>
