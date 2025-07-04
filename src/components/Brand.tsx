@@ -64,7 +64,7 @@ export const Brand: React.FC<BrandProps> = ({
             alt="CodeDuck Logo"
             width={logoSizes[size]}
             height={logoSizes[size]}
-            className="flex-shrink-0"
+            className="flex-shrink-0 rounded-full"
           />
           {showText && (
             <span
@@ -83,7 +83,7 @@ export const Brand: React.FC<BrandProps> = ({
               alt="CodeDuck Logo"
               width={48}
               height={48}
-              className="flex-shrink-0"
+              className="flex-shrink-0 rounded-full"
             />
             <AlertDialogTitle className="text-2xl font-bold">
               Welcome to CodeDuck! 🚀
