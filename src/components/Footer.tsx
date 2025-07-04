@@ -1,5 +1,5 @@
 import React from "react";
-import { Globe, Github, Linkedin } from "lucide-react";
+import { Globe, Github, Linkedin, Heart } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -15,7 +15,8 @@ export const Footer: React.FC = () => {
             Practice, filter, and track your progress.
           </p>
           <p className="text-xs text-muted-foreground mt-2">
-            Built with Next.js, TypeScript, and ❤️
+            Built with Next.js, TypeScript, and{" "}
+            <Heart className="inline w-3 h-3 fill-black" />
           </p>
         </div>
         {/* About Marc Beepath */}
