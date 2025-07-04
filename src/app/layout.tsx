@@ -19,11 +19,7 @@ export const metadata: Metadata = {
     "Practice coding interview problems with interactive flashcards. Study algorithms, data structures, and problem-solving techniques with programming interview questions.",
   keywords:
     "codeduck, coding interview, algorithms, data structures, programming, flashcards, practice, interview prep, leetcode",
-  authors: [
-    { name: "Marc Beepath", url: "https://marc.tt" },
-    { name: "Daniel Diaz", url: "https://github.com/Daniel-04" },
-    { name: "Haowen Rong", url: "https://github.com/HaowenRong" },
-  ],
+  authors: [{ name: "Marc Beepath", url: "https://marc.tt" }],
   icons: {
     icon: [
       { url: "/favicon.ico" },

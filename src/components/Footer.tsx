@@ -1,0 +1,59 @@
+import React from "react";
+
+export const Footer: React.FC = () => {
+  return (
+    <footer className="w-full border-t bg-white text-muted-foreground text-sm px-4 py-8 mt-12">
+      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start text-left">
+        {/* About the App */}
+        <div>
+          <h2 className="font-semibold text-lg mb-2 text-black">
+            About CodeDuck
+          </h2>
+          <p className="mb-1">
+            A minimal, modern LeetCode flashcard app for focused interview prep.
+            Practice, filter, and track your progress.
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">
+            Built with Next.js, TypeScript, and ❤️
+          </p>
+        </div>
+        {/* About Marc Beepath */}
+        <div>
+          <h2 className="font-semibold text-lg mb-2 text-black">
+            Marc Beepath
+          </h2>
+          <p className="mb-2">
+            Software engineer from Trinidad & Tobago, based in the UK. I build
+            things people love.
+          </p>
+          <div className="flex flex-col gap-1 text-primary">
+            <a
+              href="https://marc.tt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              Personal Website
+            </a>
+            <a
+              href="https://github.com/marcbeep"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/marcbeepath/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
