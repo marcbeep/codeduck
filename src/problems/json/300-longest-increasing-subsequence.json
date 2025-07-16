@@ -1,7 +1,7 @@
 {
   "id": 300,
   "title": "Longest Increasing Subsequence",
-  "list": ["neetcode150"],
+  "list": ["neetcode150", "marc30"],
   "category": "1-D DP",
   "difficulty": "Medium",
   "description": "Given an integer array nums, return the length of the longest strictly increasing subsequence.",

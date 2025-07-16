@@ -1,0 +1,43 @@
+{
+  "id": 560,
+  "title": "Subarray Sum Equals K",
+  "list": ["marc30"],
+  "category": "Arrays & Hashing",
+  "difficulty": "Medium",
+  "description": "Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.\n\nA subarray is a contiguous non-empty sequence of elements within an array.",
+  "constraints": [
+    "1 <= nums.length <= 2 * 104",
+    "-1000 <= nums[i] <= 1000",
+    "-107 <= k <= 107"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "nums": [1, 1, 1],
+        "k": 2
+      },
+      "output": 2,
+      "explanation": "The subarrays [1,1] and [1,1] have sum 2."
+    },
+    {
+      "input": {
+        "nums": [1, 2, 3],
+        "k": 3
+      },
+      "output": 2,
+      "explanation": "The subarrays [1,2] and [3] have sum 3."
+    },
+    {
+      "input": {
+        "nums": [1, -1, 0],
+        "k": 0
+      },
+      "output": 3,
+      "explanation": "The subarrays [1,-1], [-1,0], and [0] have sum 0."
+    }
+  ],
+  "solution": {
+    "code": "def subarraySum(nums: list[int], k: int) -> int:\n    # Use prefix sum with hash map\n    prefix_sum = {0: 1}  # sum -> count\n    current_sum = 0\n    count = 0\n    \n    for num in nums:\n        current_sum += num\n        # If (current_sum - k) exists in prefix_sum, we found a subarray\n        if current_sum - k in prefix_sum:\n            count += prefix_sum[current_sum - k]\n        \n        # Update prefix_sum count\n        prefix_sum[current_sum] = prefix_sum.get(current_sum, 0) + 1\n    \n    return count",
+    "explanation": "This solution uses prefix sum with a hash map:\n1. We maintain a running sum and a hash map of prefix sums\n2. For each element, we check if (current_sum - k) exists in our map\n3. If it exists, we add the count of that prefix sum to our result\n4. We update the count of current prefix sum in our map\n\nThe time complexity is O(n) as we only need one pass through the array. The space complexity is O(n) as we might need to store all prefix sums in the hash map."
+  }
+}

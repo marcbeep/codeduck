@@ -1,7 +1,7 @@
 {
   "id": 206,
   "title": "Reverse Linked List",
-  "list": ["grind75", "neetcode150"],
+  "list": ["grind75", "neetcode150", "marc30"],
   "category": "Linked List",
   "difficulty": "Easy",
   "description": "Given the head of a singly linked list, reverse the list, and return the reversed list.",

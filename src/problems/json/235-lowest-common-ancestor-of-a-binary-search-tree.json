@@ -1,7 +1,7 @@
 {
   "id": 235,
   "title": "Lowest Common Ancestor of a Binary Search Tree",
-  "list": ["grind75", "neetcode150"],
+  "list": ["grind75", "neetcode150", "marc30"],
   "category": "Trees",
   "difficulty": "Medium",
   "description": "Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.\n\nAccording to the definition of LCA on Wikipedia: \"The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).\"",
@@ -42,7 +42,7 @@
     }
   ],
   "solution": {
-    "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, x):\n#         self.val = x\n#         self.left = None\n#         self.right = None\n\ndef lowest_common_ancestor(root, p, q):\n    # If both p and q are less than root, LCA is in left subtree\n    if p.val < root.val and q.val < root.val:\n        return lowest_common_ancestor(root.left, p, q)\n    \n    # If both p and q are greater than root, LCA is in right subtree\n    if p.val > root.val and q.val > root.val:\n        return lowest_common_ancestor(root.right, p, q)\n    \n    # If one is less and one is greater, or one equals root, root is LCA\n    return root",
-    "explanation": "This solution uses BST property for efficient LCA finding:\n- If both p and q are less than root, search left subtree\n- If both p and q are greater than root, search right subtree\n- Otherwise, root is the LCA\n- Time complexity: O(h) where h is the height of the tree\n- Space complexity: O(h) due to recursion stack"
+    "code": "def lowestCommonAncestor(root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':\n    # Use BST property: left subtree < root < right subtree\n    current = root\n    \n    while current:\n        # If both p and q are greater than current, go right\n        if p.val > current.val and q.val > current.val:\n            current = current.right\n        # If both p and q are less than current, go left\n        elif p.val < current.val and q.val < current.val:\n            current = current.left\n        # Otherwise, current is the LCA\n        else:\n            return current\n    \n    return None",
+    "explanation": "This solution uses the BST property to find LCA efficiently:\n1. Start from the root and traverse down the tree\n2. If both p and q are greater than current node, go to right subtree\n3. If both p and q are less than current node, go to left subtree\n4. Otherwise, current node is the LCA (one is in left, one in right, or one is current)\n\nThe time complexity is O(h) where h is the height of the tree. The space complexity is O(1) as we only use a constant amount of extra space."
   }
 }

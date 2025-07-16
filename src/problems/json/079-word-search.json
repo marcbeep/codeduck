@@ -1,7 +1,7 @@
 {
   "id": 79,
   "title": "Word Search",
-  "list": ["grind75", "neetcode150"],
+  "list": ["grind75", "neetcode150", "marc30"],
   "category": "Backtracking",
   "difficulty": "Medium",
   "description": "Given an m x n grid of characters board and a string word, return true if word exists in the grid.\n\nThe word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.",

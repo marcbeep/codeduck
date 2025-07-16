@@ -1,0 +1,60 @@
+{
+  "id": 460,
+  "title": "LFU Cache",
+  "list": ["marc30"],
+  "category": "Heap / Priority Queue",
+  "difficulty": "Hard",
+  "description": "Design and implement a data structure for a Least Frequently Used (LFU) cache.\n\nImplement the LFUCache class:\n- LFUCache(int capacity) Initializes the object with the capacity of the data structure.\n- int get(int key) Gets the value of the key if the key exists in the cache. Otherwise, returns -1.\n- void put(int key, int value) Update the value of the key if present, or insert the key if not already present. When the cache reaches its capacity, it should invalidate and remove the least frequently used key before inserting a new item. For this problem, when there is a tie (i.e., two or more keys with the same frequency), the least recently used key would be invalidated.\n\nTo determine the least frequently used key, a use counter is maintained for each key in the cache. The key with the smallest use counter is the least frequently used key.\n\nWhen a key is first inserted into the cache, its use counter is set to 1 (due to the put operation). The use counter for a key in the cache is incremented either a get or put operation is called on it.",
+  "constraints": [
+    "1 <= capacity <= 104",
+    "0 <= key <= 105",
+    "0 <= value <= 109",
+    "At most 2 * 105 calls will be made to get and put"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "operations": [
+          "LFUCache",
+          "put",
+          "put",
+          "get",
+          "put",
+          "get",
+          "get",
+          "put",
+          "get",
+          "get",
+          "get"
+        ],
+        "values": [
+          [2],
+          [1, 1],
+          [2, 2],
+          [1],
+          [3, 3],
+          [2],
+          [3],
+          [4, 4],
+          [1],
+          [3],
+          [4]
+        ]
+      },
+      "output": [null, null, null, 1, null, -1, 3, null, -1, 3, 4],
+      "explanation": "Cache operations: put(1,1), put(2,2), get(1)=1, put(3,3) evicts key 2, get(2)=-1, get(3)=3, put(4,4) evicts key 1, get(1)=-1, get(3)=3, get(4)=4"
+    },
+    {
+      "input": {
+        "operations": ["LFUCache", "put", "get"],
+        "values": [[1], [1, 1], [1]]
+      },
+      "output": [null, null, 1],
+      "explanation": "Simple case: put(1,1), get(1)=1"
+    }
+  ],
+  "solution": {
+    "code": "from collections import defaultdict, OrderedDict\n\nclass LFUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.key_to_freq = {}  # key -> frequency\n        self.freq_to_keys = defaultdict(OrderedDict)  # frequency -> OrderedDict of keys\n        self.key_to_val = {}  # key -> value\n        self.min_freq = 0\n    \n    def get(self, key: int) -> int:\n        if key not in self.key_to_val:\n            return -1\n        \n        # Update frequency\n        freq = self.key_to_freq[key]\n        self.key_to_freq[key] = freq + 1\n        \n        # Remove from old frequency\n        del self.freq_to_keys[freq][key]\n        if not self.freq_to_keys[freq]:\n            del self.freq_to_keys[freq]\n            if freq == self.min_freq:\n                self.min_freq += 1\n        \n        # Add to new frequency\n        self.freq_to_keys[freq + 1][key] = None\n        \n        return self.key_to_val[key]\n    \n    def put(self, key: int, value: int) -> None:\n        if self.capacity == 0:\n            return\n        \n        if key in self.key_to_val:\n            # Update existing key\n            self.key_to_val[key] = value\n            self.get(key)  # Update frequency\n            return\n        \n        # Evict if at capacity\n        if len(self.key_to_val) >= self.capacity:\n            # Remove least frequently used key\n            lfu_key = next(iter(self.freq_to_keys[self.min_freq]))\n            del self.freq_to_keys[self.min_freq][lfu_key]\n            if not self.freq_to_keys[self.min_freq]:\n                del self.freq_to_keys[self.min_freq]\n            del self.key_to_val[lfu_key]\n            del self.key_to_freq[lfu_key]\n        \n        # Add new key\n        self.key_to_val[key] = value\n        self.key_to_freq[key] = 1\n        self.freq_to_keys[1][key] = None\n        self.min_freq = 1",
+    "explanation": "This solution uses multiple data structures to implement LFU cache:\n1. key_to_freq: maps keys to their frequency\n2. freq_to_keys: maps frequency to OrderedDict of keys (maintains insertion order)\n3. key_to_val: maps keys to their values\n4. min_freq: tracks the minimum frequency\n\nFor get operations: update frequency and move key to new frequency bucket\nFor put operations: if key exists, update value and frequency; if new key, evict LFU key if at capacity\n\nThe time complexity is O(1) for both get and put operations. The space complexity is O(capacity)."
+  }
+}

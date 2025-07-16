@@ -1,7 +1,7 @@
 {
   "id": 4,
   "title": "Median of Two Sorted Arrays",
-  "list": ["neetcode150"],
+  "list": ["neetcode150", "marc30"],
   "category": "Binary Search",
   "difficulty": "Hard",
   "description": "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.\n\nThe overall run time complexity should be O(log (m+n)).",
