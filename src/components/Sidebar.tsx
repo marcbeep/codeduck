@@ -176,20 +176,20 @@ export function Sidebar({
       <h2 className="text-lg font-semibold mb-4">Filters</h2>
       <div className="space-y-6">
         {/* Select All and Clear All */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={selectAllFilters}
-            className="text-xs text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded cursor-pointer focus:outline-none"
+            className="text-xs border-border hover:bg-accent hover:text-accent-foreground transition-colors px-3 py-1.5 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             Select All
           </Button>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={clearAllFilters}
-            className="text-xs text-muted-foreground hover:text-destructive transition-colors px-2 py-1 rounded cursor-pointer focus:outline-none"
+            className="text-xs border-border hover:bg-destructive hover:text-destructive-foreground transition-colors px-3 py-1.5 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             Clear All
           </Button>
@@ -197,21 +197,37 @@ export function Sidebar({
 
         {/* Lists */}
         <Collapsible open={isListsOpen} onOpenChange={setIsListsOpen}>
-          <CollapsibleTrigger asChild>
-            <Button
-              variant="ghost"
-              className="flex w-full justify-between items-center p-2 hover:bg-accent/50 transition-colors cursor-pointer"
-            >
-              <span className="font-medium">Lists</span>
-              <motion.div
-                animate={{ rotate: isListsOpen ? 180 : 0 }}
-                transition={{ duration: 0.15, ease: "easeOut" }}
-                style={{ willChange: "transform" }}
+          <div className="flex items-center justify-between">
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="ghost"
+                className="flex justify-between items-center p-2 hover:bg-accent/50 transition-colors flex-1 cursor-pointer"
               >
-                <ChevronDown className="h-4 w-4" />
-              </motion.div>
-            </Button>
-          </CollapsibleTrigger>
+                <span className="font-medium">Lists</span>
+                <motion.div
+                  animate={{ rotate: isListsOpen ? 180 : 0 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  style={{ willChange: "transform" }}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </motion.div>
+              </Button>
+            </CollapsibleTrigger>
+            <div className="flex gap-1">
+              <button
+                onClick={clearLists}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+              >
+                clear
+              </button>
+              <button
+                onClick={selectAllLists}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors px-1 py-0.5 rounded cursor-pointer focus:outline-none"
+              >
+                all
+              </button>
+            </div>
+          </div>
 
           <CollapsibleContent className="pl-2">
             <div
