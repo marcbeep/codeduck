@@ -19,6 +19,7 @@ import {
   ExternalLink,
   TestTube2,
   Link,
+  Play,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { generateShareUrl, copyToClipboard } from "@/lib/sharing";
@@ -81,6 +82,22 @@ export default function Flashcard({ problem }: { problem: LeetCodeProblem }) {
                     className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
                   >
                     <Link className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      const searchQuery = encodeURIComponent(
+                        `Leetcode ${problem.title} Solution`
+                      );
+                      window.open(
+                        `https://www.youtube.com/results?search_query=${searchQuery}`,
+                        "_blank"
+                      );
+                    }}
+                    className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                  >
+                    <Play className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="ghost"

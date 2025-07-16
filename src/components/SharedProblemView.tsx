@@ -20,6 +20,7 @@ import {
   ArrowLeft,
   Home,
   Network,
+  Play,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -206,31 +207,59 @@ export function SharedProblemView({
                   {problem.difficulty}
                 </span>
               </div>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(
-                          `https://leetcode.com/problems/${problem.title
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")}`,
-                          "_blank"
-                        );
-                      }}
-                      className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Open on LeetCode</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <div className="flex items-center gap-1">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const searchQuery = encodeURIComponent(
+                            `Leetcode ${problem.title} Solution`
+                          );
+                          window.open(
+                            `https://www.youtube.com/results?search_query=${searchQuery}`,
+                            "_blank"
+                          );
+                        }}
+                        className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                      >
+                        <Play className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Search YouTube for solution</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(
+                            `https://leetcode.com/problems/${problem.title
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}`,
+                            "_blank"
+                          );
+                        }}
+                        className="hover:bg-accent/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Open on LeetCode</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
