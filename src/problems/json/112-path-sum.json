@@ -1,0 +1,43 @@
+{
+  "id": 112,
+  "title": "Path Sum",
+  "list": ["marc30"],
+  "category": "Trees",
+  "difficulty": "Easy",
+  "description": "Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.\n\nA leaf is a node with no children.",
+  "constraints": [
+    "The number of nodes in the tree is in the range [0, 5000]",
+    "-1000 <= Node.val <= 1000",
+    "-1000 <= targetSum <= 1000"
+  ],
+  "testCases": [
+    {
+      "input": {
+        "root": [5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1],
+        "targetSum": 22
+      },
+      "output": true,
+      "explanation": "The root-to-leaf path with the target sum is shown: 5 -> 4 -> 11 -> 2 = 22"
+    },
+    {
+      "input": {
+        "root": [1, 2, 3],
+        "targetSum": 5
+      },
+      "output": false,
+      "explanation": "There is no root-to-leaf path with sum = 5."
+    },
+    {
+      "input": {
+        "root": [],
+        "targetSum": 0
+      },
+      "output": false,
+      "explanation": "Since the tree is empty, there are no root-to-leaf paths."
+    }
+  ],
+  "solution": {
+    "code": "def hasPathSum(root: 'TreeNode', targetSum: int) -> bool:\n    # Base case: empty tree\n    if not root:\n        return False\n    \n    # If we're at a leaf node, check if remaining sum equals node value\n    if not root.left and not root.right:\n        return targetSum == root.val\n    \n    # Recursively check left and right subtrees\n    remaining_sum = targetSum - root.val\n    return hasPathSum(root.left, remaining_sum) or hasPathSum(root.right, remaining_sum)",
+    "explanation": "This solution uses recursive DFS to check all root-to-leaf paths:\n1. Base case: if root is null, return False\n2. If we reach a leaf node (no children), check if remaining sum equals the leaf value\n3. For non-leaf nodes, recursively check both left and right subtrees with updated target sum\n4. Return True if any path from root to leaf sums to targetSum\n\nThe time complexity is O(n) where n is the number of nodes. The space complexity is O(h) where h is the height of the tree due to recursion stack."
+  }
+}

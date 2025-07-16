@@ -240,6 +240,8 @@ export function Sidebar({
                       ? "NeetCode 150"
                       : list === "leetcode150"
                       ? "LeetCode 150"
+                      : list === "marc30"
+                      ? "Marc 30"
                       : list}
                   </Label>
                 </div>
